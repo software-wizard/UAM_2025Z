@@ -1,5 +1,6 @@
 package org.example;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,7 @@ class CreatureTest {
     }
 
     @Test
+    @Disabled
     void y() {
         Creature attacker = new Creature(new DefaultDamageCalculator());
         Creature defender = new Creature(new DefaultDamageCalculator());

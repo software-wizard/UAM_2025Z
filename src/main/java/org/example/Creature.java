@@ -1,10 +1,12 @@
 package org.example;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
+@Builder
 @Setter
+@AllArgsConstructor
+@ToString
 public class Creature {
     private int attack;
     private int defence;
@@ -12,6 +14,7 @@ public class Creature {
     private int maxHp;
     private int currentHp;
     private int amount;
+    private int moveRange;
 
     private DefaultDamageCalculator dmgCalc;
 
