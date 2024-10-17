@@ -13,8 +13,19 @@ public class Creature {
     private int currentHp;
     private int amount;
 
+    private DefaultDamageCalculator dmgCalc;
+
+    public Creature(DefaultDamageCalculator dmgCalc) {
+        this.dmgCalc = dmgCalc;
+    }
+
     public void attack(Creature defender) {
-        defender.applyDamage(damage);
+        defender.applyDamage(dmgCalc.calculateDamage(this, defender));
+        counterAttack(this, dmgCalc.calculateDamage(defender, this));
+    }
+
+    private void counterAttack(Creature creature, int damage) {
+        creature.applyDamage(damage);
     }
 
     private void applyDamage(int aDamageToApply) {
