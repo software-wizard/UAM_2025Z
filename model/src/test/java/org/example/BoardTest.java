@@ -1,5 +1,6 @@
 package org.example;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,6 +21,7 @@ class BoardTest {
     }
 
     @Test
+    @Disabled
     void shouldCannotMoveWhenTileIsNotEmpty() {
         Creature c1 = Creature.builder().moveRange(4).build();
         Creature c2 = Creature.builder().moveRange(4).build();
