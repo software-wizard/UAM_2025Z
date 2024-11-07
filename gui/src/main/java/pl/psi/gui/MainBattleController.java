@@ -6,12 +6,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import org.example.*;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Optional;
 
 import static javafx.scene.paint.Color.*;
 
-public class MainBattleController {
+public class MainBattleController implements PropertyChangeListener {
     private final GameEngine gameEngine;
     @FXML
     private GridPane gridMap;
@@ -23,13 +25,14 @@ public class MainBattleController {
         List<Creature> p2 = List.of(Creature.builder().amount(2).maxHp(112).moveRange(5).build());
 
         gameEngine = new GameEngine(new Hero(p1), new Hero(p2));
-
+        gameEngine.addPropertyChangeListener(this);
     }
 
     @FXML
     private void initialize() {
         refreshGui();
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> gameEngine.pass());
+        gameEngine.addPropertyChangeListener(this);
     }
 
     private void refreshGui() {
@@ -55,11 +58,15 @@ public class MainBattleController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             (e) -> {
                                 gameEngine.move(new Point(xx, yy));
-                                refreshGui();
                             }
                     );
                 }
             }
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        refreshGui();
     }
 }
