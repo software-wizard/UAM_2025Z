@@ -41,6 +41,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>pl.psi</groupId>
+            <artifactId>model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>${fxVersion}</version>
