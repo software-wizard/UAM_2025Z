@@ -12,7 +12,7 @@
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <fx.version>20.0.2</fx.version>
+        <fx.version>21.0.5</fx.version>
         <javafx.platform>win</javafx.platform>
     </properties>
 
