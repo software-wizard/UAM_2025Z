@@ -28,6 +28,5 @@ public class Hero
         this(aCreatures, new ArrayList<>());
         Spell defaultSpell = new Spell("Magic Arrow", 5, 1, 5);
         spells.add(defaultSpell);
-        System.out.println("Default spell added: " + spells.size());
     }
 }
