@@ -1,5 +1,6 @@
 package pl.psi.gui;
 
+import javafx.scene.control.Label;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
@@ -9,6 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
+
+import java.util.List;
+import pl.psi.Spell;
 
 public class MainBattleController {
     private final GameEngine gameEngine;
@@ -16,6 +21,14 @@ public class MainBattleController {
     private GridPane gridMap;
     @FXML
     private Button passButton;
+
+    @FXML
+    private Button windowButton;
+
+    @FXML
+    private VBox sideBarSpells;
+
+    private boolean isSpellsTabVisible = false;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -27,6 +40,11 @@ public class MainBattleController {
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
+            refreshGui();
+        });
+
+        windowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            isSpellsTabVisible = !isSpellsTabVisible;
             refreshGui();
         });
 
@@ -62,5 +80,33 @@ public class MainBattleController {
                 gridMap.add(mapTile, x, y);
             }
         }
+        toggleSpellsTab();
+    }
+
+    private void toggleSpellsTab(){
+        if(isSpellsTabVisible){
+            List<Spell> heroSpells = gameEngine.getCurrentHero().getSpells();
+            Label label = new Label("Spells");
+            label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+            sideBarSpells.getChildren().clear();
+            sideBarSpells.getChildren().add(label);
+
+            for(int i = 0; i < heroSpells.size(); i++){
+                Spell spell = heroSpells.get(i);
+                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
+                button.setPrefWidth(104);
+                int finalI = i;
+                button.setOnAction(event -> handleButtonClick(finalI));
+                sideBarSpells.getChildren().add(button);
+            }
+
+        } else {
+            sideBarSpells.getChildren().clear();
+        }
+    }
+
+    private void handleButtonClick(int buttonIdx) {
+        // TODO: STACHU, TU OPRACUJ LOGIKĘ PRZEKAZYWANIA GDZIEŚ TAM JAK ATTACK DZIAŁA, NIE MAM POJĘCIA JAK, ALE POWODZENIA :)
+        System.out.println("Button " + (buttonIdx + 1) + " clicked!");
     }
 }

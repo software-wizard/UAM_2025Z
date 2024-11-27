@@ -37,6 +37,12 @@
         <GridPane fx:id="gridMap" BorderPane.alignment="CENTER">
         </GridPane>
     </center>
+    <right>
+        <Pane BorderPane.alignment="CENTER">
+            <VBox fx:id="sideBarSpells" alignment="TOP_CENTER" spacing="10.0" prefWidth="104">
+            </VBox>
+        </Pane>
+    </right>
     <bottom>
         <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>

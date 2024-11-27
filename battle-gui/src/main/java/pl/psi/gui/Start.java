@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.Spell;
 import pl.psi.creatures.NecropolisFactory;
 
 public class Start extends Application
@@ -48,7 +49,7 @@ public class Start extends Application
 
     private Hero createP2()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ) );
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), List.of(new Spell("Health", -5, 1, 5)) );
         return ret;
     }
 

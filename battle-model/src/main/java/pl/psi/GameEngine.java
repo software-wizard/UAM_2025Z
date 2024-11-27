@@ -2,6 +2,8 @@ package pl.psi;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import pl.psi.creatures.Creature;
@@ -16,9 +18,13 @@ public class GameEngine {
     private final Board board;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
 
+    private final List<Hero> heroes = new ArrayList<>();
+
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
+        heroes.add(aHero1);
+        heroes.add(aHero2);
     }
 
     public void attack(final Point point) {
@@ -39,6 +45,16 @@ public class GameEngine {
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    public Hero getCurrentHero(){
+        Creature currentCreature = turnQueue.getCurrentCreature();
+        for(Hero hero : heroes){
+            if(hero.getCreatures().contains(currentCreature)){
+                return hero;
+            }
+        }
+        return null;
     }
 
     public void pass() {
