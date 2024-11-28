@@ -54,7 +54,7 @@ public class GameEngine {
                 return hero;
             }
         }
-        return null;
+        throw new IllegalStateException("getCurrentHero: Hero must be returned");
     }
 
     public void pass() {

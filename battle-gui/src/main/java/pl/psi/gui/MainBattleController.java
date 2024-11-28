@@ -28,6 +28,8 @@ public class MainBattleController {
     @FXML
     private VBox sideBarSpells;
 
+    private SpellsTab spellsTab;
+
     private boolean isSpellsTabVisible = false;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
@@ -36,6 +38,7 @@ public class MainBattleController {
 
     @FXML
     private void initialize() {
+        spellsTab = new SpellsTab(gameEngine, sideBarSpells);
         refreshGui();
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -44,7 +47,7 @@ public class MainBattleController {
         });
 
         windowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            isSpellsTabVisible = !isSpellsTabVisible;
+            spellsTab.toggle();
             refreshGui();
         });
 
@@ -80,33 +83,7 @@ public class MainBattleController {
                 gridMap.add(mapTile, x, y);
             }
         }
-        toggleSpellsTab();
-    }
 
-    private void toggleSpellsTab(){
-        if(isSpellsTabVisible){
-            List<Spell> heroSpells = gameEngine.getCurrentHero().getSpells();
-            Label label = new Label("Spells");
-            label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-            sideBarSpells.getChildren().clear();
-            sideBarSpells.getChildren().add(label);
-
-            for(int i = 0; i < heroSpells.size(); i++){
-                Spell spell = heroSpells.get(i);
-                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
-                button.setPrefWidth(104);
-                int finalI = i;
-                button.setOnAction(event -> handleButtonClick(finalI));
-                sideBarSpells.getChildren().add(button);
-            }
-
-        } else {
-            sideBarSpells.getChildren().clear();
-        }
-    }
-
-    private void handleButtonClick(int buttonIdx) {
-        // TODO: STACHU, TU OPRACUJ LOGIKĘ PRZEKAZYWANIA GDZIEŚ TAM JAK ATTACK DZIAŁA, NIE MAM POJĘCIA JAK, ALE POWODZENIA :)
-        System.out.println("Button " + (buttonIdx + 1) + " clicked!");
+        spellsTab.render();
     }
 }
