@@ -13,7 +13,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <fx.version>21.0.5</fx.version>
-        <javafx.platform>win</javafx.platform>
+        <javafx.platform>linux</javafx.platform>
     </properties>
 
     <modules>

@@ -58,7 +58,9 @@ public class MainBattleController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.attack(new Point(x1, y1)));
                 }
-
+                if (gameEngine.isObstacleTile(new Point(x, y))){
+                    mapTile.setBackground(Color.BLACK);
+                }
                 gridMap.add(mapTile, x, y);
             }
         }
