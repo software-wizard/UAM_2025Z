@@ -3,8 +3,10 @@ package pl.psi.hero;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import pl.psi.creatures.EconomyCreature;
 
+@Getter
 public class EconomyHero
 {
 
@@ -43,7 +45,7 @@ public class EconomyHero
         return List.copyOf( creatureList );
     }
 
-    void substractGold( final int aAmount )
+    public void substractGold( final int aAmount )
     {
         if( aAmount > gold )
         {
