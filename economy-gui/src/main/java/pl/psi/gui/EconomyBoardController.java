@@ -73,18 +73,22 @@ public class EconomyBoardController {
                 final MapTile mapTile = new MapTile("");
                 economyBoardEngine.getHero(new Point(x, y))
                         .ifPresent(c -> mapTile.setBackground(Color.GREEN));
-
+                economyBoardEngine.getCastle(new Point(x,y))
+                        .ifPresent(c -> mapTile.setBackground(Color.BLUE));
 //                if (economyBoardEngine.isCurrentCreature(new Point(x, y))) {
 //                    mapTile.setBackground(Color.GREEN);
 //                }
 //
-//                if (economyBoardEngine.canMove(new Point(x, y))) {
-//                    mapTile.setBackground(Color.GREY);
-//
-//                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-//                            e -> economyBoardEngine.move(new Point(x1, y1)));
-//                }
+           //    if (economyBoardEngine.canMove(new Point(x, y))) {
+//  ZMIENIC NA WYWOLANIE BEZ HERO  !!!!!! gdy zostanie dodana turnQueue
+         /*      if (economyBoardEngine.canMove(new Point(x, y))) {
+                   mapTile.setBackground(Color.GREY);
 
+                mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                        //e -> economyBoardEngine.move(new Point(x1, y1)));
+                            e -> economyBoardEngine.move(new Point(x1, y1)));
+//                }
+*/
                 gridMap.add(mapTile, x, y);
             }
         }

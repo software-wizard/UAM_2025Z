@@ -16,4 +16,19 @@ public class EconomyBoardEngine {
         return board.getEconomyHero(aPoint);
     }
 
+    public Optional<Castle> getCastle(final Point aPoint) {
+        return board.getCastle(aPoint);
+    }
+
+  /*  public boolean canMove(final Point aPoint) {
+
+    //   return board.canMove(EconomyTurnQueue.getCurrentHero(), aPoint);
+
+    }*/
+
+  /*  public void move(final Point aPoint) {
+     //   board.move(EconomyTurnQueue.getCurrentHero(), aPoint);
+      //  observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
+    }
+*/
 }

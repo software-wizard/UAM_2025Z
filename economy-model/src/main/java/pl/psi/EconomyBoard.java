@@ -9,40 +9,58 @@ import java.util.Optional;
 public class EconomyBoard {
 
     private static final int MAX_WITDH = 9;
-    private final BiMap< Point, EconomyHero> map = HashBiMap.create();
+    private final BiMap< Point, EconomyHero> heroMap = HashBiMap.create();
+
+    private final BiMap<Point,BoardEntity> boardEntitiesMap = HashBiMap.create();
 
     public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2 )
     {
         addHeroes( hero1, 0 );
         addHeroes( hero2, MAX_WITDH );
+        addEntitiesToBoard();
+    }
+
+    private void addEntitiesToBoard(){
+        Castle castle = new Castle();
+        Point castleCoords = new Point(5,5);
+        boardEntitiesMap.put(castleCoords,castle);
     }
 
     private void addHeroes( final EconomyHero hero, final int aPosition )
     {
-            map.put( new Point( aPosition, aPosition ), hero);
+            heroMap.put( new Point( aPosition, aPosition ), hero);
     }
 
     Optional< EconomyHero > getEconomyHero(final Point aPoint )
     {
-        return Optional.ofNullable( map.get( aPoint ) );
+        return Optional.ofNullable( heroMap.get( aPoint ) );
+    }
+
+    Optional<Castle> getCastle(final Point aPoint )
+    {
+        return Optional.ofNullable((Castle) boardEntitiesMap.get( aPoint ) );
     }
 
     void move( final EconomyHero hero, final Point aPoint )
     {
         if( canMove( hero, aPoint ) )
         {
-            map.inverse()
+            heroMap.inverse()
                     .remove( hero );
-            map.put( aPoint, hero );
+            heroMap.put( aPoint, hero );
         }
     }
 
     // na razie hero ma range poruszania się (hardcoded 5) - TODO stamina?
     boolean canMove( final EconomyHero hero, final Point aPoint )
     {
-        if( map.containsKey( aPoint ) )
+        if( heroMap.containsKey( aPoint ) )
         {
             return false;
+        }
+        if( boardEntitiesMap.containsKey( aPoint ) )
+        {
+        return false;
         }
         final Point oldPosition = getPosition( hero );
         return aPoint.distance( oldPosition.getX(), oldPosition.getY() ) < 5;
@@ -50,7 +68,7 @@ public class EconomyBoard {
 
     Point getPosition( EconomyHero hero )
     {
-        return map.inverse()
+        return heroMap.inverse()
                 .get( hero );
     }
 }
