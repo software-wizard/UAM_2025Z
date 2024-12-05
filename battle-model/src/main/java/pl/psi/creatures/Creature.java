@@ -55,6 +55,12 @@ public class Creature implements PropertyChangeListener {
         return getAmount() > 0;
     }
 
+    // undead is a type of creature:
+    public boolean isUndead()
+    {
+        return stats.isUndead();
+    }
+
     private void applyDamage(final int aDamage) {
         int hpToSubstract = aDamage % getMaxHp();
         int amountToSubstract = Math.round(aDamage / getMaxHp());
