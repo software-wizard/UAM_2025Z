@@ -37,17 +37,24 @@ public class Board
         return Optional.ofNullable( map.get( aPoint ) );
     }
 
-    void move( final Creature aCreature, final Point aPoint )
+    public void move( final Creature aCreature, final Point aPoint )
     {
         if( canMove( aCreature, aPoint ) )
         {
             map.inverse()
                 .remove( aCreature );
             map.put( aPoint, aCreature );
+
+            Tile tile = specialTiles.get(aPoint);
+            if (tile instanceof DamageTile) {
+                DamageTile damageTile = (DamageTile) tile;
+                aCreature.takeDamage(damageTile.getGivenDamage());
+            }
         }
+
     }
 
-    boolean canMove(final Creature aCreature, final Point aPoint) {
+    public boolean canMove(final Creature aCreature, final Point aPoint) {
         if (map.containsKey(aPoint)) {
             return false;
         }
@@ -57,7 +64,7 @@ public class Board
         final Point oldPosition = getPosition(aCreature);
         return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
     }
-    Point getPosition( Creature aCreature )
+    public Point getPosition(Creature aCreature)
     {
         return map.inverse()
             .get( aCreature );

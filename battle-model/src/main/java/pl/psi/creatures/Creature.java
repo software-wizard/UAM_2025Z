@@ -120,6 +120,22 @@ public class Creature implements PropertyChangeListener {
         return stats.getMoveRange();
     }
 
+    public void takeDamage(int damage) {
+        int remainingHp = currentHp - damage;
+        if (remainingHp <= 0) {
+            int remainingDamage = Math.abs(remainingHp);
+            int unitsLost = (int) Math.ceil((double) remainingDamage / getMaxHp());
+            setAmount(Math.max(0, amount - unitsLost));
+            currentHp = (amount > 0) ? getMaxHp() - (remainingDamage % getMaxHp()) : 0;
+        } else {
+            currentHp = remainingHp;
+        }
+
+        if (amount <= 0) {
+            System.out.println(getName() + " has been defeated.");
+        }
+    }
+
     public static class Builder {
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
