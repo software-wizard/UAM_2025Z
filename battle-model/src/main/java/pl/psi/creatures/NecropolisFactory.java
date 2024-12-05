@@ -63,9 +63,10 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 4:
-                    return new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
+                    Creature VampireLord = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
                         .amount( aAmount )
                         .build();
+                    return new ResurrectAfterAttackCreature(VampireLord);
                 case 5:
                     return new Creature.Builder().statistic( CreatureStatistic.POWER_LICH )
                         .amount( aAmount )

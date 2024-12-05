@@ -168,6 +168,47 @@ public class CreatureTest
     }
 
     @Test
+    void creatureShouldResurrect()
+    {
+        Creature VampireLord = new NecropolisFactory().create(true, 4, 10);
+
+        final Creature dragon = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( NOT_IMPORTANT )
+                        .damage( Range.closed( 10, 10 ) )
+                        .attack( 30 )
+                        .armor( 10 )
+                        .build() )
+                .build();
+
+        int initialAmount = VampireLord.getAmount();
+        VampireLord.setCurrentHp(20);
+        int initialHp = VampireLord.getCurrentHp();
+
+        VampireLord.attack(dragon);
+
+
+        assertThat(VampireLord.getAmount()).isEqualTo(initialAmount);
+        assertThat(VampireLord.getCurrentHp()).isGreaterThan(initialHp);
+
+    }
+
+    // zapytac
+    @Test
+    void creatureShouldNotResurrectIfAttacksUndead()
+    {
+        Creature VampireLord = new ResurrectAfterAttackCreature(
+                new NecropolisFactory().create(true, 4, 1));
+        Creature Zombie = new NecropolisFactory().create(true, 2, 30);
+
+        int initialAmount = VampireLord.getAmount();
+
+        VampireLord.attack(Zombie);
+
+        assertThat(VampireLord.getAmount()).isLessThan( initialAmount );
+
+    }
+
+    @Test
     void creatureShouldHealAfterEndOfTurn()
     {
         final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
@@ -178,10 +219,12 @@ public class CreatureTest
 
         final Creature selfHealAfterEndOfTurnCreature = new SelfHealAfterTurnCreature( new Creature.Builder()
             .statistic( CreatureStats.builder()
-                .maxHp( 100 )
-                .damage( NOT_IMPORTANT_DMG )
-                .build() )
-            .build() );
+                    .maxHp( NOT_IMPORTANT )
+                    .damage( Range.closed( 10, 10 ) )
+                    .attack( 50 )
+                    .armor( NOT_IMPORTANT )
+                    .build() )
+                .build());
 
         final TurnQueue turnQueue =
             new TurnQueue( List.of( attacker ), List.of( selfHealAfterEndOfTurnCreature ) );
