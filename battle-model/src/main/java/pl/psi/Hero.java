@@ -16,17 +16,15 @@ public class Hero
     private final List< Creature > creatures;
 
     @Getter
-    private final List<Spell> spells;
+    private SpellBook spellBook;
 
-    public Hero( final List< Creature > aCreatures, final List<Spell> aSpells )
+    public Hero( final List< Creature > aCreatures, int aInitMana, final List<Spell> aInitSpells )
     {
         creatures = aCreatures;
-        spells = aSpells;
+        this.spellBook = new SpellBook(aInitMana, aInitSpells);
     }
 
     public Hero(final List<Creature> aCreatures) {
-        this(aCreatures, new ArrayList<>());
-        Spell defaultSpell = new Spell("Magic Arrow", 5, 1, 5);
-        spells.add(defaultSpell);
+        this(aCreatures, 0, new ArrayList<>());
     }
 }

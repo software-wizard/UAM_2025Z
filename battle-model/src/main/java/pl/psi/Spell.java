@@ -1,19 +1,17 @@
 package pl.psi;
 
 import lombok.Getter;
+import pl.psi.creatures.Creature;
 
+@Getter
 public class Spell {
 
-    @Getter
     private final String name;
 
-    @Getter
     private final int damage;
 
-    @Getter
     private final int level;
 
-    @Getter
     private final int manaCost;
 
     public Spell(final String aName, final int aDamage, final int aLevel, final int aManaCost) {
@@ -23,5 +21,7 @@ public class Spell {
         manaCost = aManaCost;
     }
 
-
+    public void castSpell(Creature aDefender) {
+        aDefender.applyMagicDamage(damage);
+    }
 }

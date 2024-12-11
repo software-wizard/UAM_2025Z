@@ -6,7 +6,7 @@
 <?import java.net.URL?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity"
-            prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1">
+            prefHeight="700.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1">
     <center>
         <HBox>
             <HBox fx:id="heroStateHBox" styleClass="centerHBox" BorderPane.alignment="CENTER">

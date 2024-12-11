@@ -21,7 +21,7 @@ public class SpellsTab {
 
     public void render(){
         if(isSpellsTabVisible){
-            List<Spell> heroSpells = gameEngine.getCurrentHero().getSpells();
+            List<Spell> heroSpells = gameEngine.getCurrentHero().getSpellBook().getSpells();
             Label label = new Label("Spells");
             label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
             sideBarSpells.getChildren().clear();
