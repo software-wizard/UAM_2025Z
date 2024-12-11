@@ -26,17 +26,22 @@ public class MainBattleController {
     @FXML
     private VBox sideBarSpells;
 
+    private SpellsTab spellsTab;
+
     private boolean isSpellsTabVisible = false;
 
-    boolean isCastingSpell = false;
+    int selectedSpellIdx = -1;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
+
         gameEngine = new GameEngine(aHero1, aHero2);
     }
 
     @FXML
     private void initialize() {
+        spellsTab = new SpellsTab(gameEngine, sideBarSpells, this);
         refreshGui();
+
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
@@ -44,7 +49,7 @@ public class MainBattleController {
         });
 
         windowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            isSpellsTabVisible = !isSpellsTabVisible;
+            spellsTab.toggle();
             refreshGui();
         });
 
@@ -79,12 +84,12 @@ public class MainBattleController {
                             e -> gameEngine.attack(new Point(x1, y1)));
                 }
 
-                if (isCastingSpell) {
+                if (selectedSpellIdx >= 0) {
                     gameEngine.getCreature(new Point(x, y)).ifPresent(creature -> {
                         mapTile.setBackground(Color.BLUE);
                         mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                             SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-                            Spell selectedSpell = spellBook.getSpells().getFirst(); // todo get correct spell but instantly cast it and ON SPELL not spellbook
+                            Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx); // todo get correct spell but instantly cast it and ON SPELL not spellbook
 
                             if (selectedSpell != null) {
                                 spellBook.castSpell(selectedSpell, creature);
@@ -92,7 +97,7 @@ public class MainBattleController {
                             } else {
                                 System.out.println("Not enough mana/invalid spell");
                             }
-                            isCastingSpell = false;
+                            selectedSpellIdx = -1;
                             refreshGui();
                         });
                     });
@@ -101,60 +106,14 @@ public class MainBattleController {
                 gridMap.add(mapTile, x, y);
             }
         }
-        toggleSpellsTab();
+        spellsTab.render();
     }
 
-    private void toggleSpellsTab(){
-        if(isSpellsTabVisible){
-            SpellBook heroBook = gameEngine.getCurrentHero().getSpellBook();
-            List<Spell> heroSpells = heroBook.getSpells();
-            Label label = new Label("Spells");
-            label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-            sideBarSpells.getChildren().clear();
-            sideBarSpells.getChildren().add(label);
-
-            for(int i = 0; i < heroSpells.size(); i++){
-                Spell spell = heroSpells.get(i);
-                boolean canCastSpell = heroBook.canCastSpell(spell);
-                Button button = getSpellButton(spell, canCastSpell, i);
-                sideBarSpells.getChildren().add(button);
-            }
-
-        } else {
-            sideBarSpells.getChildren().clear();
-        }
-    }
-
-    private Button getSpellButton(Spell spell, boolean canCastSpell, int i) {
-        Button button = new Button(
-         spell.getName() +
-            "\n" +
-            spell.getLevel() +
-            " lev/Exp\nSpell points: " +
-            spell.getManaCost()
-        );
-        button.setPrefWidth(104);
-
-        if (canCastSpell) {
-            button.setOpacity(1.0);
-            button.setDisable(false);
-            button.setOnAction(event -> handleButtonClick(i));
-        } else {
-            button.setOpacity(0.5);
-            button.setDisable(true);
-        }
-
-        button.setOnAction(event -> handleButtonClick(i));
-        return button;
-    }
-
-    private void handleButtonClick(int buttonIdx) {
-        SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-        Spell selectedSpell = spellBook.getSpells().get(buttonIdx);
-        isCastingSpell = true;
-
-        System.out.println("Selected spell: " + selectedSpell.getName());
-
+    void triggerRefreshGui(){
         refreshGui();
+    }
+
+    void setActiveSpellIdx(int idx) {
+        selectedSpellIdx = idx;
     }
 }
