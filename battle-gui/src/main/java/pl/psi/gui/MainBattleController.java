@@ -1,9 +1,8 @@
 package pl.psi.gui;
 
 import javafx.scene.control.Label;
-import pl.psi.GameEngine;
-import pl.psi.Hero;
-import pl.psi.Point;
+import lombok.Getter;
+import pl.psi.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
-import pl.psi.Spell;
 
 public class MainBattleController {
     private final GameEngine gameEngine;
@@ -29,6 +27,8 @@ public class MainBattleController {
     private VBox sideBarSpells;
 
     private boolean isSpellsTabVisible = false;
+
+    boolean isCastingSpell = false;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -52,6 +52,8 @@ public class MainBattleController {
     }
 
     private void refreshGui() {
+        gridMap.getChildren().clear();
+
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;
@@ -77,6 +79,25 @@ public class MainBattleController {
                             e -> gameEngine.attack(new Point(x1, y1)));
                 }
 
+                if (isCastingSpell) {
+                    gameEngine.getCreature(new Point(x, y)).ifPresent(creature -> {
+                        mapTile.setBackground(Color.BLUE);
+                        mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                            SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
+                            Spell selectedSpell = spellBook.getSpells().getFirst(); // todo get correct spell but instantly cast it and ON SPELL not spellbook
+
+                            if (selectedSpell != null) {
+                                spellBook.castSpell(selectedSpell, creature);
+                                System.out.println("Spell cast on creature" + creature.getName());
+                            } else {
+                                System.out.println("Not enough mana/invalid spell");
+                            }
+                            isCastingSpell = false;
+                            refreshGui();
+                        });
+                    });
+                }
+
                 gridMap.add(mapTile, x, y);
             }
         }
@@ -85,7 +106,8 @@ public class MainBattleController {
 
     private void toggleSpellsTab(){
         if(isSpellsTabVisible){
-            List<Spell> heroSpells = gameEngine.getCurrentHero().getSpells();
+            SpellBook heroBook = gameEngine.getCurrentHero().getSpellBook();
+            List<Spell> heroSpells = heroBook.getSpells();
             Label label = new Label("Spells");
             label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
             sideBarSpells.getChildren().clear();
@@ -93,10 +115,8 @@ public class MainBattleController {
 
             for(int i = 0; i < heroSpells.size(); i++){
                 Spell spell = heroSpells.get(i);
-                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
-                button.setPrefWidth(104);
-                int finalI = i;
-                button.setOnAction(event -> handleButtonClick(finalI));
+                boolean canCastSpell = heroBook.canCastSpell(spell);
+                Button button = getSpellButton(spell, canCastSpell, i);
                 sideBarSpells.getChildren().add(button);
             }
 
@@ -105,8 +125,36 @@ public class MainBattleController {
         }
     }
 
+    private Button getSpellButton(Spell spell, boolean canCastSpell, int i) {
+        Button button = new Button(
+         spell.getName() +
+            "\n" +
+            spell.getLevel() +
+            " lev/Exp\nSpell points: " +
+            spell.getManaCost()
+        );
+        button.setPrefWidth(104);
+
+        if (canCastSpell) {
+            button.setOpacity(1.0);
+            button.setDisable(false);
+            button.setOnAction(event -> handleButtonClick(i));
+        } else {
+            button.setOpacity(0.5);
+            button.setDisable(true);
+        }
+
+        button.setOnAction(event -> handleButtonClick(i));
+        return button;
+    }
+
     private void handleButtonClick(int buttonIdx) {
-        // TODO: STACHU, TU OPRACUJ LOGIKĘ PRZEKAZYWANIA GDZIEŚ TAM JAK ATTACK DZIAŁA, NIE MAM POJĘCIA JAK, ALE POWODZENIA :)
-        System.out.println("Button " + (buttonIdx + 1) + " clicked!");
+        SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
+        Spell selectedSpell = spellBook.getSpells().get(buttonIdx);
+        isCastingSpell = true;
+
+        System.out.println("Selected spell: " + selectedSpell.getName());
+
+        refreshGui();
     }
 }
