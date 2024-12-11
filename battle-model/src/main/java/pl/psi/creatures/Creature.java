@@ -8,9 +8,11 @@ package pl.psi.creatures;//  ***************************************************
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
+import pl.psi.AppliedSpell;
 import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
@@ -28,6 +30,8 @@ public class Creature implements PropertyChangeListener {
     @Setter
     private int currentHp;
     private int counterAttackCounter = 1;
+    private final int MINIMAL_DAMAGE = 0;
+    private ArrayList<AppliedSpell> appliedSpells;
     private DamageCalculatorIf calculator;
 
     Creature() {
@@ -39,16 +43,44 @@ public class Creature implements PropertyChangeListener {
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
+        appliedSpells = new ArrayList<AppliedSpell>();
     }
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
-            aDefender.applyDamage(damage);
+            final int damageWithRoundBonus = Math.max(damage + getRoundDamageBonus(), MINIMAL_DAMAGE);
+            System.out.println("Damage: " + damage + "\nDamage with round bonus: " + damageWithRoundBonus);
+            aDefender.applyDamage(damageWithRoundBonus);
             if (canCounterAttack(aDefender)) {
+                System.out.println("Counter attack");
                 counterAttack(aDefender);
             }
         }
+    }
+
+    public int getRoundDamageBonus(){
+        int bonus = 0;
+
+        System.out.println("Checking applied spells");
+        for(AppliedSpell spell : appliedSpells){
+            bonus += spell.getSpell().getDamageBonus();
+            System.out.println("Spell: " + spell.getSpell().getName() + " bonus: " + spell.getSpell().getDamageBonus());
+        }
+        System.out.println("Bonus: " + bonus);
+
+        return bonus;
+    }
+
+    public void decreaseAppliedSpellsRound(){
+        for(AppliedSpell spell : appliedSpells){
+            spell.decreaseRoundsLeft();
+        }
+    }
+
+    public void clearNotActiveSpells(){
+        if(appliedSpells.isEmpty()) return;
+        appliedSpells.removeIf(spell -> !spell.isActive());
     }
 
     public boolean isAlive() {

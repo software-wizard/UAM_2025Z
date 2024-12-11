@@ -1,7 +1,5 @@
 package pl.psi.gui;
 
-import javafx.scene.control.Label;
-import lombok.Getter;
 import pl.psi.*;
 
 import javafx.fxml.FXML;
@@ -11,7 +9,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 
-import java.util.List;
 
 public class MainBattleController {
     private final GameEngine gameEngine;
@@ -45,11 +42,13 @@ public class MainBattleController {
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
+            selectedSpellIdx = -1;
             refreshGui();
         });
 
         windowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             spellsTab.toggle();
+            selectedSpellIdx = -1;
             refreshGui();
         });
 
@@ -75,7 +74,11 @@ public class MainBattleController {
                     mapTile.setBackground(Color.GREY);
 
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                            e -> gameEngine.move(new Point(x1, y1)));
+                            (e) -> {
+                                gameEngine.move(new Point(x1, y1));
+                                selectedSpellIdx = -1;
+                                refreshGui();
+                            });
                 }
                 if (gameEngine.canAttack(new Point(x, y))) {
                     mapTile.setBackground(Color.RED);
@@ -89,7 +92,7 @@ public class MainBattleController {
                         mapTile.setBackground(Color.BLUE);
                         mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                             SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-                            Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx); // todo get correct spell but instantly cast it and ON SPELL not spellbook
+                            Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx); // TODO: Fix strange case, when creature is in combat range for other creature drops an error that idx is out of bounds. Why?
 
                             if (selectedSpell != null) {
                                 spellBook.castSpell(selectedSpell, creature);

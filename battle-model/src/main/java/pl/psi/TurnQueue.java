@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.Getter;
 import pl.psi.creatures.Creature;
 
 /**
@@ -21,6 +22,7 @@ public class TurnQueue {
     private final Queue<Creature> creaturesQueue;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
+    @Getter
     private int roundNumber;
 
     public TurnQueue(final Collection<Creature> aCreatureList,
@@ -43,6 +45,12 @@ public class TurnQueue {
 
     public void next() {
         Creature oldCreature = currentCreature;
+        if(oldCreature != null) {
+            System.out.println("Cleaning spells for " + oldCreature.getStats().getName());
+            oldCreature.decreaseAppliedSpellsRound();
+            oldCreature.clearNotActiveSpells();
+        }
+
         if (creaturesQueue.isEmpty()) {
             endOfTurn();
         }
