@@ -10,7 +10,6 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SpellBookTest {
@@ -19,7 +18,7 @@ public class SpellBookTest {
 
     @Test
     void magicArrowCast() {
-        Spell magicArrow = new Spell("Magic Arrow", 10, 1, 5);
+        Spell magicArrow = new Spell.Builder().name("Magic Arrow").damage(10).level(1).manaCost(5).build();
         SpellBook spellBook = new SpellBook(50, List.of(magicArrow));
 
         final Creature targetCreature = new Creature.Builder()
@@ -42,7 +41,7 @@ public class SpellBookTest {
     @Test
     void cannotCastWithoutEnoughMana() {
         SpellBook spellBook = new SpellBook(3, new ArrayList<>());
-        Spell magicArrow = new Spell("Magic Arrow", 10, 1, 5);
+        Spell magicArrow = new Spell.Builder().name("Magic Arrow").damage(10).level(1).manaCost(5).build();
         spellBook.addSpell(magicArrow);
 
         final Creature targetCreature = new Creature.Builder()

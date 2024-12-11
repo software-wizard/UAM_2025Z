@@ -52,7 +52,13 @@ public class Start extends Application
         final Hero ret = new Hero(
                 List.of( new NecropolisFactory().create( true, 1, 5 ) ),
                 10,
-                List.of(new Spell("Health", -5, 1, 5))
+                List.of(new Spell.Builder()
+                        .name("Health")
+                        .damage(-5)
+                        .level(1)
+                        .manaCost(5)
+                        .build()
+                )
         );
         return ret;
     }
@@ -62,7 +68,12 @@ public class Start extends Application
         final Hero ret = new Hero(
                 List.of( new NecropolisFactory().create( false, 1, 5 ) ),
                 15,
-                List.of(new Spell("Magic arrow", 5, 1, 5))
+                List.of(
+                        new Spell.Builder().name("Magic arrow").damage(5).level(1).manaCost(5).build(),
+                        new Spell.Builder()
+                                .name("Weaken attack").manaCost(5).damageBonus(-3)
+                        .build()
+                )
         );
         return ret;
     }

@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import pl.psi.GameEngine;
 import pl.psi.Spell;
+import pl.psi.SpellBook;
 
 import java.util.List;
 
@@ -13,9 +14,13 @@ public class SpellsTab {
     private final GameEngine gameEngine;
     private final VBox sideBarSpells;
     private boolean isSpellsTabVisible = false;
-    public SpellsTab(GameEngine aGameEngine, VBox aSideBarSpells){
+
+    private final MainBattleController mainBattleController;
+    public SpellsTab(GameEngine aGameEngine, VBox aSideBarSpells, MainBattleController aMainBattleController){
         gameEngine = aGameEngine;
         sideBarSpells = aSideBarSpells;
+        mainBattleController = aMainBattleController;
+
     }
 
 
@@ -32,7 +37,17 @@ public class SpellsTab {
                 Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
                 button.setPrefWidth(104);
                 int finalI = i;
-                button.setOnAction(event -> handleButtonClick(finalI));
+
+                boolean canCastSpell = gameEngine.getCurrentHero().getSpellBook().canCastSpell(spell);
+                if (canCastSpell) {
+                    button.setOpacity(1.0);
+                    button.setDisable(false);
+                    button.setOnAction(event -> handleButtonClick(finalI));
+                } else {
+                    button.setOpacity(0.5);
+                    button.setDisable(true);
+                }
+
                 sideBarSpells.getChildren().add(button);
             }
 
@@ -58,7 +73,7 @@ public class SpellsTab {
     }
 
     private void handleButtonClick(int buttonIdx) {
-        // TODO: STACHU, TU OPRACUJ LOGIKĘ PRZEKAZYWANIA GDZIEŚ TAM JAK ATTACK DZIAŁA, NIE MAM POJĘCIA JAK, ALE POWODZENIA :)
-        System.out.println("Button " + (buttonIdx + 1) + " clicked! FROM SPELLSTAB");
+        mainBattleController.setActiveSpellIdx(buttonIdx);
+        mainBattleController.triggerRefreshGui();
     }
 }
