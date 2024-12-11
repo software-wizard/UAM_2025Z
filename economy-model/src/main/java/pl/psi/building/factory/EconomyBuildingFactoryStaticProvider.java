@@ -1,4 +1,4 @@
-package pl.psi.building;
+package pl.psi.building.factory;
 
 import pl.psi.hero.EconomyHero;
 

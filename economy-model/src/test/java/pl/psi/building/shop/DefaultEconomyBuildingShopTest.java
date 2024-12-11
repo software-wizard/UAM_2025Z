@@ -1,46 +1,48 @@
 package pl.psi.building.shop;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingType;
+import pl.psi.building.EconomyBuildingStatistic;
+import pl.psi.building.factory.EconomyBuildingFactory;
 import pl.psi.hero.EconomyHero;
-import pl.psi.town.Town;
+import pl.psi.resource.Resource;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static pl.psi.hero.EconomyHero.Fraction.NECROPOLIS;
 
 class DefaultEconomyBuildingShopTest {
 
-    private final DefaultEconomyBuildingShop economyBuildingShop =
-            new DefaultEconomyBuildingShop();
+    private DefaultEconomyBuildingShop economyBuildingShop;
+    private EconomyBuildingFactory economyBuildingFactory;
+
+    @BeforeEach
+    void setUp() {
+        economyBuildingFactory = Mockito.mock(EconomyBuildingFactory.class);
+        economyBuildingShop = new DefaultEconomyBuildingShop(economyBuildingFactory);
+    }
 
     @Test
     @DisplayName("Should successfully buy a building.")
     void should_buy_building() {
         // GIVEN
-        var town = Town.builder()
-                .buildings(new HashSet<>())
-                .fraction(NECROPOLIS)
-                .name("Coldreign")
-                .build();
-        var buyer = new EconomyHero(NECROPOLIS, 1000);
-        var buildingToBuy = EconomyBuilding.builder()
-                .prerequisites(List.of())
-                .fraction(NECROPOLIS)
-                .goldCost(100)
-                .name("Tomb of Souls")
-                .type(EconomyBuildingType.CREATURE_GENERATOR)
-                .build();
+        var buildingName = "Tomb of Souls";
+        var costOfBuilding = Set.of(new Resource(Resource.ResourceType.GOLD, 100));
+        var buyer = new EconomyHero(NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 1000)));
+        var buildingStatistic = new EconomyBuildingStatistic(buildingName, costOfBuilding, List.of());
+        var buildingToBuy = new EconomyBuilding(buildingStatistic);
 
         // WHEN
-        economyBuildingShop.buy(buyer, town, buildingToBuy);
+        when(economyBuildingFactory.createBuilding(buildingName)).thenReturn(buildingToBuy);
+        economyBuildingShop.buy(buyer, buildingName);
 
         // THEN
-        assertThat(town.getBuildings()).contains(buildingToBuy);
-        assertThat(buyer.getGold()).isEqualTo(900);
+        assertThat(buyer.getResource(Resource.ResourceType.GOLD).amount()).isEqualTo(900);
     }
 }

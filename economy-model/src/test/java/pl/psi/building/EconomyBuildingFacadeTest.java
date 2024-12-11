@@ -4,100 +4,61 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import pl.psi.building.engine.EconomyBuildingEngine;
+import pl.psi.building.factory.EconomyBuildingFactory;
 import pl.psi.building.shop.EconomyBuildingShop;
 import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resource;
 import pl.psi.town.Town;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 class EconomyBuildingFacadeTest {
 
     private EconomyBuildingShop economyBuildingShopMock;
-    private EconomyBuildingEngine economyBuildingEngineMock;
     private EconomyBuildingFacade economyBuildingFacade;
 
     @BeforeEach
     void setUp() {
         this.economyBuildingShopMock = Mockito.mock(EconomyBuildingShop.class);
-        this.economyBuildingEngineMock = Mockito.mock(EconomyBuildingEngine.class);
-        this.economyBuildingFacade = new EconomyBuildingFacade(
-                economyBuildingShopMock, economyBuildingEngineMock
-        );
+        EconomyBuildingFactory economyBuildingFactoryMock = Mockito.mock(EconomyBuildingFactory.class);
+        this.economyBuildingFacade = new EconomyBuildingFacade(economyBuildingShopMock, economyBuildingFactoryMock);
     }
 
     @Test
     @DisplayName("Should successfully delegate tasks to shop and engine.")
-    void should_delegate_building_task_to_engine_and_shop() {
+    void should_buy_a_building_and_build_it_in_town() {
         // GIVEN
-        var building = EconomyBuilding.builder()
-                .name("")
-                .type(EconomyBuildingType.CREATURE_GENERATOR)
-                .fraction(EconomyHero.Fraction.NECROPOLIS)
-                .prerequisites(List.of())
-                .goldCost(100)
-                .build();
-        var buyer = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, 1000);
+        var buildingName = "test";
+        var buyer = new EconomyHero(
+                EconomyHero.Fraction.NECROPOLIS,
+                Set.of(new Resource(Resource.ResourceType.GOLD, 1000))
+        );
         var town = Town.builder()
                 .name("")
                 .buildings(Set.of())
                 .build();
 
         // WHEN
-        economyBuildingFacade.buildBuilding(buyer, town, building);
+        economyBuildingFacade.buildBuilding(buyer, town, buildingName);
 
         // THEN
-        verify(economyBuildingShopMock).buy(buyer, town, building);
-        verify(economyBuildingEngineMock).buildBuilding(building);
-    }
-
-    @Test
-    void testBuildBuilding_Fails_WhenBuildingStateIsNotToBuild() {
-        // GIVEN
-        var building = Mockito.mock(EconomyBuilding.class);
-        var buyer = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, 1000);
-        var town = Town.builder()
-                .name("")
-                .buildings(Set.of())
-                .build();
-
-        // WHEN
-        when(building.getBuiltState()).thenReturn(EconomyBuilding.BuildingState.BUILT);
-
-        // THEN
-        assertThatThrownBy(() -> economyBuildingFacade.buildBuilding(buyer, town, building))
-                .isInstanceOf(IllegalStateException.class);
-        verifyNoInteractions(economyBuildingShopMock, economyBuildingEngineMock);
-        assertThat(buyer.getGold()).isEqualTo(1000);
+        verify(economyBuildingShopMock).buy(buyer, buildingName);
     }
 
     @Test
     void testBuildBuilding_Fails_WhenBuildingAlreadyBuilt() {
         // GIVEN
-        var building = EconomyBuilding.builder()
-                .name("")
-                .type(EconomyBuildingType.CREATURE_GENERATOR)
-                .fraction(EconomyHero.Fraction.NECROPOLIS)
-                .prerequisites(List.of())
-                .goldCost(100)
-                .build();
-        var buyer = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, 1000);
+        var buildingName = "test";
+        var buyer = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 1000)));
         var town = Mockito.mock(Town.class);
-        Set<EconomyBuilding> buildings = new HashSet<>();
-        buildings.add(building);
 
         // WHEN
-        when(town.getBuildings()).thenReturn(buildings);
+        economyBuildingFacade.buildBuilding(buyer, town, buildingName);
 
-        // GIVEN
-        assertThatThrownBy(() -> economyBuildingFacade.buildBuilding(buyer, town, building))
-                .isInstanceOf(IllegalStateException.class);
-        verifyNoInteractions(economyBuildingShopMock, economyBuildingEngineMock);
+        // THEN
+        verify(economyBuildingShopMock).buy(buyer, buildingName);
+        verify(town).buildBuilding(Mockito.any());
     }
 }

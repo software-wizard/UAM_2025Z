@@ -1,20 +1,25 @@
 package pl.psi.hero;
 
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.resource.Resource;
 
 public class CreatureShop
 {
 
     public void buy( final EconomyHero aHero, final EconomyCreature aEconomyCreature )
     {
-        aHero.substractGold( aEconomyCreature.getGoldCost() * aEconomyCreature.getAmount() );
+        var resourcesNeededToButCreature = new Resource(
+                Resource.ResourceType.GOLD,
+                aEconomyCreature.getGoldCost() * aEconomyCreature.getAmount()
+        );
+        aHero.subtractResource(resourcesNeededToButCreature);
         try
         {
             aHero.addCreature( aEconomyCreature );
         }
         catch( final Exception e )
         {
-            aHero.addGold( aEconomyCreature.getGoldCost() * aEconomyCreature.getAmount() );
+            aHero.addResource( resourcesNeededToButCreature );
             throw new IllegalStateException( "hero cannot consume more creature" );
         }
     }

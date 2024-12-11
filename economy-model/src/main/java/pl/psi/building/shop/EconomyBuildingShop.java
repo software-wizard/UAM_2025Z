@@ -6,5 +6,7 @@ import pl.psi.town.Town;
 
 public interface EconomyBuildingShop {
 
-    void buy(EconomyHero aBuyer, Town aTown, EconomyBuilding aBuildingToBuy);
+    EconomyBuilding buy(EconomyHero aBuyer, String aBuildingName);
+
+    boolean hasHeroEnoughResourcesToBuyBuilding(EconomyHero aHero, String aBuildingName);
 }

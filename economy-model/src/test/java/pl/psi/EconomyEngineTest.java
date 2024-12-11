@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resource;
+
+import java.util.Set;
 
 class EconomyEngineTest
 {
@@ -19,8 +22,8 @@ class EconomyEngineTest
     @BeforeEach
     void init()
     {
-        h1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
-        h2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        h1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 1000)) );
+        h2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 1000)) );
         economyEngine = new EconomyEngine( h1, h2 );
         creatureFactory = new EconomyNecropolisFactory();
     }
@@ -47,11 +50,11 @@ class EconomyEngineTest
     void shouldBuyCreatureCreatureInCorrectHero()
     {
         economyEngine.buy( creatureFactory.create( false, 1, 1 ) );
-        assertEquals( 940, h1.getGold() );
-        assertEquals( 1000, h2.getGold() );
+        assertEquals( 940, h1.getResource(Resource.ResourceType.GOLD) );
+        assertEquals( 1000, h2.getResource(Resource.ResourceType.GOLD) );
         economyEngine.pass();
         economyEngine.buy( creatureFactory.create( false, 2, 1 ) );
-        assertEquals( 900, h2.getGold() );
-        assertEquals( 940, h1.getGold() );
+        assertEquals( 900, h2.getResource(Resource.ResourceType.GOLD) );
+        assertEquals( 940, h1.getResource(Resource.ResourceType.GOLD) );
     }
 }
