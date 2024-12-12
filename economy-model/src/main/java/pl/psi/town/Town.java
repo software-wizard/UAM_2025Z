@@ -1,9 +1,9 @@
 package pl.psi.town;
 
-import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Getter;
 import pl.psi.building.EconomyBuilding;
+import pl.psi.building.EconomyBuildingStatistic;
 import pl.psi.hero.EconomyHero;
 
 import java.util.HashSet;
@@ -19,9 +19,17 @@ public class Town {
 
     public void buildBuilding(EconomyBuilding aBuilding) {
         if (buildings.contains(aBuilding)) {
-            throw new BuildingAlreadyBuiltException(String.format("Building %s is already built", aBuilding.getName()));
+            throw new BuildingAlreadyBuiltException(String.format("Building %s is already built", aBuilding.getStatistic().name()));
         }
         buildings.add(aBuilding);
+        aBuilding.startBuilding();
+        aBuilding.finishBuilding();
+    }
+
+    public boolean isBuildingAlreadyBuilt(Town aTown, EconomyBuildingStatistic economyBuildingStatistic) {
+        return aTown.getBuildings()
+                .stream()
+                .anyMatch(building -> building.getStatistic().equals(economyBuildingStatistic));
     }
 
     public static class Builder {

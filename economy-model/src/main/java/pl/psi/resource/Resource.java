@@ -24,4 +24,9 @@ public record Resource(ResourceType type, int amount) {
     public enum ResourceType {
         GOLD, WOOD, ORE, MERCURY, SULFUR, CRYSTAL, GEMS
     }
+
+    @Override
+    public String toString() {
+        return type + "=" + amount;
+    }
 }

@@ -8,8 +8,8 @@ import java.util.Set;
 @EqualsAndHashCode
 public class EconomyBuilding {
 
-
-    protected final EconomyBuildingStatistic statistic;
+    @Getter
+    private final EconomyBuildingStatistic statistic;
     private BuildingState builtState = BuildingState.TO_BUILD;
 
     public EconomyBuilding(EconomyBuildingStatistic statistic) {
@@ -18,10 +18,6 @@ public class EconomyBuilding {
 
     public Set<Resource> getBuildingCost() {
         return Set.copyOf(statistic.cost());
-    }
-
-    public String getName() {
-        return statistic.name();
     }
 
     public void startBuilding() {

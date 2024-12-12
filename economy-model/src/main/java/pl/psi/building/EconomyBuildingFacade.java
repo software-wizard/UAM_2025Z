@@ -7,31 +7,38 @@ import pl.psi.building.shop.EconomyBuildingShop;
 import pl.psi.hero.EconomyHero;
 import pl.psi.town.Town;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
 @RequiredArgsConstructor
 public class EconomyBuildingFacade {
 
     private final EconomyBuildingShop economyBuildingShop;
-    private final EconomyBuildingFactory economyBuildingFactory;
+    private final EconomyBuildingFactory<EconomyBuilding> economyBuildingFactory;
+    private final EconomyBuildingFactory<CreatureDwellingsBuilding> economyDwellingsFactory;
 
     public void buildBuilding(EconomyHero aBuyer, Town aTown, String aBuildingName) {
         Preconditions.checkArgument(!aBuildingName.isBlank());
-        EconomyBuilding boughtBuilding = economyBuildingShop.buy(aBuyer, aBuildingName);
+        EconomyBuilding boughtBuilding = economyBuildingShop.buyBuilding(aBuyer, aBuildingName);
         aTown.buildBuilding(boughtBuilding);
     }
 
-    public boolean hasHeroEnoughResourcesToBuildBuilding(EconomyHero aBuyer, String aBuildingName) {
-        Preconditions.checkArgument(!aBuildingName.isBlank());
-        var building = economyBuildingFactory.createBuilding(aBuildingName);
-        return aBuyer.hasEnoughResources(building.getBuildingCost());
+    public Optional<EconomyBuildingStatistic> findEconomyBuildingStatistic(String aBuildingName) {
+        return Stream.concat(
+                economyDwellingsFactory.getAllAvailableBuildingsToBuild().stream(),
+                economyBuildingFactory.getAllAvailableBuildingsToBuild().stream()
+        ).filter(building -> building.name().equals(aBuildingName)).findFirst();
     }
 
     public void upgradeDwellingsBuilding(EconomyHero aBuyer, CreatureDwellingsBuilding aBuilding) {
         aBuilding.upgrade();
     }
 
-    public boolean hasHeroEnoughResourcesToUpgradeDwellings(EconomyHero aBuyer, String aDwellingsName) {
-        Preconditions.checkArgument(!aDwellingsName.isBlank());
-        CreatureDwellingsBuilding building = economyBuildingFactory.createDwellings(aDwellingsName);
-        return aBuyer.hasEnoughResources(building.getUpgradeCost());
+    public Set<EconomyBuildingStatistic> getAllAvailableBuildingsToBuild(EconomyBuildingStatistic.EconomyBuildingType type) {
+        return type == EconomyBuildingStatistic.EconomyBuildingType.BUILDING
+                ? economyBuildingFactory.getAllAvailableBuildingsToBuild()
+                : economyDwellingsFactory.getAllAvailableBuildingsToBuild();
     }
 }

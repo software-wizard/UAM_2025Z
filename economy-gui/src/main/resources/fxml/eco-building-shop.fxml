@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="800.0" prefWidth="1600.0">
+    <children>
+        <GridPane fx:id="buildingGrid">
+        </GridPane>
+        <VBox fx:id="labelVBox" alignment="CENTER">
+            <Label fx:id="resourcesLabel" text="Zasoby: "/>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@main.css"/>
+    </stylesheets>
+</VBox>
