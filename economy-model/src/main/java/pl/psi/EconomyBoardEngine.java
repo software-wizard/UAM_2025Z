@@ -30,15 +30,38 @@ public class EconomyBoardEngine {
         return board.getCastle(aPoint);
     }
 
+    public Optional<MapTileIf> getMapTile(final Point aPoint) {
+        return board.getMapTile(aPoint);
+    }
+
     public boolean canMove(final Point aPoint) {
 
        return board.canMove(economyTurnQueue.getCurrentHero(), aPoint);
 
     }
 
+    public void pass() {
+        economyTurnQueue.next();
+    }
+
+    public boolean canAttack(final Point point) {
+        double distance = board.getPosition(economyTurnQueue.getCurrentHero())
+                .distance(point);
+        return board.getEconomyHero(point)
+                .isPresent()
+                && distance < 2 && distance > 0;
+    }
+    public boolean canEnter(final Point point) {
+        double distance = board.getPosition(economyTurnQueue.getCurrentHero())
+                .distance(point);
+        return board.getCastle(point)
+                .isPresent()
+                && distance < 2 && distance > 0;
+    }
+
+
     public void move(final Point aPoint) {
         board.move(economyTurnQueue.getCurrentHero(), aPoint);
         observerSupport.firePropertyChange(HERO_MOVED, null, aPoint);
     }
-
 }

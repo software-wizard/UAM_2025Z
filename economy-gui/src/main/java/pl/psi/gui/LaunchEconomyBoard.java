@@ -6,5 +6,4 @@ public class LaunchEconomyBoard {
     {
         EconomyBoardStart.main( args );
     }
-
 }

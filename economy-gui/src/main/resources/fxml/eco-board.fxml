@@ -11,7 +11,7 @@
     <top>
         <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="shopButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="BUY"
+                <Button fx:id="passButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="PASS"
                         textAlignment="CENTER">
                     <font>
                         <Font size="16.0"/>

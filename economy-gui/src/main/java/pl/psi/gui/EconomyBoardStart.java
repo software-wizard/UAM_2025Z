@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
 public class EconomyBoardStart extends Application {
@@ -19,12 +20,28 @@ public class EconomyBoardStart extends Application {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getClass().getClassLoader()
                 .getResource( "fxml/eco-board.fxml" ) );
-        loader.setController( new EconomyBoardController( new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000 ),
-                new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 2000 ) ) );
+        loader.setController( new EconomyBoardController( aHero1(), aHero2() ));
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
         aStage.setX( 5 );
         aStage.setY( 5 );
         aStage.show();
+    }
+
+    private EconomyHero aHero1()
+    {
+        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000);
+        final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
+        ret.addCreature( factory.create( false, 1, 1 ));
+        ret.addCreature( factory.create( false, 1, 1 ));
+        return ret;
+    }
+
+    private EconomyHero aHero2()
+    {
+        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 4000);
+        final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
+        ret.addCreature( factory.create( false, 2, 1 ));
+        return ret;
     }
 }

@@ -11,7 +11,7 @@ public class EconomyBoard {
     private static final int MAX_WITDH = 9;
     private final BiMap< Point, EconomyHero> heroMap = HashBiMap.create();
 
-    private final BiMap<Point,BoardEntity> boardEntitiesMap = HashBiMap.create();
+    private final BiMap<Point,MapTileIf> boardEntitiesMap = HashBiMap.create();
 
     public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2 )
     {
@@ -21,7 +21,7 @@ public class EconomyBoard {
     }
 
     private void addEntitiesToBoard(){
-        Castle castle = new Castle();
+        MapTileIf castle = new Castle();
         Point castleCoords = new Point(5,5);
         boardEntitiesMap.put(castleCoords,castle);
     }
@@ -39,6 +39,11 @@ public class EconomyBoard {
     Optional<Castle> getCastle(final Point aPoint )
     {
         return Optional.ofNullable((Castle) boardEntitiesMap.get( aPoint ) );
+    }
+
+    Optional<MapTileIf> getMapTile(final Point aPoint )
+    {
+        return Optional.ofNullable( boardEntitiesMap.get(aPoint));
     }
 
     void move( final EconomyHero hero, final Point aPoint )

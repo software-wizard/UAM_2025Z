@@ -5,9 +5,11 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.ImagePattern;
+import pl.psi.MapTileIf;
 import pl.psi.creatures.EconomyCreature;
 
-public class EconomyHero implements PropertyChangeListener
+public class EconomyHero implements PropertyChangeListener, MapTileIf
 {
     private final Fraction fraction;
     private final List< EconomyCreature > creatureList;
@@ -20,7 +22,7 @@ public class EconomyHero implements PropertyChangeListener
         creatureList = new ArrayList<>();
     }
 
-    void addCreature( final EconomyCreature aCreature )
+    public void addCreature( final EconomyCreature aCreature )
     {
         if( creatureList.size() >= 7 )
         {
@@ -57,6 +59,16 @@ public class EconomyHero implements PropertyChangeListener
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
     }
+
+    @Override
+    public TileType getTileType() {
+        return TileType.HERO;
+    }
+
+    @Override
+    public ImagePattern getImagePattern() {
+        return null;
+    } //TODO Interface
 
     public enum Fraction
     {
