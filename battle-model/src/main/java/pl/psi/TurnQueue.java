@@ -54,9 +54,11 @@ public class TurnQueue {
         roundNumber++;
         initQueue();
         observerSupport.firePropertyChange(END_OF_TURN, roundNumber - 1, roundNumber);
+
     }
 
     void addObserver(PropertyChangeListener aObserver) {
         observerSupport.addPropertyChangeListener(aObserver);
     }
+
 }

@@ -1,4 +1,5 @@
 package pl.psi;
+import pl.psi.creatures.Creature;
 
 public abstract class Tile {
     private final Point point;
@@ -9,6 +10,7 @@ public abstract class Tile {
         this.passable = passable;
     }
 
+    public abstract void apply(Creature aCreature);
     public boolean isPassable() {
         return passable;
     }

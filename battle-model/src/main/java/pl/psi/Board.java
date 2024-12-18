@@ -46,10 +46,14 @@ public class Board
             map.put( aPoint, aCreature );
 
             Tile tile = specialTiles.get(aPoint);
-            if (tile instanceof DamageTile) {
-                DamageTile damageTile = (DamageTile) tile;
-                aCreature.takeDamage(damageTile.getGivenDamage());
+            if(tile!=null){
+                tile.apply(aCreature); //to jest ten polimorfizm
             }
+             //to jest ten polimorfizm
+//        if (tile instanceof DamageTile) {
+//                DamageTile damageTile = (DamageTile) tile;
+//                aCreature.takeDamage(damageTile.getGivenDamage());
+//            }
         }
 
     }

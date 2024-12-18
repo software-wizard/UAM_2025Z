@@ -51,7 +51,7 @@ public enum CreatureStatistic implements CreatureStatisticIf
         true );//
 
     private final String name;
-    private final int attack;
+    private int attack;
     private final int armor;
     private final int maxHp;
     private final int moveRange;
@@ -75,6 +75,9 @@ public enum CreatureStatistic implements CreatureStatisticIf
         isUpgraded = aIsUpgraded;
     }
 
+    public void changeAttack(int change){
+        attack = attack + change;
+    }
     String getTranslatedName()
     {
         return name;

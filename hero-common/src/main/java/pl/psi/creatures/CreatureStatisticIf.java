@@ -12,4 +12,6 @@ public interface CreatureStatisticIf {
     int getTier();
     String getDescription();
     boolean isUpgraded();
+
+    void changeAttack(int boost);
 }

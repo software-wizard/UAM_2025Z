@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 public class CreatureStats implements CreatureStatisticIf{
     private final String name;
-    private final int attack;
+    private int attack;
     private final int armor;
     private final int maxHp;
     private final int moveRange;
@@ -25,6 +25,10 @@ public class CreatureStats implements CreatureStatisticIf{
     @Override
     public boolean isUpgraded() {
         return upgraded;
+    }
+
+    public void changeAttack(int increase){
+        attack = attack + increase;
     }
     private final boolean upgraded;
 }
