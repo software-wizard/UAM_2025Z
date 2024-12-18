@@ -43,10 +43,6 @@ public class BuffTest {
         creature1.addBuff(buff);
         turnQueue.next();
         turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
         assertEquals(10, creature1.getAttack());
     }
 

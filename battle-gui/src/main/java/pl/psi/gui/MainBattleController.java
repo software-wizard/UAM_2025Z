@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import pl.psi.Tile;
 
 public class MainBattleController {
     private final GameEngine gameEngine;
@@ -58,8 +59,13 @@ public class MainBattleController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.attack(new Point(x1, y1)));
                 }
-                if (gameEngine.isObstacleTile(new Point(x, y))){
-                    mapTile.setBackground(Color.BLACK);
+                Tile tile = gameEngine.getTile(new Point(x, y));
+                if (tile != null) {
+                    switch (tile.getType()) {
+                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
+                        case DAMAGE -> mapTile.setBackground(Color.ORANGE);
+                        case BUFF -> mapTile.setBackground(Color.BLUE);
+                    }
                 }
                 gridMap.add(mapTile, x, y);
             }

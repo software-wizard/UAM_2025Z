@@ -62,7 +62,7 @@ public class GameEngine {
         return Optional.of(turnQueue.getCurrentCreature()).equals(board.getCreature(aPoint));
     }
 
-    public boolean isObstacleTile(Point point) {
-        return board.isObstacleTile(point);
+    public Tile getTile(Point point) {
+        return board.getSpecialTiles(point);
     }
 }

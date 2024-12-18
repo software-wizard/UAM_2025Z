@@ -97,7 +97,7 @@ public class Creature implements PropertyChangeListener {
         return stats.getDamage();
     }
 
-    int getAttack() {
+    public int getAttack() {
         return stats.getAttack();
     }
 

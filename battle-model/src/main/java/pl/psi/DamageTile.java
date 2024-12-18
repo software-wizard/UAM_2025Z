@@ -5,8 +5,8 @@ import pl.psi.creatures.Creature;
 public class DamageTile extends Tile{
     final private int givenDamage;
 
-    public DamageTile(Point point, int aGivenDamage) {
-        super(point, true);
+    public DamageTile(int aGivenDamage) {
+        super(true, TileType.DAMAGE);
         this.givenDamage = aGivenDamage;
     }
 

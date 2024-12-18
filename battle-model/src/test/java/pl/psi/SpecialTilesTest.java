@@ -20,7 +20,7 @@ public class SpecialTilesTest {
                         .build() )
                 .build();
         Board board = new Board(List.of(c1), List.of());
-        board.addTile(new Point(2,2), new ObstacleTile(new Point(2,2)));
+        board.addTile(new Point(2,2), new ObstacleTile());
         boolean result = board.canMove(c1, new Point(2, 2));
         assertThat(result).isFalse();
     }
@@ -39,7 +39,7 @@ public class SpecialTilesTest {
 
         Board board = new Board(List.of(creature), emptyList());
         Point damageTilePoint = new Point(2, 2);
-        board.addTile(damageTilePoint, new DamageTile(damageTilePoint, 30));
+        board.addTile(damageTilePoint, new DamageTile(30));
 
         Point startPosition = board.getPosition(creature);
         board.move(creature, damageTilePoint);
@@ -62,7 +62,7 @@ public class SpecialTilesTest {
 
         Board board = new Board(List.of(creature), emptyList());
         Point damageTilePoint = new Point(2, 2);
-        board.addTile(damageTilePoint, new DamageTile(damageTilePoint, 250));
+        board.addTile(damageTilePoint, new DamageTile(250));
 
         board.move(creature, damageTilePoint);
 

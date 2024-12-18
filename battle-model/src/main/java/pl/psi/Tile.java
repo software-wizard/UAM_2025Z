@@ -2,12 +2,12 @@ package pl.psi;
 import pl.psi.creatures.Creature;
 
 public abstract class Tile {
-    private final Point point;
     private final boolean passable;
+    private final TileType type;
 
-    public Tile(Point point, boolean passable) {
-        this.point = point;
+    public Tile(boolean passable, TileType type) {
         this.passable = passable;
+        this.type = type;
     }
 
     public abstract void apply(Creature aCreature);
@@ -15,4 +15,7 @@ public abstract class Tile {
         return passable;
     }
 
+    public TileType getType() {
+        return type;
+    }
 }
