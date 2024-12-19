@@ -102,7 +102,7 @@ public class ResurrectAfterAttackCreature  extends Creature{
     }
 
     @Override
-    int getAttack()
+    public int getAttack()
     {
         return decorated.getAttack();
     }
