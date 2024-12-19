@@ -48,7 +48,7 @@ public class Creature implements PropertyChangeListener {
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
-            applyDamage(aDefender, damage);
+            aDefender.applyDamage(damage);
             if (canCounterAttack(aDefender)) {
                 counterAttack(aDefender);
             }
@@ -59,19 +59,25 @@ public class Creature implements PropertyChangeListener {
         return getAmount() > 0;
     }
 
-    private void applyDamage(final Creature aDefender, final int aDamage) {
-        int hpToSubstract = aDamage % aDefender.getMaxHp();
-        int amountToSubstract = Math.round(aDamage / aDefender.getMaxHp());
+    // undead is a type of creature:
+    public boolean isUndead()
+    {
+        return stats.isUndead();
+    }
 
-        int hp = aDefender.getCurrentHp() - hpToSubstract;
+    private void applyDamage(final int aDamage) {
+        int hpToSubstract = aDamage % getMaxHp();
+        int amountToSubstract = Math.round(aDamage / getMaxHp());
+
+        int hp = getCurrentHp() - hpToSubstract;
         if (hp <= 0) {
-            setCurrentHp(aDefender.getMaxHp() - hp);
-            setAmount(aDefender.getAmount() - 1);
+            setCurrentHp(getMaxHp() - hp);
+            setAmount(getAmount() - 1);
         }
         else{
             setCurrentHp(hp);
         }
-        setAmount(aDefender.getAmount() - amountToSubstract);
+        setAmount(getAmount() - amountToSubstract);
     }
 
     private int getMaxHp() {
@@ -89,7 +95,7 @@ public class Creature implements PropertyChangeListener {
     private void counterAttack(final Creature aAttacker) {
         final int damage = aAttacker.getCalculator()
                 .calculateDamage(aAttacker, this);
-        applyDamage(this, damage);
+        applyDamage(damage);
         aAttacker.counterAttackCounter--;
     }
 

@@ -21,14 +21,16 @@ public class CreatureStats implements CreatureStatisticIf{
     private final Range< Integer > damage;
     private final int tier;
     private final String description;
+    private final boolean upgraded;
+    private final boolean isUpgraded;
+    private final boolean isUndead;
 
     @Override
     public boolean isUpgraded() {
         return upgraded;
     }
-
     public void changeAttack(int increase){
         attack = attack + increase;
     }
-    private final boolean upgraded;
+
 }
