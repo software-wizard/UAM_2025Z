@@ -24,17 +24,15 @@ public class EcoController implements PropertyChangeListener
     @FXML
     HBox shopsBox;
     @FXML
-    Button readyButton;
-    @FXML
     Label playerLabel;
     @FXML
     Label currentGoldLabel;
     @FXML
     Label roundNumberLabel;
 
-    public EcoController( final EconomyHero aHero1, final EconomyHero aHero2 )
+    public EcoController( final EconomyHero aHero1 )
     {
-        economyEngine = new EconomyEngine( aHero1, aHero2 );
+        economyEngine = new EconomyEngine( aHero1 );
     }
 
     @FXML
@@ -45,22 +43,12 @@ public class EcoController implements PropertyChangeListener
         economyEngine.addObserver( EconomyEngine.HERO_BOUGHT_CREATURE, this );
         economyEngine.addObserver( EconomyEngine.NEXT_ROUND, this );
 
-        readyButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            if( economyEngine.getRoundNumber() < 4 )
-            {
-                economyEngine.pass();
-            }
-            else
-            {
-                goToBattle();
-            }
-        } );
     }
 
-    private void goToBattle()
-    {
-        EcoBattleConverter.startBattle( economyEngine.getPlayer1(), economyEngine.getPlayer2() );
-    }
+//    private void goToBattle()
+//    {
+//        //EcoBattleConverter.startBattle( economyEngine.getPlayer1(), economyEngine.getPlayer2() );
+//    }
 
     void refreshGui()
     {
@@ -68,7 +56,7 @@ public class EcoController implements PropertyChangeListener
             .toString() );
         currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero()
             .getGold() ) );
-        roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
+        //roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         shopsBox.getChildren()
             .clear();
         heroStateHBox.getChildren()
