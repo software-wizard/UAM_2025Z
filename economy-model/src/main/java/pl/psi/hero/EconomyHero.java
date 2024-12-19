@@ -70,6 +70,12 @@ public class EconomyHero implements PropertyChangeListener, MapTileIf
         return null;
     } //TODO Interface
 
+    @Override
+    public void Interact(EconomyHero hero) {//inny bohater wchodzi w interakcje z TYM bohaterem
+        //TUTAJ moznaby dac Attack ?
+       //tylko trzeba uzupelnic canInteract o interact z mapa bohaterow??
+    }
+
     public enum Fraction
     {
         NECROPOLIS;

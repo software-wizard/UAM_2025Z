@@ -48,7 +48,6 @@ public class EconomyBoardController {
         economyBoardEngine.addObserver((e) -> refreshGui());
     }
 
-
     private void openShop(EconomyHero hero) {
 
         try {
@@ -68,6 +67,7 @@ public class EconomyBoardController {
         }
     }
 
+
     private void refreshGui() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -78,8 +78,8 @@ public class EconomyBoardController {
                 economyBoardEngine.getHero(new Point(x, y))
                         .ifPresent(c -> mapTile.setBackground(Color.GREEN));
 
-                Optional<MapTileIf> entity = economyBoardEngine.getMapTile(new Point(x, y));
-                entity.ifPresent(c -> mapTile.setBackgroundImage(entity.get().getImagePattern()));
+                Optional<MapTileIf> mapObject = economyBoardEngine.getMapTile(new Point(x, y));
+                mapObject.ifPresent(c -> mapTile.setBackgroundImage(mapObject.get().getImagePattern()));
 
                 if (economyBoardEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.GREY);
@@ -87,18 +87,27 @@ public class EconomyBoardController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> economyBoardEngine.move(new Point(x1, y1)));
                 }
+                if (economyBoardEngine.canInteract(new Point(x,y))){
+                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                            e -> economyBoardEngine.interact(new Point(x1, y1)));
+                }//dla obiektow na mapie
 
                 if (economyBoardEngine.canEnter(new Point(x, y))) {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> openShop(economyTurnQueue.getCurrentHero())
                     );
                 }
-
+                if (economyBoardEngine.canEnterCombatBuilding(new Point(x, y))) {
+                    EconomyHero opponent = economyBoardEngine.createCombatBuildingOpponent(new Point(x,y));
+                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                            e -> ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), opponent));
+                }
                 if (economyBoardEngine.canAttack(new Point(x, y))) {
                     mapTile.setBackground(Color.RED);
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> ecoBattleConverter.startBattle(hero1, hero2));
                 }
+
                 gridMap.add(mapTile, x, y);
             }
         }
