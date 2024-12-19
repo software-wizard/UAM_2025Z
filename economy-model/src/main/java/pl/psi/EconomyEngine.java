@@ -2,10 +2,13 @@ package pl.psi;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Map;
 
+import lombok.Getter;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.hero.CreatureShop;
 import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resources;
 
 public class EconomyEngine
 {
@@ -16,7 +19,9 @@ public class EconomyEngine
     //private final EconomyHero hero2;
     private final CreatureShop creatureShop = new CreatureShop();
     private final PropertyChangeSupport observerSupport;
+    @Getter
     private EconomyHero activeHero;
+    @Getter
     private int roundNumber;
 
     public EconomyEngine( final EconomyHero aHero1 )
@@ -53,6 +58,20 @@ public class EconomyEngine
 //            endTurn();
 //        }
 //    }
+    public void pass()
+    {
+        if( activeHero == hero1 )
+        {
+            activeHero = hero2;
+            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero1, activeHero );
+        }
+        else
+        {
+            activeHero = hero1;
+            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero2, activeHero );
+            endTurn();
+        }
+    }
 
 //    private void endTurn()
 //    {
@@ -61,6 +80,13 @@ public class EconomyEngine
 //        hero2.addGold( 2000 * roundNumber );
 //        observerSupport.firePropertyChange( NEXT_ROUND, roundNumber - 1, roundNumber );
 //    }
+    private void endTurn()
+    {
+        roundNumber += 1;
+        hero1.addResource( new Resources(Map.of(Resources.ResourceType.GOLD, 2000 * roundNumber )));
+        hero2.addResource( new Resources(Map.of(Resources.ResourceType.GOLD, 2000 * roundNumber )));
+        observerSupport.firePropertyChange( NEXT_ROUND, roundNumber - 1, roundNumber );
+    }
 
 //    public int getRoundNumber()
 //    {
