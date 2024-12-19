@@ -52,6 +52,7 @@ public class Board
             return false;
         }
         final Point oldPosition = getPosition( aCreature );
+
         return aPoint.distance( oldPosition.getX(), oldPosition.getY() ) < aCreature.getMoveRange();
     }
 
@@ -60,4 +61,6 @@ public class Board
         return map.inverse()
             .get( aCreature );
     }
+
+
 }
