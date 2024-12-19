@@ -34,14 +34,5 @@ class TurnQueueTest
         assertEquals( turnQueue.getCurrentCreature(), creature1 );
     }
 
-    @Test
-    void x(){
-        c1 - moverange 2 (0,1)
-                c2 - moverange 10
-        new Board(List.of(c1,c2), empty())
-                board.move(c2 -> 1,1);
-        board.canMove(c1,2,1);
 
-        alg.getPath((0,1), (2,1), board); -> null
-    }
 }

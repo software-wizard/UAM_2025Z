@@ -24,8 +24,7 @@ class EconomyEngineTest
     void init()
     {
         h1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 1000)) );
-        h2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 1000)) );
-        economyEngine = new EconomyEngine( h1, h2 );
+        economyEngine = new EconomyEngine( h1 );
         creatureFactory = new EconomyNecropolisFactory();
     }
 
@@ -53,7 +52,6 @@ class EconomyEngineTest
         economyEngine.buy( creatureFactory.create( false, 1, 1 ) );
         assertEquals( 940, h1.getResourceAmount(Resources.ResourceType.GOLD) );
         assertEquals( 1000, h2.getResourceAmount(Resources.ResourceType.GOLD) );
-        economyEngine.pass();
         economyEngine.buy( creatureFactory.create( false, 2, 1 ) );
         assertEquals( 900, h2.getResourceAmount(Resources.ResourceType.GOLD) );
         assertEquals( 940, h1.getResourceAmount(Resources.ResourceType.GOLD) );

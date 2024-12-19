@@ -26,8 +26,6 @@ public class EconomyEngine
 
     public EconomyEngine( final EconomyHero aHero1 )
     {
-//        hero1 = aHero1;
-//        hero2 = aHero2;
         activeHero = aHero1;
         roundNumber = 1;
         observerSupport = new PropertyChangeSupport( this );
@@ -39,74 +37,9 @@ public class EconomyEngine
         observerSupport.firePropertyChange( HERO_BOUGHT_CREATURE, null, null );
     }
 
-    public EconomyHero getActiveHero()
-    {
-        return activeHero;
-    }
-
-//    public void pass()
-//    {
-//        if( activeHero == hero1 )
-//        {
-//            activeHero = hero2;
-//            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero1, activeHero );
-//        }
-//        else
-//        {
-//            activeHero = hero1;
-//            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero2, activeHero );
-//            endTurn();
-//        }
-//    }
-    public void pass()
-    {
-        if( activeHero == hero1 )
-        {
-            activeHero = hero2;
-            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero1, activeHero );
-        }
-        else
-        {
-            activeHero = hero1;
-            observerSupport.firePropertyChange( ACTIVE_HERO_CHANGED, hero2, activeHero );
-            endTurn();
-        }
-    }
-
-//    private void endTurn()
-//    {
-//        roundNumber += 1;
-//        hero1.addGold( 2000 * roundNumber );
-//        hero2.addGold( 2000 * roundNumber );
-//        observerSupport.firePropertyChange( NEXT_ROUND, roundNumber - 1, roundNumber );
-//    }
-    private void endTurn()
-    {
-        roundNumber += 1;
-        hero1.addResource( new Resources(Map.of(Resources.ResourceType.GOLD, 2000 * roundNumber )));
-        hero2.addResource( new Resources(Map.of(Resources.ResourceType.GOLD, 2000 * roundNumber )));
-        observerSupport.firePropertyChange( NEXT_ROUND, roundNumber - 1, roundNumber );
-    }
-
-//    public int getRoundNumber()
-//    {
-//        return roundNumber;
-//    }
 
     public void addObserver( final String aPropertyName, final PropertyChangeListener aObserver )
     {
         observerSupport.addPropertyChangeListener( aPropertyName, aObserver );
     }
-
-//    public EconomyHero getPlayer1()
-//    {
-//        // TODO make copy
-//        //return hero1;
-//    }
-//
-//    public EconomyHero getPlayer2()
-//    {
-//        // TODO make copy
-//       // return hero2;
-//    }
 }

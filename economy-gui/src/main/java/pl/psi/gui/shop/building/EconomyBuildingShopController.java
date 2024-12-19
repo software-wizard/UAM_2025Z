@@ -73,6 +73,35 @@ public class EconomyBuildingShopController {
         buildBuildingsGridPane(EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS, 2);
     }
 
+    private void zajebiscieWzne(int row, ImageView buildingIcon, EconomyBuildingStatistic economyBuildingStatistic, String buildingName, Popup popup, Map<EconomyBuildingStatistic, VBox> buildingBoxes, VBox buildingBox, int i) {
+        buildingIcon.setOnMouseClicked(event -> {
+            if (town.isBuildingAlreadyBuilt(town, economyBuildingStatistic)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Budynek już zbudowany");
+                alert.setHeaderText(null);
+                alert.setContentText("Ten budynek już został zbudowany w tym mieście.");
+                alert.showAndWait();
+            } else if (!economyBuildingStatistic.hasEnoughResourcesToBuild(buyer)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Brak zasobów");
+                alert.setHeaderText(null);
+                alert.setContentText("Nie masz wystarczająco zasobów, aby kupić ten budynek.");
+                alert.showAndWait();
+            } else {
+                economyBuildingFacade.buildBuilding(buyer, town, buildingName);
+                updateResources();
+                popup.show(stage);
+                updateBuildingStatuses(buildingBoxes);
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), ae -> popup.hide()));
+                timeline.play();
+            }
+        });
+        buildingGrid.add(buildingBox, i, row);
+    }
+
+
+    //============== śmieci z gui ================
+
     private void buildBuildingsGridPane(EconomyBuildingStatistic.EconomyBuildingType aType, int row) {
         List<EconomyBuildingStatistic> allAvailableDwellingsToBuild = economyBuildingFacade.getAllAvailableBuildingsToBuild(aType, town.getFraction())
                 .stream().toList();
@@ -97,29 +126,7 @@ public class EconomyBuildingShopController {
             label.setTranslateY(-750);
             label.setStyle("-fx-background-color: #81fa81; -fx-padding: 10;");
             popup.getContent().add(label);
-            buildingIcon.setOnMouseClicked(event -> {
-                if (town.isBuildingAlreadyBuilt(town, economyBuildingStatistic)) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Budynek już zbudowany");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Ten budynek już został zbudowany w tym mieście.");
-                    alert.showAndWait();
-                } else if (!economyBuildingStatistic.hasEnoughResourcesToBuild(buyer)) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Brak zasobów");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Nie masz wystarczająco zasobów, aby kupić ten budynek.");
-                    alert.showAndWait();
-                } else {
-                    economyBuildingFacade.buildBuilding(buyer, town, buildingName);
-                    updateResources();
-                    popup.show(stage);
-                    updateBuildingStatuses(buildingBoxes);
-                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), ae -> popup.hide()));
-                    timeline.play();
-                }
-            });
-            buildingGrid.add(buildingBox, i, row);
+            zajebiscieWzne(row, buildingIcon, economyBuildingStatistic, buildingName, popup, buildingBoxes, buildingBox, i);
         }
     }
 

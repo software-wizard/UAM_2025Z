@@ -19,14 +19,12 @@ public class BuyingCreatureTest
     private final EconomyNecropolisFactory creatureFactory = new EconomyNecropolisFactory();
     private EconomyHero hero1;
     private EconomyEngine economyEngine;
-    private EconomyHero hero2;
 
     @BeforeEach
     void init()
     {
         hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 1000)) );
-        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 1000)) );
-        economyEngine = new EconomyEngine( hero1, hero2 );
+        economyEngine = new EconomyEngine( hero1 );
     }
 
     @Test

@@ -6,6 +6,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resources;
+
+import java.util.Map;
+
+import static pl.psi.resource.Resources.ResourceType.GOLD;
 
 public class EconomyBoardStart extends Application {
 
@@ -30,7 +35,7 @@ public class EconomyBoardStart extends Application {
 
     private EconomyHero aHero1()
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000);
+        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,3000)));
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 1, 1 ));
         ret.addCreature( factory.create( false, 1, 1 ));
@@ -39,7 +44,7 @@ public class EconomyBoardStart extends Application {
 
     private EconomyHero aHero2()
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 4000);
+        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,4000)));
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 2, 1 ));
         return ret;

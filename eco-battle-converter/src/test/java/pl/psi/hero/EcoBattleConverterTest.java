@@ -1,14 +1,17 @@
 package pl.psi.hero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static pl.psi.resource.Resources.ResourceType.GOLD;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
 import pl.psi.converter.EcoBattleConverter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.resource.Resources;
 
 class EcoBattleConverterTest
 {
@@ -16,7 +19,7 @@ class EcoBattleConverterTest
     @Test
     void shouldConvertCreaturesCorrectly()
     {
-        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,1000)) );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ecoHero.addCreature( factory.create( false, 1, 1 ) );
         ecoHero.addCreature( factory.create( false, 2, 2 ) );
