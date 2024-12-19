@@ -182,6 +182,7 @@ public class CreatureTest
 
         int initialAmount = VampireLord.getAmount();
         VampireLord.setCurrentHp(20);
+        //wykorzystac stałą, get mozę popsuć
         int initialHp = VampireLord.getCurrentHp();
 
         VampireLord.attack(dragon);
@@ -196,15 +197,16 @@ public class CreatureTest
     @Test
     void creatureShouldNotResurrectIfAttacksUndead()
     {
-        Creature VampireLord = new ResurrectAfterAttackCreature(
-                new NecropolisFactory().create(true, 4, 1));
+        Creature VampireLord =
+                new NecropolisFactory().create(true, 4, 1);
         Creature Zombie = new NecropolisFactory().create(true, 2, 30);
 
         int initialAmount = VampireLord.getAmount();
 
         VampireLord.attack(Zombie);
 
-        assertThat(VampireLord.getAmount()).isLessThan( initialAmount );
+        assertThat(VampireLord.getAmount()).isLessThan( initialAmount ); // zly zapis -> konkreten wartosci jakich sie spodziewam
+        // mozna podejrzec w debugu wartosc
 
     }
 

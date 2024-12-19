@@ -39,17 +39,18 @@ public class ResurrectAfterAttackCreature  extends Creature{
     @Override
     public void attack( final Creature aDefender )
     {
+        int dealtDamage = decorated.getCalculator().calculateDamage(this, aDefender); //wyciaganiete przed atak!
         decorated.attack( aDefender );
 
         // po ataku uzywa nowej zdolnosci resurectCreatures - ale tylko gdy NIE atakowała undeada:
-        if (!aDefender.isUndead()) {
-            int dealtDamage = decorated.getCalculator().calculateDamage(this, aDefender);
+        if (!aDefender.isUndead())
+        {
             resurrectCreatures(dealtDamage);
         }
     }
 
 
-    private void resurrectCreatures(final int dealtDamage)
+    private void resurrectCreatures(final int dealtDamage) // odwrotnosc applydamage?
     {
         // łącznie będziemy leczyc tyle ile zadalismy w attack()
         int hpToRestore = dealtDamage;
