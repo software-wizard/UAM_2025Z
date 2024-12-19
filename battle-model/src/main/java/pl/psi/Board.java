@@ -19,13 +19,20 @@ public class Board
     private static final int DAMAGE_TILE_COUNT = 10;
     private static final int INCREASE_ATTACK_BUFFTILE_COUNT = 5;
     private final BiMap< Point, Creature > map = HashBiMap.create();
-    private final Map<Point, Tile> specialTiles = new HashMap<>();
+    private Map<Point, Tile> specialTiles = new HashMap<>();
 
     public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2 )
     {
         addCreatures( aCreatures1, 0 );
         addCreatures( aCreatures2, MAX_WITDH );
         generateSpecialTiles();
+    }
+
+    public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2, final Map<Point, Tile> aSpecialTiles )
+    {
+        addCreatures( aCreatures1, 0 );
+        addCreatures( aCreatures2, MAX_WITDH );
+        this.specialTiles = aSpecialTiles;
     }
 
     private void addCreatures( final List< Creature > aCreatures, final int aXPosition )
@@ -118,7 +125,7 @@ public class Board
 
     }
 
-    public Tile getSpecialTiles(Point point) {
+    public Tile getSpecialTile(Point point) {
         return specialTiles.get(point);
     }
 }

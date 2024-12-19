@@ -63,6 +63,6 @@ public class GameEngine {
     }
 
     public Tile getTile(Point point) {
-        return board.getSpecialTiles(point);
+        return board.getSpecialTile(point);
     }
 }
