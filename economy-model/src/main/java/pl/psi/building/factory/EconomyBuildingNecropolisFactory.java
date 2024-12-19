@@ -2,21 +2,17 @@ package pl.psi.building.factory;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import pl.psi.building.CreatureDwellingsBuilding;
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingStatistic;
-import pl.psi.resource.Resource;
+import pl.psi.building.model.DefaultEconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.resource.Resources;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory<EconomyBuilding> {
+class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
 
     @Override
-    public EconomyBuilding createBuilding(String aBuildingName) {
+    public DefaultEconomyBuilding createBuilding(String aBuildingName) {
         return buildBuildingFromName(aBuildingName);
     }
 
@@ -37,7 +33,7 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory<Economy
                 .collect(Collectors.toSet());
     }
 
-    private EconomyBuilding buildBuildingFromName(String name) {
+    private DefaultEconomyBuilding buildBuildingFromName(String name) {
         var building = NecropolisBuildingStatistic.valueOf(name.toUpperCase());
         var economyBuildingStatistic = EconomyBuildingStatistic.builder()
                 .type(EconomyBuildingStatistic.EconomyBuildingType.BUILDING)
@@ -45,7 +41,7 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory<Economy
                 .prerequisites(building.buildingStatistic.prerequisites())
                 .name(name)
                 .build();
-        return new EconomyBuilding(economyBuildingStatistic);
+        return new DefaultEconomyBuilding(economyBuildingStatistic);
     }
 
     @RequiredArgsConstructor
@@ -54,7 +50,7 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory<Economy
         TAVERN(new EconomyBuildingStatistic(
                 "Tavern",
                 EconomyBuildingStatistic.EconomyBuildingType.BUILDING,
-                Set.of(new Resource(Resource.ResourceType.GOLD, 100)),
+                new Resources(Map.of(Resources.ResourceType.GOLD, 100)),
                 List.of()
         ));
     

@@ -1,15 +1,14 @@
 package pl.psi.building.factory;
 
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingStatistic;
+import pl.psi.building.model.EconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface EconomyBuildingFactory<T extends EconomyBuilding> {
+public interface EconomyBuildingFactory {
 
-    T createBuilding(String aBuildingName);
+    EconomyBuilding createBuilding(String aBuildingName);
 
     Optional<EconomyBuildingStatistic> getStatisticByName(String name);
 

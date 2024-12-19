@@ -4,14 +4,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import pl.psi.building.CreatureDwellingsBuilding;
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingStatistic;
+import pl.psi.building.factory.EconomyBuildingAbstractFactory;
 import pl.psi.building.factory.EconomyBuildingFactory;
+import pl.psi.building.model.DefaultEconomyBuilding;
+import pl.psi.building.model.EconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.hero.EconomyHero;
-import pl.psi.resource.Resource;
+import pl.psi.resource.Resources;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,13 +24,12 @@ import static pl.psi.hero.EconomyHero.Fraction.NECROPOLIS;
 class DefaultEconomyBuildingShopTest {
 
     private DefaultEconomyBuildingShop economyBuildingShop;
-    private EconomyBuildingFactory<EconomyBuilding> economyBuildingFactory;
-    private EconomyBuildingFactory<CreatureDwellingsBuilding> creatureDwellingsFactory;
+    private EconomyBuildingAbstractFactory abstractFactory;
 
     @BeforeEach
     void setUp() {
-        economyBuildingFactory = Mockito.mock(EconomyBuildingFactory.class);
-        economyBuildingShop = new DefaultEconomyBuildingShop(economyBuildingFactory, creatureDwellingsFactory);
+        abstractFactory = Mockito.mock(EconomyBuildingAbstractFactory.class);
+        economyBuildingShop = new DefaultEconomyBuildingShop(NECROPOLIS, abstractFactory);
     }
 
     @Test
@@ -35,16 +37,32 @@ class DefaultEconomyBuildingShopTest {
     void should_buy_building() {
         // GIVEN
         var buildingName = "Tomb of Souls";
-        var costOfBuilding = Set.of(new Resource(Resource.ResourceType.GOLD, 100));
-        var buyer = new EconomyHero(NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 1000)));
+        var costOfBuilding = new Resources(Map.of(Resources.ResourceType.GOLD, 100));
+        var buyer = new EconomyHero(NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 1000)));
         var buildingStatistic = new EconomyBuildingStatistic(buildingName, EconomyBuildingStatistic.EconomyBuildingType.BUILDING, costOfBuilding, List.of());
-        var buildingToBuy = new EconomyBuilding(buildingStatistic);
+        var buildingToBuy = new DefaultEconomyBuilding(buildingStatistic);
 
         // WHEN
-        when(economyBuildingFactory.createBuilding(buildingName)).thenReturn(buildingToBuy);
+        when(abstractFactory.getEconomyBuildingFactory(NECROPOLIS, EconomyBuildingStatistic.EconomyBuildingType.BUILDING))
+                .thenReturn(new EconomyBuildingFactory() {
+                    @Override
+                    public EconomyBuilding createBuilding(String aBuildingName) {
+                        return buildingToBuy;
+                    }
+
+                    @Override
+                    public Optional<EconomyBuildingStatistic> getStatisticByName(String name) {
+                        return Optional.empty();
+                    }
+
+                    @Override
+                    public Set<EconomyBuildingStatistic> getAllAvailableBuildingsToBuild() {
+                        return Set.of(buildingStatistic);
+                    }
+                });
         economyBuildingShop.buyBuilding(buyer, buildingName);
 
         // THEN
-        assertThat(buyer.getResource(Resource.ResourceType.GOLD).amount()).isEqualTo(900);
+        assertThat(buyer.getResourceAmount(Resources.ResourceType.GOLD)).isEqualTo(900);
     }
 }

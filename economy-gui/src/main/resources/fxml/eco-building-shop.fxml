@@ -7,7 +7,7 @@
 <?import javafx.geometry.Insets?>
 <VBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
-      prefHeight="800.0" prefWidth="1600.0">
+      prefHeight="800.0" prefWidth="1750.0">
     <children>
         <GridPane fx:id="buildingGrid">
         </GridPane>

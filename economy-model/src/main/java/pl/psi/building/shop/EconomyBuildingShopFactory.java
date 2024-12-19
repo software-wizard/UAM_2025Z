@@ -1,14 +1,14 @@
 package pl.psi.building.shop;
 
-import pl.psi.building.CreatureDwellingsBuilding;
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.factory.EconomyBuildingFactory;
+import pl.psi.building.factory.EconomyBuildingAbstractFactory;
+import pl.psi.hero.EconomyHero;
 
 public class EconomyBuildingShopFactory {
 
     public static EconomyBuildingShop createEconomyBuildingShop(
-            EconomyBuildingFactory<EconomyBuilding> economyBuildingFactory,
-            EconomyBuildingFactory<CreatureDwellingsBuilding> creatureDwellingsBuildingEconomyBuildingFactory) {
-        return new DefaultEconomyBuildingShop(economyBuildingFactory, creatureDwellingsBuildingEconomyBuildingFactory);
+            EconomyHero.Fraction fraction,
+            EconomyBuildingAbstractFactory abstractFactory
+    ) {
+        return new DefaultEconomyBuildingShop(fraction, abstractFactory);
     }
 }

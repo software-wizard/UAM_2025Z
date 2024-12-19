@@ -6,8 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import pl.psi.creatures.EconomyNecropolisFactory;
-import pl.psi.resource.Resource;
+import pl.psi.resource.Resources;
 
+import java.util.Map;
 import java.util.Set;
 
 class EconomyHeroTest
@@ -18,7 +19,7 @@ class EconomyHeroTest
     @BeforeEach
     void init()
     {
-        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Set.of(new Resource(Resource.ResourceType.GOLD, 3000)) );
+        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 3000)) );
     }
 
     @Test
@@ -39,6 +40,6 @@ class EconomyHeroTest
     @Test
     void shouldThrowExceptionWhileYouTrySubstractMoreGoldThanHeroHas()
     {
-        assertThrows( IllegalStateException.class, () -> hero.subtractResource( new Resource(Resource.ResourceType.GOLD, 3001) ) );
+        assertThrows( IllegalStateException.class, () -> hero.subtractResource( new Resources(Map.of(Resources.ResourceType.GOLD, 3001)) ) );
     }
 }

@@ -2,39 +2,48 @@ package pl.psi.building.shop;
 
 import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
-import pl.psi.building.CreatureDwellingsBuilding;
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingStatistic;
-import pl.psi.building.factory.EconomyBuildingFactory;
+import pl.psi.building.factory.EconomyBuildingAbstractFactory;
+import pl.psi.building.model.EconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.hero.EconomyHero;
-import pl.psi.resource.Resource;
-import pl.psi.town.Town;
 
-import java.util.Set;
+import java.util.EnumSet;
 
 @RequiredArgsConstructor
 class DefaultEconomyBuildingShop implements EconomyBuildingShop {
 
-    private final EconomyBuildingFactory<EconomyBuilding> economyBuildingFactory;
-    private final EconomyBuildingFactory<CreatureDwellingsBuilding> creatureDwellingsFactory;
+    private final EconomyHero.Fraction fraction;
+    private final EconomyBuildingAbstractFactory abstractFactory;
 
     @Override
     public EconomyBuilding buyBuilding(EconomyHero aBuyer, String aBuildingName) {
-        EconomyBuildingStatistic buildingStatistic = economyBuildingFactory.getStatisticByName(aBuildingName)
-                .or(() -> creatureDwellingsFactory.getStatisticByName(aBuildingName))
+        EconomyBuildingStatistic foundBuildingStatistic = EnumSet.allOf(EconomyBuildingStatistic.EconomyBuildingType.class)
+                .stream()
+                .map(type -> abstractFactory.getEconomyBuildingFactory(fraction, type))
+                .flatMap(factory -> factory.getAllAvailableBuildingsToBuild().stream())
+                .filter(economyBuildingStatistic -> economyBuildingStatistic.name().equals(aBuildingName))
+                .findFirst()
                 .orElseThrow();
         Preconditions.checkState(
-                aBuyer.hasEnoughResources(buildingStatistic.cost()),
+                aBuyer.canAfford(foundBuildingStatistic.cost()),
                 "Buyer has not enough gold cost to buy a building %s",
                 aBuildingName
         );
-        subtractResources(aBuyer, buildingStatistic.cost());
-        return buildingStatistic.type() == EconomyBuildingStatistic.EconomyBuildingType.BUILDING
-                ? economyBuildingFactory.createBuilding(aBuildingName)
-                : creatureDwellingsFactory.createBuilding(aBuildingName);
+        aBuyer.subtractResource(foundBuildingStatistic.cost());
+        return abstractFactory.getEconomyBuildingFactory(fraction, foundBuildingStatistic.type()).createBuilding(aBuildingName);
     }
 
-    private void subtractResources(EconomyHero aHero, Set<Resource> aResourcesToSubtract) {
-        aResourcesToSubtract.forEach(aHero::subtractResource);
+    @Override
+    public UpgradableBuilding buyBuildingUpgrade(EconomyHero aBuyer, EconomyBuilding aBuildingToUpgrade) {
+        if (!(aBuildingToUpgrade instanceof UpgradableBuilding upgradableBuilding)) {
+            throw new IllegalArgumentException("Building is not upgradable!");
+        }
+        Preconditions.checkState(
+                aBuyer.canAfford(upgradableBuilding.getUpgradeCost()),
+                "Buyer has not enough gold cost to buy a building %s",
+                aBuildingToUpgrade.getStatistic().name()
+        );
+        return upgradableBuilding;
     }
 }

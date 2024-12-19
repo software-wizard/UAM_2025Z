@@ -1,17 +1,14 @@
 package pl.psi.hero;
 
 import pl.psi.creatures.EconomyCreature;
-import pl.psi.resource.Resource;
+import pl.psi.resource.Resources;
 
 public class CreatureShop
 {
 
     public void buy( final EconomyHero aHero, final EconomyCreature aEconomyCreature )
     {
-        var resourcesNeededToButCreature = new Resource(
-                Resource.ResourceType.GOLD,
-                aEconomyCreature.getGoldCost() * aEconomyCreature.getAmount()
-        );
+        Resources resourcesNeededToButCreature = aEconomyCreature.getCost();
         aHero.subtractResource(resourcesNeededToButCreature);
         try
         {

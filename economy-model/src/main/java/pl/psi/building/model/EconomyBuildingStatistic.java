@@ -1,17 +1,16 @@
-package pl.psi.building;
+package pl.psi.building.model;
 
 import lombok.Builder;
 import pl.psi.hero.EconomyHero;
-import pl.psi.resource.Resource;
+import pl.psi.resource.Resources;
 
 import java.util.List;
-import java.util.Set;
 
 @Builder
 public record EconomyBuildingStatistic(
         String name,
         EconomyBuildingType type,
-        Set<Resource> cost,
+        Resources cost,
         List<EconomyBuildingStatistic> prerequisites
 ) {
 
@@ -20,6 +19,6 @@ public record EconomyBuildingStatistic(
     }
 
     public boolean hasEnoughResourcesToBuild(EconomyHero aBuyer) {
-        return aBuyer.hasEnoughResources(cost);
+        return aBuyer.canAfford(cost);
     }
 }

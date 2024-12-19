@@ -1,27 +1,22 @@
 package pl.psi.creatures;
 
+import lombok.Getter;
+import pl.psi.resource.Resources;
+
 public class EconomyCreature
 {
 
     private final CreatureStatistic stats;
+    @Getter
     private final int amount;
-    private final int goldCost;
+    @Getter
+    private final Resources cost;
 
-    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
+    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final Resources aCost )
     {
         stats = aStats;
         amount = aAmount;
-        goldCost = aGoldCost;
-    }
-
-    public int getAmount()
-    {
-        return amount;
-    }
-
-    public int getGoldCost()
-    {
-        return goldCost;
+        cost = aCost;
     }
 
     public String getName()

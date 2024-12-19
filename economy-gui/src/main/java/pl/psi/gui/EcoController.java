@@ -15,7 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import pl.psi.resource.Resource;
+import pl.psi.resource.Resources;
 
 public class EcoController implements PropertyChangeListener
 {
@@ -68,7 +68,7 @@ public class EcoController implements PropertyChangeListener
         playerLabel.setText( economyEngine.getActiveHero()
             .toString() );
         currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero()
-            .getResource(Resource.ResourceType.GOLD) ) );
+            .getResourceAmount(Resources.ResourceType.GOLD) ) );
         roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         shopsBox.getChildren()
             .clear();

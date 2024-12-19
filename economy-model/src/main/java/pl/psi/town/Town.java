@@ -2,11 +2,14 @@ package pl.psi.town;
 
 import lombok.Builder;
 import lombok.Getter;
-import pl.psi.building.EconomyBuilding;
-import pl.psi.building.EconomyBuildingStatistic;
+import pl.psi.building.model.DefaultEconomyBuilding;
+import pl.psi.building.model.EconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.hero.EconomyHero;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Builder(builderClassName = "Builder")
@@ -26,10 +29,20 @@ public class Town {
         aBuilding.finishBuilding();
     }
 
+    public Optional<EconomyBuilding> findBuildingByName(String name) {
+        return buildings.stream()
+                .filter(building -> building.getStatistic().name().equals(name))
+                .findFirst();
+    }
+
     public boolean isBuildingAlreadyBuilt(Town aTown, EconomyBuildingStatistic economyBuildingStatistic) {
         return aTown.getBuildings()
                 .stream()
                 .anyMatch(building -> building.getStatistic().equals(economyBuildingStatistic));
+    }
+
+    public void upgradeBuilding(UpgradableBuilding buildingToUpgrade) {
+        buildingToUpgrade.upgrade();
     }
 
     public static class Builder {
