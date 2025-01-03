@@ -19,13 +19,13 @@ public class Board
     private static final int DAMAGE_TILE_COUNT = 10;
     private static final int INCREASE_ATTACK_BUFFTILE_COUNT = 5;
     private final BiMap< Point, Creature > map = HashBiMap.create();
+    private final TileGenerationStrategy tileGenerationStrategy = new RandomTileGeneration(OBSTACLE_COUNT, DAMAGE_TILE_COUNT, INCREASE_ATTACK_BUFFTILE_COUNT);
     private Map<Point, Tile> specialTiles = new HashMap<>();
 
-    public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2 )
-    {
-        addCreatures( aCreatures1, 0 );
-        addCreatures( aCreatures2, MAX_WITDH );
-        generateSpecialTiles();
+    public Board(List<Creature> aCreatures1, List<Creature> aCreatures2) {
+        addCreatures(aCreatures1, 0);
+        addCreatures(aCreatures2, MAX_WITDH);
+        this.specialTiles = this.tileGenerationStrategy.generateSpecialTiles(MAX_WITDH, map);
     }
 
     public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2, final Map<Point, Tile> aSpecialTiles )
@@ -82,47 +82,6 @@ public class Board
 
     public void addTile(Point point, Tile tile) {
         specialTiles.put(point, tile);
-    }
-
-    private void generateSpecialTiles() {
-        Random random = new Random();
-        int generatedObstacles = 0;
-        int generatedDamageTiles = 0;
-        int generatedIncreaseAttackBuffTiles = 0;
-
-        while (generatedObstacles < OBSTACLE_COUNT) {
-            int x = random.nextInt(MAX_WITDH);
-            int y = random.nextInt(MAX_WITDH);
-            Point point = new Point(x, y);
-
-            if (!map.containsKey(point) && !specialTiles.containsKey(point)) {
-                addTile(point, new ObstacleTile());
-                generatedObstacles++;
-            }
-        }
-
-        while (generatedDamageTiles < DAMAGE_TILE_COUNT) {
-            int x = random.nextInt(MAX_WITDH);
-            int y = random.nextInt(MAX_WITDH);
-            Point point = new Point(x, y);
-
-            if (!map.containsKey(point) && !specialTiles.containsKey(point)) {
-                addTile(point, new DamageTile(20));
-                generatedDamageTiles++;
-            }
-        }
-
-        while (generatedIncreaseAttackBuffTiles < INCREASE_ATTACK_BUFFTILE_COUNT) {
-            int x = random.nextInt(MAX_WITDH);
-            int y = random.nextInt(MAX_WITDH);
-            Point point = new Point(x, y);
-
-            if (!map.containsKey(point) && !specialTiles.containsKey(point)) {
-                addTile(point, new BuffTile(new IncreaseAttackBuff(10,10)));
-                generatedIncreaseAttackBuffTiles++;
-            }
-        }
-
     }
 
     public Tile getSpecialTile(Point point) {
