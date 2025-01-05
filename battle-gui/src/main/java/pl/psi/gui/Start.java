@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Spell;
 import pl.psi.creatures.NecropolisFactory;
+import pl.psi.creatures.SpellBonusStatistic;
 
 public class Start extends Application
 {
@@ -57,7 +58,8 @@ public class Start extends Application
                         .damage(-5)
                         .level(1)
                         .manaCost(5)
-                        .build()
+                        .build(),
+                        new Spell.Builder().name("Boost damage").damage(0).level(1).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).build()
                 )
         );
         return ret;
@@ -71,8 +73,9 @@ public class Start extends Application
                 List.of(
                         new Spell.Builder().name("Magic arrow").damage(5).level(1).manaCost(5).build(),
                         new Spell.Builder()
-                                .name("Weaken attack").manaCost(5).damageBonus(-3)
-                        .build()
+                                .name("Weaken attack").manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
+                        .build(),
+                        new Spell.Builder().name("Extra move range").manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
                 )
         );
         return ret;

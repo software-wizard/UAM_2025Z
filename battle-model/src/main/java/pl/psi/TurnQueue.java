@@ -46,7 +46,6 @@ public class TurnQueue {
     public void next() {
         Creature oldCreature = currentCreature;
         if(oldCreature != null) {
-            System.out.println("Cleaning spells for " + oldCreature.getStats().getName());
             oldCreature.decreaseAppliedSpellsRound();
             oldCreature.clearNotActiveSpells();
         }
