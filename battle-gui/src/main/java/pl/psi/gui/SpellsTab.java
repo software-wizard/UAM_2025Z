@@ -20,7 +20,6 @@ public class SpellsTab {
         gameEngine = aGameEngine;
         sideBarSpells = aSideBarSpells;
         mainBattleController = aMainBattleController;
-
     }
 
 
@@ -73,7 +72,12 @@ public class SpellsTab {
     }
 
     private void handleButtonClick(int buttonIdx) {
-        mainBattleController.setActiveSpellIdx(buttonIdx);
+        boolean isSameSpellClicked = buttonIdx == mainBattleController.getSharedState().getSelectedSpellIdx();
+        if (isSameSpellClicked) {
+            mainBattleController.getSharedState().resetSelectedSpellIdx();
+        } else {
+            mainBattleController.getSharedState().setSelectedSpellIdx(buttonIdx);
+        }
         mainBattleController.triggerRefreshGui();
     }
 }
