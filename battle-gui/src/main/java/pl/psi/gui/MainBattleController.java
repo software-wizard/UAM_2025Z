@@ -1,17 +1,16 @@
 package pl.psi.gui;
 
+import lombok.Getter;
 import pl.psi.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 
-import pl.psi.Tile;
-
 public class MainBattleController {
+    public int INITIAL_SELECTED_SPELL_IDX = -1;
     private final GameEngine gameEngine;
     @FXML
     private GridPane gridMap;
@@ -26,9 +25,8 @@ public class MainBattleController {
 
     private SpellsTab spellsTab;
 
-    private boolean isSpellsTabVisible = false;
-
-    int selectedSpellIdx = -1;
+    @Getter
+    private SharedState sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui);
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -42,13 +40,13 @@ public class MainBattleController {
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
-            selectedSpellIdx = -1;
+            sharedState.resetSelectedSpellIdx();
             refreshGui();
         });
 
         windowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             spellsTab.toggle();
-            selectedSpellIdx = -1;
+            sharedState.resetSelectedSpellIdx();
             refreshGui();
         });
 
@@ -58,61 +56,20 @@ public class MainBattleController {
     private void refreshGui() {
         gridMap.getChildren().clear();
 
+        TileContext tileContext = new TileContext();
+        tileContext.addStrategy(new CreatureTileStrategy(gameEngine));
+        tileContext.addStrategy(new MoveTileStrategy(gameEngine, sharedState));
+        tileContext.addStrategy(new AttackTileStrategy(gameEngine));
+        tileContext.addStrategy(new TileTypeStrategy(gameEngine));
+        tileContext.addStrategy(new CastTileStrategy(gameEngine, sharedState));
+
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
-                final int x1 = x;
-                final int y1 = y;
                 final MapTile mapTile = new MapTile("");
                 gameEngine.getCreature(new Point(x, y))
                         .ifPresent(c -> mapTile.setName(c.toString()));
 
-                if (gameEngine.isCurrentCreature(new Point(x, y))) {
-                    mapTile.setBackground(Color.GREEN);
-                }
-
-                if (gameEngine.canMove(new Point(x, y))) {
-                    mapTile.setBackground(Color.GREY);
-
-                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                            (e) -> {
-                                gameEngine.move(new Point(x1, y1));
-                                selectedSpellIdx = -1;
-                                refreshGui();
-                            });
-                }
-                if (gameEngine.canAttack(new Point(x, y))) {
-                    mapTile.setBackground(Color.RED);
-
-                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                            e -> gameEngine.attack(new Point(x1, y1)));
-                }
-                Tile tile = gameEngine.getTile(new Point(x, y));
-                if (tile != null) {
-                    switch (tile.getType()) {
-                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
-                        case DAMAGE -> mapTile.setBackground(Color.ORANGE);
-                        case BUFF -> mapTile.setBackground(Color.BLUE);
-                    }
-                }
-
-                if (selectedSpellIdx >= 0) {
-                    gameEngine.getCreature(new Point(x, y)).ifPresent(creature -> {
-                        mapTile.setBackground(Color.BLUE);
-                        mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                            SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-                            Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx); // TODO: Fix strange case, when creature is in combat range for other creature drops an error that idx is out of bounds. Why?
-
-                            if (selectedSpell != null) {
-                                spellBook.castSpell(selectedSpell, creature);
-                                System.out.println("Spell cast on creature" + creature.getName());
-                            } else {
-                                System.out.println("Not enough mana/invalid spell");
-                            }
-                            selectedSpellIdx = -1;
-                            refreshGui();
-                        });
-                    });
-                }
+                tileContext.applyStrategies(mapTile, new Point(x,y));
 
                 gridMap.add(mapTile, x, y);
             }
@@ -122,9 +79,5 @@ public class MainBattleController {
 
     void triggerRefreshGui(){
         refreshGui();
-    }
-
-    void setActiveSpellIdx(int idx) {
-        selectedSpellIdx = idx;
     }
 }

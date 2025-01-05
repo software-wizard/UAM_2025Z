@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CreatureStats implements CreatureStatisticIf{
+public class CreatureStats implements CreatureStatisticIf {
     private final String name;
     private int attack;
     private final int armor;

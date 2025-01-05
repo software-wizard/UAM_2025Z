@@ -43,7 +43,7 @@ public class Board
         }
     }
 
-    Optional< Creature > getCreature( final Point aPoint )
+Optional< Creature > getCreature( final Point aPoint )
     {
         return Optional.ofNullable( map.get( aPoint ) );
     }
