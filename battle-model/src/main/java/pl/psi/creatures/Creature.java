@@ -9,6 +9,9 @@ package pl.psi.creatures;//  ***************************************************
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
@@ -33,6 +36,7 @@ public class Creature implements PropertyChangeListener {
     private final int MINIMAL_DAMAGE = 0;
     private ArrayList<AppliedSpell> appliedSpells;
     private DamageCalculatorIf calculator;
+    private List<Buff> buffs = new ArrayList<>();
 
     Creature() {
     }
@@ -49,6 +53,7 @@ public class Creature implements PropertyChangeListener {
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
+            aDefender.applyDamage(damage);
             final int damageWithRoundBonus = Math.max(damage + getRoundDamageBonus(), MINIMAL_DAMAGE);
             System.out.println("Damage: " + damage + "\nDamage with round bonus: " + damageWithRoundBonus);
             aDefender.applyDamage(damageWithRoundBonus);
@@ -87,6 +92,11 @@ public class Creature implements PropertyChangeListener {
         return getAmount() > 0;
     }
 
+    // undead is a type of creature:
+    public boolean isUndead()
+    {
+        return stats.isUndead();
+    }
     public void applyMagicDamage(int damage) {
         applyDamage(damage); // todo fix not always reducing
     }
@@ -129,7 +139,7 @@ public class Creature implements PropertyChangeListener {
         return stats.getDamage();
     }
 
-    int getAttack() {
+    public int getAttack() {
         return stats.getAttack();
     }
 
@@ -141,6 +151,15 @@ public class Creature implements PropertyChangeListener {
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
             counterAttackCounter = 1;
+            // tutaj te wszystkie buffy powinny się robić
+            // jakieś np. filtry ktowe filtrują które buffy dodaja ozdrowia itd i to
+            // edytuja w creature statistics
+            processBuffsAtTurnStart();
+            buffs.forEach(buff -> buff.apply(this));
+
+        }
+        if (TurnQueue.NEXT_CREATURE.equals(evt.getPropertyName())) {
+            buffs.forEach(buff -> buff.apply(this));
         }
     }
 
@@ -154,6 +173,38 @@ public class Creature implements PropertyChangeListener {
 
     public int getMoveRange() {
         return stats.getMoveRange();
+    }
+
+    public void takeDamage(int damage) {
+        int remainingHp = currentHp - damage;
+        if (remainingHp <= 0) {
+            int remainingDamage = Math.abs(remainingHp);
+            int unitsLost = (int) Math.ceil((double) remainingDamage / getMaxHp());
+            setAmount(Math.max(0, amount - unitsLost));
+            currentHp = (amount > 0) ? getMaxHp() - (remainingDamage % getMaxHp()) : 0;
+        } else {
+            currentHp = remainingHp;
+        }
+
+        if (amount <= 0) {
+            System.out.println(getName() + " has been defeated.");
+        }
+    }
+
+    public void processBuffsAtTurnStart() {
+        Iterator<Buff> iterator = buffs.iterator();
+        while (iterator.hasNext()) {
+            Buff buff = iterator.next();
+            buff.decrementTurn();
+            if (buff.isExpired()) {
+                buff.onExpire(this);
+                iterator.remove();
+            }
+        }
+    }
+
+    public void addBuff(Buff aBuff){
+        buffs.add(aBuff);
     }
 
     public static class Builder {

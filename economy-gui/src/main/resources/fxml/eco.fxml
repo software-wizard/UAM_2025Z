@@ -26,13 +26,6 @@
             </children>
         </HBox>
     </top>
-    <bottom>
-        <HBox BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="readyButton" mnemonicParsing="false" text="READY"/>
-            </children>
-        </HBox>
-    </bottom>
 
     <stylesheets>
         <URL value="@main.css"/>

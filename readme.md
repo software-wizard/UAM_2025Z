@@ -21,7 +21,8 @@ Projects:
 -------------------------------------------------------------------------------------------------
 
 - pola specjalne
-    1. Przeszkoda dla jednostek chodzących 2.zadające obrażenia (dla latających albo chodzacych)
+    1. Przeszkoda dla jednostek chodzących
+    2. zadające obrażenia (dla latających albo chodzacych)
     3. Nakładające buffy/debufy
     4. Przszkody do zaatakowania
 -------------------------------------------------------------------------------------------------

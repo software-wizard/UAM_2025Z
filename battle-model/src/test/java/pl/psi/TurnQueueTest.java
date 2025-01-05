@@ -33,4 +33,6 @@ class TurnQueueTest
         turnQueue.next();
         assertEquals( turnQueue.getCurrentCreature(), creature1 );
     }
+
+
 }

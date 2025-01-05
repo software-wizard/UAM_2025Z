@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.VBox;
 
+import pl.psi.Tile;
 
 public class MainBattleController {
     private final GameEngine gameEngine;
@@ -30,7 +31,6 @@ public class MainBattleController {
     int selectedSpellIdx = -1;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
-
         gameEngine = new GameEngine(aHero1, aHero2);
     }
 
@@ -85,6 +85,14 @@ public class MainBattleController {
 
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.attack(new Point(x1, y1)));
+                }
+                Tile tile = gameEngine.getTile(new Point(x, y));
+                if (tile != null) {
+                    switch (tile.getType()) {
+                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
+                        case DAMAGE -> mapTile.setBackground(Color.ORANGE);
+                        case BUFF -> mapTile.setBackground(Color.BLUE);
+                    }
                 }
 
                 if (selectedSpellIdx >= 0) {

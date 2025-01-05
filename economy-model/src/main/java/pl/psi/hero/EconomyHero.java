@@ -1,25 +1,33 @@
 package pl.psi.hero;
 
+import lombok.Getter;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.resource.Resources;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
+import javafx.scene.paint.ImagePattern;
+import pl.psi.MapTileIf;
 import pl.psi.creatures.EconomyCreature;
 
-public class EconomyHero
-{
 
+@Getter
+public class EconomyHero implements PropertyChangeListener, MapTileIf
+{
     private final Fraction fraction;
     private final List< EconomyCreature > creatureList;
-    private int gold;
+    private final Resources resources;
 
-    public EconomyHero( final Fraction aFraction, final int aGold )
+    public EconomyHero( final Fraction aFraction, final Resources aResources )
     {
         fraction = aFraction;
-        gold = aGold;
+        this.resources = aResources;
         creatureList = new ArrayList<>();
     }
 
-    void addCreature( final EconomyCreature aCreature )
+    public void addCreature( final EconomyCreature aCreature )
     {
         if( creatureList.size() >= 7 )
         {
@@ -28,14 +36,12 @@ public class EconomyHero
         creatureList.add( aCreature );
     }
 
-    public int getGold()
-    {
-        return gold;
+    public Integer getResourceAmount(Resources.ResourceType resourceType) {
+        return resources.getResourceAmount(resourceType);
     }
 
-    public void addGold( final int aAmount )
-    {
-        gold += aAmount;
+    public void addResource(final Resources aResources ) {
+        resources.add(aResources);
     }
 
     public List< EconomyCreature > getCreatures()
@@ -43,17 +49,37 @@ public class EconomyHero
         return List.copyOf( creatureList );
     }
 
-    void substractGold( final int aAmount )
-    {
-        if( aAmount > gold )
-        {
-            throw new IllegalStateException( "Hero has not enought money" );
-        }
-        gold -= aAmount;
+    public void subtractResource(final Resources aResources) {
+        resources.subtract(aResources);
+    }
+
+    public boolean canAfford(Resources prerequisites) {
+        return resources.canAfford(prerequisites);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+
+    }
+
+    @Override
+    public TileType getTileType() {
+        return TileType.HERO;
+    }
+
+    @Override
+    public ImagePattern getImagePattern() {
+        return null;
+    } //TODO Interface
+
+    @Override
+    public void Interact(EconomyHero hero) {//inny bohater wchodzi w interakcje z TYM bohaterem
+        //TUTAJ moznaby dac Attack ?
+       //tylko trzeba uzupelnic canInteract o interact z mapa bohaterow??
     }
 
     public enum Fraction
     {
-        NECROPOLIS;
+        NECROPOLIS
     }
 }

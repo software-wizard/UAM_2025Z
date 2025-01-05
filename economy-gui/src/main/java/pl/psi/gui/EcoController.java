@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import pl.psi.resource.Resources;
 
 public class EcoController implements PropertyChangeListener
 {
@@ -24,17 +25,15 @@ public class EcoController implements PropertyChangeListener
     @FXML
     HBox shopsBox;
     @FXML
-    Button readyButton;
-    @FXML
     Label playerLabel;
     @FXML
     Label currentGoldLabel;
     @FXML
     Label roundNumberLabel;
 
-    public EcoController( final EconomyHero aHero1, final EconomyHero aHero2 )
+    public EcoController( final EconomyHero aHero1 )
     {
-        economyEngine = new EconomyEngine( aHero1, aHero2 );
+        economyEngine = new EconomyEngine( aHero1 );
     }
 
     @FXML
@@ -45,29 +44,19 @@ public class EcoController implements PropertyChangeListener
         economyEngine.addObserver( EconomyEngine.HERO_BOUGHT_CREATURE, this );
         economyEngine.addObserver( EconomyEngine.NEXT_ROUND, this );
 
-        readyButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            if( economyEngine.getRoundNumber() < 4 )
-            {
-                economyEngine.pass();
-            }
-            else
-            {
-                goToBattle();
-            }
-        } );
     }
 
-    private void goToBattle()
-    {
-        EcoBattleConverter.startBattle( economyEngine.getPlayer1(), economyEngine.getPlayer2() );
-    }
+//    private void goToBattle()
+//    {
+//        //EcoBattleConverter.startBattle( economyEngine.getPlayer1(), economyEngine.getPlayer2() );
+//    }
 
     void refreshGui()
     {
         playerLabel.setText( economyEngine.getActiveHero()
             .toString() );
         currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero()
-            .getGold() ) );
+            .getResourceAmount(Resources.ResourceType.GOLD) ) );
         roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         shopsBox.getChildren()
             .clear();

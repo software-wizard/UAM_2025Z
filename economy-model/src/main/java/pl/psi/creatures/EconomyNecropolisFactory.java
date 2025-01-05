@@ -1,5 +1,9 @@
 package pl.psi.creatures;
 
+import pl.psi.resource.Resources;
+
+import java.util.Map;
+
 public class EconomyNecropolisFactory
 {
 
@@ -12,19 +16,19 @@ public class EconomyNecropolisFactory
             switch( aTier )
             {
                 case 1:
-                    return new EconomyCreature( CreatureStatistic.SKELETON, aAmount, 60 );
+                    return new EconomyCreature( CreatureStatistic.SKELETON, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 50)));
                 case 2:
-                    return new EconomyCreature( CreatureStatistic.WALKING_DEAD, aAmount, 100 );
+                    return new EconomyCreature( CreatureStatistic.WALKING_DEAD, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 100)) );
                 case 3:
-                    return new EconomyCreature( CreatureStatistic.WIGHT, aAmount, 200 );
+                    return new EconomyCreature( CreatureStatistic.WIGHT, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 200)) );
                 case 4:
-                    return new EconomyCreature( CreatureStatistic.VAMPIRE, aAmount, 360 );
+                    return new EconomyCreature( CreatureStatistic.VAMPIRE, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 360)) );
                 case 5:
-                    return new EconomyCreature( CreatureStatistic.LICH, aAmount, 550 );
+                    return new EconomyCreature( CreatureStatistic.LICH, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 550)) );
                 case 6:
-                    return new EconomyCreature( CreatureStatistic.BLACK_KNIGHT, aAmount, 1200 );
+                    return new EconomyCreature( CreatureStatistic.BLACK_KNIGHT, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 1200)) );
                 case 7:
-                    return new EconomyCreature( CreatureStatistic.BONE_DRAGON, aAmount, 1800 );
+                    return new EconomyCreature( CreatureStatistic.BONE_DRAGON, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 1800)) );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
@@ -34,19 +38,19 @@ public class EconomyNecropolisFactory
             switch( aTier )
             {
                 case 1:
-                    return new EconomyCreature( CreatureStatistic.SKELETON_WARRIOR, aAmount, 70 );
+                    return new EconomyCreature( CreatureStatistic.SKELETON_WARRIOR, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 70)) );
                 case 2:
-                    return new EconomyCreature( CreatureStatistic.ZOMBIE, aAmount, 125 );
+                    return new EconomyCreature( CreatureStatistic.ZOMBIE, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 125)) );
                 case 3:
-                    return new EconomyCreature( CreatureStatistic.WRAITH, aAmount, 230 );
+                    return new EconomyCreature( CreatureStatistic.WRAITH, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 230)) );
                 case 4:
-                    return new EconomyCreature( CreatureStatistic.VAMPIRE_LORD, aAmount, 500 );
+                    return new EconomyCreature( CreatureStatistic.VAMPIRE_LORD, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 500)) );
                 case 5:
-                    return new EconomyCreature( CreatureStatistic.POWER_LICH, aAmount, 600 );
+                    return new EconomyCreature( CreatureStatistic.POWER_LICH, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 600)) );
                 case 6:
-                    return new EconomyCreature( CreatureStatistic.DREAD_KNIGHT, aAmount, 1500 );
+                    return new EconomyCreature( CreatureStatistic.DREAD_KNIGHT, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 1500)) );
                 case 7:
-                    return new EconomyCreature( CreatureStatistic.GHOST_DRAGON, aAmount, 3000 );
+                    return new EconomyCreature( CreatureStatistic.GHOST_DRAGON, aAmount, new Resources(Map.of(Resources.ResourceType.GOLD, 3000)) );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
