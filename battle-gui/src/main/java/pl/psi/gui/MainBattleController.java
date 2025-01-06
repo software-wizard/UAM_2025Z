@@ -74,7 +74,7 @@ public class MainBattleController {
                 gridMap.add(mapTile, x, y);
             }
         }
-        spellsTab.render();
+        spellsTab.render(sharedState);
     }
 
     void triggerRefreshGui(){

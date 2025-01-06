@@ -109,7 +109,7 @@ public class Creature implements PropertyChangeListener {
         return stats.isUndead();
     }
     public void applyMagicDamage(int damage) {
-        applyDamage(damage); // todo fix not always reducing
+        applyDamage(damage);
     }
 
     private void applyDamage(final int aDamage) {

@@ -25,7 +25,7 @@ public class CastTileStrategy implements TileStrategy {
                 }
                 aMapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                     SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-                    Spell selectedSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx()); // TODO: Fix strange case, when creature is in combat range for other creature drops an error that idx is out of bounds. Why?
+                    Spell selectedSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx());
 
                     if (selectedSpell != null) {
                         spellBook.castSpell(selectedSpell, creature);
