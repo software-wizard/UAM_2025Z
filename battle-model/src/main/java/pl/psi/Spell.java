@@ -2,6 +2,7 @@ package pl.psi;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.SpellBonusStatistic;
 
 @Getter
 public class Spell {
@@ -14,15 +15,17 @@ public class Spell {
 
     private final int manaCost;
 
-    @Getter
-    private final int damageBonus;
+    private final int spellBonusRoundsDuration;
 
-    public Spell(final String aName, final int aDamage, final int aLevel, final int aManaCost, final int aDamageBonus) {
+    private SpellBonusStatistic spellBonus;
+
+    public Spell(final String aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonusStatistic aSpellBonus, final int aSpellBonusRoundsDuration) {
         name = aName;
         damage = aDamage;
         level = aLevel;
         manaCost = aManaCost;
-        damageBonus = aDamageBonus;
+        spellBonusRoundsDuration = aSpellBonusRoundsDuration;
+        spellBonus = aSpellBonus;
     }
 
     public static class Builder {
@@ -30,7 +33,8 @@ public class Spell {
         private int damage = 0;
         private int level = 1;
         private int manaCost = 0;
-        private int damageBonus = 0;
+        private int spellBonusRoundsDuration = 3;
+        private SpellBonusStatistic spellBonus = SpellBonusStatistic.NO_BONUS;
         public Builder name(String aName) {
             name = aName;
             return this;
@@ -51,13 +55,18 @@ public class Spell {
             return this;
         }
 
-        public Builder damageBonus(int aDamageBonus) {
-            damageBonus = aDamageBonus;
+        public Builder spellBonusRoundsDuration(int aSpellBonusRoundsDuration){
+            spellBonusRoundsDuration = aSpellBonusRoundsDuration;
+            return this;
+        }
+
+        public Builder spellBonus(SpellBonusStatistic aSpellBonus){
+            spellBonus = aSpellBonus;
             return this;
         }
 
         public Spell build() {
-            return new Spell(name, damage, level, manaCost, damageBonus);
+            return new Spell(name, damage, level, manaCost, spellBonus, spellBonusRoundsDuration);
         }
 
     }
@@ -65,7 +74,8 @@ public class Spell {
     public void castSpell(Creature aDefender) {
         aDefender.applyMagicDamage(damage);
         aDefender.getAppliedSpells().add(
-                new AppliedSpell(this, 3)
+                new AppliedSpell(this, spellBonusRoundsDuration) // Wartość przekazywana jako argument
         );
     }
+
 }

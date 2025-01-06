@@ -1,5 +1,7 @@
 package pl.psi.creatures;
 
+import pl.psi.StatsBonusType;
+
 import java.util.Random;
 
 /**
@@ -19,6 +21,6 @@ class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
     @Override
     protected int getArmor( final Creature aDefender )
     {
-        return (int)(aDefender.getArmor() * factor);
+        return (int)(aDefender.getArmorWithBonus() * factor);
     }
 }
