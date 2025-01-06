@@ -23,7 +23,7 @@ public class SpellsTab {
     }
 
 
-    public void render(){
+    public void render(SharedState aSharedState) {
         if(isSpellsTabVisible){
             List<Spell> heroSpells = gameEngine.getCurrentHero().getSpellBook().getSpells();
             Label label = new Label("Spells");
@@ -35,6 +35,7 @@ public class SpellsTab {
                 Spell spell = heroSpells.get(i);
                 Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
                 button.setPrefWidth(104);
+                button.setFocusTraversable(false);
                 int finalI = i;
 
                 boolean canCastSpell = gameEngine.getCurrentHero().getSpellBook().canCastSpell(spell);
@@ -45,6 +46,12 @@ public class SpellsTab {
                 } else {
                     button.setOpacity(0.5);
                     button.setDisable(true);
+                }
+
+                if (i == aSharedState.getSelectedSpellIdx()) {
+                    button.setStyle("-fx-border-color: lightblue; -fx-border-width: 2px;");
+                } else {
+                    button.setStyle("");
                 }
 
                 sideBarSpells.getChildren().add(button);

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.psi.Spell;
 import pl.psi.SpellBook;
+import pl.psi.SpellName;
 import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
@@ -20,7 +21,7 @@ public class SpellBonusTest {
     @Test
     void weakenAttackBonus() {
 
-        Spell weakenAttack = new Spell.Builder().name("Weaken Attack").damage(0).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(weakenAttack));
 
@@ -69,7 +70,7 @@ public class SpellBonusTest {
     @Test
     void increasedAttackBonus() {
 
-        Spell extraAttack = new Spell.Builder().name("Stronger attack").damage(0).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell extraAttack = new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(extraAttack));
 

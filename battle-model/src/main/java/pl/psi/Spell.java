@@ -7,7 +7,7 @@ import pl.psi.creatures.SpellBonusStatistic;
 @Getter
 public class Spell {
 
-    private final String name;
+    private final SpellName name;
 
     private final int damage;
 
@@ -19,7 +19,7 @@ public class Spell {
 
     private SpellBonusStatistic spellBonus;
 
-    public Spell(final String aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonusStatistic aSpellBonus, final int aSpellBonusRoundsDuration) {
+    public Spell(final SpellName aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonusStatistic aSpellBonus, final int aSpellBonusRoundsDuration) {
         name = aName;
         damage = aDamage;
         level = aLevel;
@@ -29,13 +29,13 @@ public class Spell {
     }
 
     public static class Builder {
-        private String name;
+        private SpellName name;
         private int damage = 0;
         private int level = 1;
         private int manaCost = 0;
         private int spellBonusRoundsDuration = 3;
         private SpellBonusStatistic spellBonus = SpellBonusStatistic.NO_BONUS;
-        public Builder name(String aName) {
+        public Builder name(SpellName aName) {
             name = aName;
             return this;
         }
@@ -78,4 +78,8 @@ public class Spell {
         );
     }
 
+    @Override
+    public String toString() {
+        return name.getDisplayName() + " (Level: " + level + ", Mana Cost: " + manaCost + ")";
+    }
 }

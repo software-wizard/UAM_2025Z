@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Spell;
+import pl.psi.SpellName;
 import pl.psi.creatures.NecropolisFactory;
 import pl.psi.creatures.SpellBonusStatistic;
 
@@ -54,12 +55,12 @@ public class Start extends Application
                 List.of( new NecropolisFactory().create( true, 1, 5 ) ),
                 10,
                 List.of(new Spell.Builder()
-                        .name("Health")
-                        .damage(-5)
+                        .name(SpellName.MAGIC_ARROW)
+                        .damage(-100)
                         .level(1)
                         .manaCost(5)
                         .build(),
-                        new Spell.Builder().name("Boost damage").damage(0).level(1).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).build()
+                        new Spell.Builder().name(SpellName.BOOST_DAMAGE).damage(0).level(1).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).build()
                 )
         );
         return ret;
@@ -71,11 +72,11 @@ public class Start extends Application
                 List.of( new NecropolisFactory().create( false, 1, 5 ) ),
                 15,
                 List.of(
-                        new Spell.Builder().name("Magic arrow").damage(5).level(1).manaCost(5).build(),
+                        new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(5).level(1).manaCost(5).build(),
                         new Spell.Builder()
-                                .name("Weaken attack").manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
+                                .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
                         .build(),
-                        new Spell.Builder().name("Extra move range").manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
+                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
                 )
         );
         return ret;
