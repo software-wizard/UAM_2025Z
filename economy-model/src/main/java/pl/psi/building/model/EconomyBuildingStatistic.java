@@ -9,12 +9,12 @@ import java.util.List;
 @Builder
 public record EconomyBuildingStatistic(
         String name,
-        EconomyBuildingType type,
+        Type type,
         Resources cost,
         List<EconomyBuildingStatistic> prerequisites
 ) {
 
-    public enum EconomyBuildingType {
+    public enum Type {
         BUILDING, DWELLINGS
     }
 

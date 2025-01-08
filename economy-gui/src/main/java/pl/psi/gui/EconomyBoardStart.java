@@ -8,9 +8,7 @@ import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
-import java.util.Map;
-
-import static pl.psi.resource.Resources.ResourceType.GOLD;
+import static pl.psi.resource.Resources.Type.GOLD;
 
 public class EconomyBoardStart extends Application {
 
@@ -35,7 +33,12 @@ public class EconomyBoardStart extends Application {
 
     private EconomyHero aHero1()
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,3000)));
+        final EconomyHero ret = new EconomyHero(
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 3000)
+                        .build()
+        );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 1, 1 ));
         ret.addCreature( factory.create( false, 1, 1 ));
@@ -44,7 +47,12 @@ public class EconomyBoardStart extends Application {
 
     private EconomyHero aHero2()
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,4000)));
+        final EconomyHero ret = new EconomyHero(
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 4000)
+                        .build()
+        );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 2, 1 ));
         return ret;

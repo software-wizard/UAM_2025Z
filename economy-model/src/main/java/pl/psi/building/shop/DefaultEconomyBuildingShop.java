@@ -18,7 +18,7 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
 
     @Override
     public EconomyBuilding buyBuilding(EconomyHero aBuyer, String aBuildingName) {
-        EconomyBuildingStatistic foundBuildingStatistic = EnumSet.allOf(EconomyBuildingStatistic.EconomyBuildingType.class)
+        EconomyBuildingStatistic foundBuildingStatistic = EnumSet.allOf(EconomyBuildingStatistic.Type.class)
                 .stream()
                 .map(type -> abstractFactory.getEconomyBuildingFactory(fraction, type))
                 .flatMap(factory -> factory.getAllAvailableBuildingsToBuild().stream())
@@ -45,5 +45,10 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
                 aBuildingToUpgrade.getStatistic().name()
         );
         return upgradableBuilding;
+    }
+
+    @Override
+    public void rollback(EconomyHero aHero, EconomyBuilding aBuilding) {
+
     }
 }

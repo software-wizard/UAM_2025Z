@@ -8,11 +8,10 @@ import pl.psi.resource.Resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Random;
 
 import static pl.psi.MapTileIf.TileType.GOLD_BUILDING;
-import static pl.psi.resource.Resources.ResourceType.GOLD;
+import static pl.psi.resource.Resources.Type.GOLD;
 
 public class GoldBuilding implements MapTileIf {
     Boolean collectedGold;
@@ -43,7 +42,9 @@ public class GoldBuilding implements MapTileIf {
     public void Interact(EconomyHero hero) {
         if (canCollectGold()) {
             int goldAmount = collectGold();
-            hero.addResource(new Resources(Map.of(GOLD, goldAmount)));
+            hero.addResource(Resources.builder()
+                    .resource(GOLD, goldAmount)
+                    .build());
             collectedGold = true;
         }
     }

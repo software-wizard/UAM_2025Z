@@ -4,15 +4,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import pl.psi.EconomyEngine;
-import pl.psi.converter.EcoBattleConverter;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import pl.psi.resource.Resources;
@@ -56,7 +53,7 @@ public class EcoController implements PropertyChangeListener
         playerLabel.setText( economyEngine.getActiveHero()
             .toString() );
         currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero()
-            .getResourceAmount(Resources.ResourceType.GOLD) ) );
+            .getResourceAmount(Resources.Type.GOLD) ) );
         roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         shopsBox.getChildren()
             .clear();

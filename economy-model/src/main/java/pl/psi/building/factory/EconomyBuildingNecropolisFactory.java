@@ -9,6 +9,8 @@ import pl.psi.resource.Resources;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static pl.psi.resource.Resources.Type.GOLD;
+
 class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
 
     @Override
@@ -36,7 +38,7 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
     private DefaultEconomyBuilding buildBuildingFromName(String name) {
         var building = NecropolisBuildingStatistic.valueOf(name.toUpperCase());
         var economyBuildingStatistic = EconomyBuildingStatistic.builder()
-                .type(EconomyBuildingStatistic.EconomyBuildingType.BUILDING)
+                .type(EconomyBuildingStatistic.Type.BUILDING)
                 .cost(building.buildingStatistic.cost())
                 .prerequisites(building.buildingStatistic.prerequisites())
                 .name(name)
@@ -49,8 +51,10 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
     private enum NecropolisBuildingStatistic implements NecropolisStatistic {
         TAVERN(new EconomyBuildingStatistic(
                 "Tavern",
-                EconomyBuildingStatistic.EconomyBuildingType.BUILDING,
-                new Resources(Map.of(Resources.ResourceType.GOLD, 100)),
+                EconomyBuildingStatistic.Type.BUILDING,
+                Resources.builder()
+                        .resource(GOLD, 100)
+                        .build(),
                 List.of()
         ));
     

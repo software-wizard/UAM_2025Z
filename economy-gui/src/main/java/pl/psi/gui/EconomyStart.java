@@ -7,7 +7,8 @@ import javafx.stage.Stage;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
-import java.util.Map;
+import static pl.psi.resource.Resources.Type.GEMS;
+import static pl.psi.resource.Resources.Type.GOLD;
 
 public class EconomyStart extends Application {
 
@@ -21,10 +22,11 @@ public class EconomyStart extends Application {
         loader.setLocation(getClass().getClassLoader()
                 .getResource("fxml/eco.fxml"));
         var controller = new EcoController(
-                new EconomyHero(EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(
-                        Resources.ResourceType.GOLD, 3000,
-                        Resources.ResourceType.GEM, 2
-                )))
+                new EconomyHero(EconomyHero.Fraction.NECROPOLIS, Resources.builder()
+                        .resource(GOLD, 3000)
+                        .resource(GEMS, 2)
+                        .build()
+                )
         );
         loader.setController(controller);
         final Scene scene = new Scene(loader.load());

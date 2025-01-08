@@ -1,27 +1,39 @@
 package pl.psi.resource;
 
+import com.google.common.base.Preconditions;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Singular;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public record Resources(Map<ResourceType, Integer> resources) {
+@Builder
+@EqualsAndHashCode
+public final class Resources {
 
-    public Resources(Map<ResourceType, Integer> resources) {
+    @Singular
+    private final Map<Type, Integer> resources;
+
+    private Resources(Map<Type, Integer> resources) {
         this.resources = new HashMap<>(resources);
     }
 
     public void subtract(Resources other) {
-        other.resources.forEach((key, value) ->
-                this.resources.put(key, resources.get(key) - value));
+        Preconditions.checkArgument(canAfford(other));
+        other.resources.forEach((key, value) -> {
+            this.resources.put(key, resources.getOrDefault(key, 0) - value);
+        });
     }
 
     public void add(Resources other) {
         other.resources.forEach((key, value) ->
-                resources.put(key, resources.get(key) + value));
+                resources.put(key, resources.getOrDefault(key, 0) + value));
     }
 
-    public Integer getResourceAmount(ResourceType type) {
-        return resources.get(type);
+    public Integer getResourceAmount(Type type) {
+        return resources.getOrDefault(type, 0);
     }
 
     public boolean canAfford(Resources aResources) {
@@ -39,7 +51,7 @@ public record Resources(Map<ResourceType, Integer> resources) {
                 .collect(Collectors.joining(", "));
     }
 
-    public enum ResourceType {
-        GOLD, WOOD, ORE, MERCURY, SULFUR, CRYSTAL, GEM
+    public enum Type {
+        GOLD, WOOD, ORE, MERCURY, SULFUR, CRYSTAL, GEMS
     }
 }

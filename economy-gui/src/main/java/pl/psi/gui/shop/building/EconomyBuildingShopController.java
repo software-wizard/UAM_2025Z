@@ -2,7 +2,6 @@ package pl.psi.gui.shop.building;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,8 +17,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
-import pl.psi.town.Town;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,13 +68,13 @@ public class EconomyBuildingShopController {
     }
 
     private void populateBuildingGrid() {
-        buildBuildingsGridPane(EconomyBuildingStatistic.EconomyBuildingType.BUILDING, 1);
-        buildBuildingsGridPane(EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS, 2);
+        buildBuildingsGridPane(EconomyBuildingStatistic.Type.BUILDING, 1);
+        buildBuildingsGridPane(EconomyBuildingStatistic.Type.DWELLINGS, 2);
     }
 
     private void zajebiscieWzne(int row, ImageView buildingIcon, EconomyBuildingStatistic economyBuildingStatistic, String buildingName, Popup popup, Map<EconomyBuildingStatistic, VBox> buildingBoxes, VBox buildingBox, int i) {
         buildingIcon.setOnMouseClicked(event -> {
-            if (town.isBuildingAlreadyBuilt(town, economyBuildingStatistic)) {
+            if (town.isBuildingAlreadyBuilt(economyBuildingStatistic.name())) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Budynek już zbudowany");
                 alert.setHeaderText(null);
@@ -102,7 +101,7 @@ public class EconomyBuildingShopController {
 
     //============== śmieci z gui ================
 
-    private void buildBuildingsGridPane(EconomyBuildingStatistic.EconomyBuildingType aType, int row) {
+    private void buildBuildingsGridPane(EconomyBuildingStatistic.Type aType, int row) {
         List<EconomyBuildingStatistic> allAvailableDwellingsToBuild = economyBuildingFacade.getAllAvailableBuildingsToBuild(aType, town.getFraction())
                 .stream().toList();
         int n = allAvailableDwellingsToBuild.size();
@@ -132,7 +131,7 @@ public class EconomyBuildingShopController {
 
     private void updateBuildingStatuses(Map<EconomyBuildingStatistic, VBox> economyBuildingStatisticMap) {
         economyBuildingStatisticMap.forEach((key, value) -> {
-            if (town.isBuildingAlreadyBuilt(town, key)) {
+            if (town.isBuildingAlreadyBuilt(key.name())) {
                 value.setStyle("-fx-border-color: #39d639; -fx-border-width: 5px; -fx-border-radius: 5px;");
             } else if (!key.hasEnoughResourcesToBuild(buyer)) {
                 value.setStyle("-fx-border-color: #e14848; -fx-border-width: 5px; -fx-border-radius: 5px;");

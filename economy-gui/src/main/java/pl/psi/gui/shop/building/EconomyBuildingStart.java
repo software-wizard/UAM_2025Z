@@ -10,10 +10,11 @@ import pl.psi.building.shop.EconomyBuildingShop;
 import pl.psi.building.shop.EconomyBuildingShopFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
-import pl.psi.town.Town;
+import pl.psi.building.town.Town;
 
-import java.util.Collections;
 import java.util.Map;
+
+import static pl.psi.resource.Resources.Type.*;
 
 public class EconomyBuildingStart extends Application {
 
@@ -30,16 +31,18 @@ public class EconomyBuildingStart extends Application {
         EconomyBuildingShop economyBuildingShop = EconomyBuildingShopFactory.createEconomyBuildingShop(
                 EconomyHero.Fraction.NECROPOLIS, abstractFactory
         );
-        Map<Resources.ResourceType, Integer> resourcesMap = Map.of(
-                Resources.ResourceType.GOLD, 5000,
-                Resources.ResourceType.ORE, 5000,
-                Resources.ResourceType.WOOD, 1500,
-                Resources.ResourceType.SULFUR, 5000,
-                Resources.ResourceType.GEM, 2
+        var hero = new EconomyHero(
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 5000)
+                        .resource(ORE, 5000)
+                        .resource(WOOD,1500)
+                        .resource(SULFUR,5000)
+                        .resource(GEMS,2)
+                        .build()
         );
-        var hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, new Resources(resourcesMap));
         var town = Town.builder()
-                .buildings(Collections.emptySet())
+                .buildings(Map.of())
                 .name("Test town name")
                 .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();

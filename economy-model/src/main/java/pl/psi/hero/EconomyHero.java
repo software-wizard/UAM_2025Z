@@ -36,7 +36,7 @@ public class EconomyHero implements PropertyChangeListener, MapTileIf
         creatureList.add( aCreature );
     }
 
-    public Integer getResourceAmount(Resources.ResourceType resourceType) {
+    public Integer getResourceAmount(Resources.Type resourceType) {
         return resources.getResourceAmount(resourceType);
     }
 
