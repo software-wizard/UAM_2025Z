@@ -2,6 +2,7 @@ package pl.psi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class BoardTest
     void canMoveToPoint()
     {
         final Creature creature1 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 5 )
+                        .moveRange( 10 )
                         .build() )
                 .build();
         final Creature creature2 = new Creature.Builder().statistic( CreatureStats.builder()
@@ -49,7 +50,7 @@ class BoardTest
         Point endPoint = new Point( 3, 4 );
         board.canMove(creature1, endPoint);
 
-        boolean reachable = alg.canReach(startPoint, endPoint);
+        boolean reachable = alg.canReach(startPoint, endPoint, creature1.getMoveRange());
 
         assertThat(reachable).isTrue();
     }
@@ -59,7 +60,7 @@ class BoardTest
     {
 
         final Creature creature1 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 5 )
+                        .moveRange( 10 )
                         .build() )
                 .build();
         final Creature creature2 = new Creature.Builder().statistic( CreatureStats.builder()
@@ -76,7 +77,7 @@ class BoardTest
         Point endPoint = new Point( 3, 4 );
         board.canMove(creature1, endPoint);
 
-        List<Point> path = alg.findPath(startPoint, endPoint, board);
+        List<Point> path = alg.findPath(startPoint, endPoint, creature1.getMoveRange());
         if (!path.isEmpty()) {
             System.out.println("Found path: " + path);
         } else {
@@ -88,6 +89,11 @@ class BoardTest
     @Test
     void shouldAvoidOccupiedPoint()
     {
+        final Creature creature1 = new Creature.Builder().statistic( CreatureStats.builder()
+                        .moveRange( 10 )
+                        .build() )
+                .build();
+
         Creature blockingCreature = new Creature.Builder().statistic( CreatureStats.builder()
                         .moveRange( 5 )
                         .build() )
@@ -114,19 +120,29 @@ class BoardTest
         board.move(blockingCreature2, new Point(2, 3));
         board.move(blockingCreature3, new Point(2, 4));
 
-        List<Point> path = alg.findPath(startPoint, endPoint, board);
+        List<Point> path = alg.findPath(startPoint, endPoint, creature1.getMoveRange());
 
         System.out.println("New path: " + path);
-        // taka powinna być ścieżka po ominięciu (1,1)
-//        assertThat(path).containsExactly(
-//                new Point(0, 1),
-//                new Point(0, 2), //ominięcie
-//                new Point(1, 2),
-//                new Point(2, 2),
-//                new Point(2, 3),
-//                new Point(2, 4),
-//                new Point(3, 4)
-//                );
+
+    }
+
+    @Test
+    void notEnoughMoveRange()
+    {
+        final Board board = new Board( new ArrayList<>(), new ArrayList<>() );
+        PathFindingAlg alg = new PathFindingAlg(board);
+
+        final Creature creature1 = new Creature.Builder().statistic( CreatureStats.builder()
+                        .moveRange( 5 )
+                        .build() )
+                .build();
+
+        int moveRange = creature1.getMoveRange(); //is 5
+        Point startPoint = new Point(0, 1);
+        Point endPoint = new Point( 3, 4 );
+        List<Point> path = alg.findPath(startPoint, endPoint, moveRange); //6 points (without the start point)
+
+        assertThat( path ).isEmpty();
     }
 
 }

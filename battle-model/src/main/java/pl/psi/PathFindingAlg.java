@@ -11,7 +11,7 @@ public class PathFindingAlg
         this.board = board;
     }
 
-    public List<Point> findPath (Point start, Point end, Board board)
+    public List<Point> findPath (Point start, Point end, int moveRange)
     {
         PriorityQueue<Node> unvisitedNodes = new PriorityQueue<Node>(Comparator.comparingInt(node -> node.cost));
         Map<Point, Integer> distances = new HashMap<>();
@@ -31,7 +31,14 @@ public class PathFindingAlg
 
             if (currentPoint.equals(end))   //warunek na wyjscie z alg
             {
-                return reconstructPath(previous, start, end);
+                List<Point> path = reconstructPath(previous, start, end);
+
+                if (path.size() - 1 > moveRange)
+                {
+                    System.out.println("Not enough speed to reach this target!");
+                    return Collections.emptyList();
+                }
+                return path;
             }
 
             for (Point neighbor : getNeighbors(currentPoint))
@@ -70,9 +77,9 @@ public class PathFindingAlg
     }
 
     // czy znajdzie sie sciezka do punktu docelowego
-    public boolean canReach(Point start, Point end)
+    public boolean canReach(Point start, Point end, int moveRange)
     {
-        return !findPath(start, end, board).isEmpty();
+        return !findPath(start, end, moveRange).isEmpty();
     }
 
 
