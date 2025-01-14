@@ -16,26 +16,29 @@ public class EconomyBoard {
 
     private final BiMap<Point,MapTileIf> boardObjectsMap = HashBiMap.create();
 
-    public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2 )
+    public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2)
     {
         addHeroes( hero1, 0 );
         addHeroes( hero2, MAX_WITDH );
-        addObjectsToBoard();
+        //addObjectsToBoard();
+    }
+    public void addBuildingToBoard(Point buildingCoord,MapTileIf building){
+            boardObjectsMap.put(buildingCoord,building);
     }
 
-    private void addObjectsToBoard(){
-        MapTileIf castle = new Castle();
-        Point castleCoords = new Point(5,5);
-        boardObjectsMap.put(castleCoords,castle);
-
-        MapTileIf goldBuilding = new GoldBuilding();
-        Point goldBuildingCoords = new Point(4,3);
-        boardObjectsMap.put(goldBuildingCoords,goldBuilding);
-
-        MapTileIf necropolisCombatBuilding = new NecropolisCombatBuilding();
-        Point necComCoord = new Point(7,6);
-        boardObjectsMap.put(necComCoord,necropolisCombatBuilding);
-    }
+//    private void addObjectsToBoard(){
+//        MapTileIf castle = new Castle();
+//        Point castleCoords = new Point(5,5);
+//        boardObjectsMap.put(castleCoords,castle);
+//
+//        MapTileIf goldBuilding = new GoldBuilding();
+//        Point goldBuildingCoords = new Point(4,3);
+//        boardObjectsMap.put(goldBuildingCoords,goldBuilding);
+//
+//        MapTileIf necropolisCombatBuilding = new NecropolisCombatBuilding();
+//        Point necComCoord = new Point(7,6);
+//        boardObjectsMap.put(necComCoord,necropolisCombatBuilding);
+//    }
 
     private void addHeroes( final EconomyHero hero, final int aPosition )
     {

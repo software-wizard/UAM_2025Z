@@ -7,6 +7,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import pl.psi.hero.EconomyHero;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import static pl.psi.MapTileIf.TileType.ZAMEK;
 
 public class Castle implements MapTileIf{
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    public static final String OPEN_SHOP= "open_shop";
 
 
     @Override
@@ -35,9 +39,12 @@ public class Castle implements MapTileIf{
         return new ImagePattern(new Image(input));
     }
 
+    public void addObserver(PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aObserver);
+    }
     @Override
     public void Interact(EconomyHero hero) {
-
+    observerSupport.firePropertyChange(OPEN_SHOP,null,null);
     }
 
 }

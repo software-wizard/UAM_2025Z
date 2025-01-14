@@ -6,6 +6,8 @@ import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,12 +18,15 @@ import java.util.Random;
 import static pl.psi.MapTileIf.TileType.NECROPOLIS_COMBAT_BUILDING;
 
 public class NecropolisCombatBuilding implements MapTileIf {
-
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    public String START_NECROPOLIS_COMBAT="start_necropolis_combat";
     @Override
     public TileType getTileType() {
         return NECROPOLIS_COMBAT_BUILDING;
     }
-
+    public void addObserver(PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aObserver);
+    }
 
     @Override
     public ImagePattern getImagePattern() {
@@ -38,7 +43,7 @@ public class NecropolisCombatBuilding implements MapTileIf {
 
     @Override
     public void Interact(EconomyHero hero) {
-
+        observerSupport.firePropertyChange(START_NECROPOLIS_COMBAT,null,null);
     }
 
     public EconomyHero createBattleOpponent() {

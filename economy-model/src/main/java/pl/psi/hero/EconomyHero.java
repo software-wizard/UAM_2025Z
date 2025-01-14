@@ -6,6 +6,7 @@ import pl.psi.resource.Resources;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.ImagePattern;
@@ -14,11 +15,12 @@ import pl.psi.creatures.EconomyCreature;
 
 
 @Getter
-public class EconomyHero implements PropertyChangeListener, MapTileIf
+public class EconomyHero implements PropertyChangeListener
 {
     private final Fraction fraction;
     private final List< EconomyCreature > creatureList;
     private final Resources resources;
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
 
     public EconomyHero( final Fraction aFraction, final Resources aResources )
     {
@@ -62,21 +64,25 @@ public class EconomyHero implements PropertyChangeListener, MapTileIf
 
     }
 
-    @Override
-    public TileType getTileType() {
-        return TileType.HERO;
-    }
+//    @Override
+//    public TileType getTileType() {
+//        return TileType.HERO;
+//    }
 
-    @Override
+    //@Override
     public ImagePattern getImagePattern() {
         return null;
     } //TODO Interface
 
-    @Override
-    public void Interact(EconomyHero hero) {//inny bohater wchodzi w interakcje z TYM bohaterem
-        //TUTAJ moznaby dac Attack ?
-       //tylko trzeba uzupelnic canInteract o interact z mapa bohaterow??
-    }
+////    @Override
+////    public void Interact(EconomyHero hero) {//inny bohater wchodzi w interakcje z TYM bohaterem
+////        //TUTAJ moznaby dac Attack ?
+////       //tylko trzeba uzupelnic canInteract o interact z mapa bohaterow??
+////    }
+//
+//    public void addObserver(PropertyChangeListener aObserver) {
+//        observerSupport.addPropertyChangeListener(aObserver);
+//    }//po kliknieciu na bohatera otwiera sie walka
 
     public enum Fraction
     {

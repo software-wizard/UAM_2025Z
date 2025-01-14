@@ -5,6 +5,8 @@ import javafx.scene.paint.ImagePattern;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,11 +17,17 @@ import static pl.psi.MapTileIf.TileType.GOLD_BUILDING;
 import static pl.psi.resource.Resources.ResourceType.GOLD;
 
 public class GoldBuilding implements MapTileIf {
-    Boolean collectedGold;
-
-    GoldBuilding() {
-        collectedGold = false;
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    public String COLLECT_GOLD = "collect_gold";
+    public void addObserver(PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aObserver);
     }
+    // Boolean collectedGold;
+
+//    GoldBuilding() {
+//        collectedGold = false;
+//    }
+    //ZAMIAST TEGO USUNIECIE BUDYNKU Z LISTY
 
     @Override
     public TileType getTileType() {
@@ -41,11 +49,16 @@ public class GoldBuilding implements MapTileIf {
 
     @Override
     public void Interact(EconomyHero hero) {
-        if (canCollectGold()) {
+//        if (canCollectGold()) {
             int goldAmount = collectGold();
             hero.addResource(new Resources(Map.of(GOLD, goldAmount)));
-            collectedGold = true;
-        }
+
+            observerSupport.firePropertyChange(COLLECT_GOLD,null,goldAmount);
+            //usuwanie zlota z board
+            //collectedGold = true;
+
+            //usunac na mapie budynek
+//        }
     }
 
     private int collectGold() {//zwraca losowa ilosc gold
@@ -54,7 +67,7 @@ public class GoldBuilding implements MapTileIf {
         return goldAmount;
     }
 
-    private Boolean canCollectGold() {
-        return !collectedGold;
-    }
+//    private Boolean canCollectGold() {
+//        return !collectedGold;
+//    }
 }
