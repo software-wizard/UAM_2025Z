@@ -22,6 +22,14 @@ public class Board
     private final TileGenerationStrategy tileGenerationStrategy = new RandomTileGeneration(OBSTACLE_COUNT, DAMAGE_TILE_COUNT, INCREASE_ATTACK_BUFFTILE_COUNT);
     private Map<Point, Tile> specialTiles = new HashMap<>();
 
+
+    public int getWidth() {
+        return MAX_WITDH;
+    }
+    public int getHeight() {
+        return MAX_WITDH;
+    }
+
     public Board(List<Creature> aCreatures1, List<Creature> aCreatures2) {
         addCreatures(aCreatures1, 0);
         addCreatures(aCreatures2, MAX_WITDH);

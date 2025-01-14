@@ -107,9 +107,13 @@ public class PathFindingAlg
         }
     }
 
-    // czy punkt jest nna kracie jeszcze:
-    private boolean isValidPoint(Point point) {
-        return point.getX() >= 0 && point.getX() < 14 && point.getY() >= 0 && point.getY() < 14;
+    // czy punkt jest na kracie jeszcze:
+    private boolean isValidPoint(Point point)
+    {
+        int width = board.getWidth();
+        int height = board.getHeight();
+
+        return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height;
     }
 
     // czy pole jest zajete przez kreature:
