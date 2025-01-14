@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
 import pl.psi.creatures.Buff;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.IncreaseAttackBuff;
@@ -58,21 +59,43 @@ Optional< Creature > getCreature( final Point aPoint )
         return Optional.ofNullable( map.get( aPoint ) );
     }
 
+
+
+
     public void move( final Creature aCreature, final Point aPoint )
     {
         if( canMove( aCreature, aPoint ) )
         {
-            map.inverse()
-                .remove( aCreature );
-            map.put( aPoint, aCreature );
+            PathFindingAlg alg = new PathFindingAlg(this);
+            Point startPoint = getPosition(aCreature);
+            int creatureMoveRange = aCreature.getMoveRangeWithBonus();
+            List<Point> path = alg.findPath(startPoint, aPoint, creatureMoveRange);
+
+            //dla kazdefo punktu z path - kreatura musi przejsc przez kazdy punkt z listy:
+            for (Point point : path)
+            {
+                map.inverse()
+                        .remove( aCreature );
+                map.put( point, aCreature );
+
+            }
 
             Tile tile = specialTiles.get(aPoint);
-            if(tile!=null){
+            if(tile!=null)
+            {
                 tile.apply(aCreature);
             }
+
+        }
+
+        else
+        {
+            throw new IllegalArgumentException("Cannot move to this target: "+aPoint);
         }
 
     }
+
+
 
     public boolean canMove(final Creature aCreature, final Point aPoint) {
         if (map.containsKey(aPoint)) {
@@ -81,9 +104,16 @@ Optional< Creature > getCreature( final Point aPoint )
         if (specialTiles.containsKey(aPoint) && !specialTiles.get(aPoint).isPassable()) {
             return false;
         }
-        final Point oldPosition = getPosition(aCreature);
-        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRangeWithBonus();
+        /*final Point oldPosition = getPosition(aCreature);
+        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRangeWithBonus();*/
+        Point startPoint = getPosition(aCreature);
+        PathFindingAlg alg = new PathFindingAlg(this);
+
+        return alg.canReach(startPoint, aPoint, aCreature.getMoveRangeWithBonus());
     }
+
+
+
     public Point getPosition(Creature aCreature)
     {
         return map.inverse()
