@@ -6,8 +6,7 @@ import pl.psi.hero.EconomyHero;
 
 import java.util.Optional;
 
-import static pl.psi.MapTileIf.TileType.NECROPOLIS_COMBAT_BUILDING;
-import static pl.psi.MapTileIf.TileType.ZAMEK;
+import static pl.psi.MapTileIf.TileType.*;
 
 public class EconomyBoard {
 
@@ -15,6 +14,13 @@ public class EconomyBoard {
     private final BiMap< Point, EconomyHero> heroMap = HashBiMap.create();
 
     private final BiMap<Point,MapTileIf> boardObjectsMap = HashBiMap.create();
+
+    private void removeGoldBuilding(MapTileIf goldBuilding){
+        if(boardObjectsMap.containsValue(goldBuilding)){
+            boardObjectsMap.inverse()
+                    .remove(goldBuilding);
+        }
+    }
 
     public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2)
     {
@@ -24,6 +30,9 @@ public class EconomyBoard {
     }
     public void addBuildingToBoard(Point buildingCoord,MapTileIf building){
             boardObjectsMap.put(buildingCoord,building);
+            if(building.getTileType()==GOLD_BUILDING){
+                building.addObserver((e)->removeGoldBuilding(building));
+            }
     }
 
 //    private void addObjectsToBoard(){
