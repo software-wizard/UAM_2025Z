@@ -4,14 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import pl.psi.*;
 import pl.psi.converter.EcoBattleConverter;
 import pl.psi.hero.EconomyHero;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -70,6 +75,18 @@ public class EconomyBoardController {
 
     }
 
+
+   public ImagePattern getImagePattern(String imagePath) {
+        File  building = new File(imagePath);
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(building);
+        } catch (
+                FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return new ImagePattern(new Image(input));
+    }
     private void refreshGui() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -81,7 +98,7 @@ public class EconomyBoardController {
                         .ifPresent(c -> mapTile.setBackground(Color.GREEN));
 
                 Optional<MapTileIf> mapObject = economyBoardEngine.getMapTile(new Point(x, y));
-                mapObject.ifPresent(c -> mapTile.setBackgroundImage(mapObject.get().getImagePattern()));
+                mapObject.ifPresent(c -> mapTile.setBackgroundImage(getImagePattern(mapObject.get().getImagePath())));
 
                 if (economyBoardEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.GREY);

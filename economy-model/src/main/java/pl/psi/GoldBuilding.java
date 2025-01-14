@@ -19,6 +19,10 @@ import static pl.psi.resource.Resources.ResourceType.GOLD;
 public class GoldBuilding implements MapTileIf {
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     public String COLLECT_GOLD = "collect_gold";
+
+    private static final String imagePath = "economy-gui/src/main/resources/AVTgold0.png";
+
+
     public void addObserver(PropertyChangeListener aObserver) {
         observerSupport.addPropertyChangeListener(aObserver);
     }
@@ -33,19 +37,23 @@ public class GoldBuilding implements MapTileIf {
     public TileType getTileType() {
         return GOLD_BUILDING;
     }
-
     @Override
-    public ImagePattern getImagePattern() {
-        File goldBuilding = new File("economy-gui/src/main/resources/AVTgold0.png");
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(goldBuilding);
-        } catch (
-                FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return new ImagePattern(new Image(input));
+    public String getImagePath(){
+        return imagePath;
     }
+//
+//    @Override
+//    public ImagePattern getImagePattern() {
+//        File goldBuilding = new File("economy-gui/src/main/resources/AVTgold0.png");
+//        FileInputStream input = null;
+//        try {
+//            input = new FileInputStream(goldBuilding);
+//        } catch (
+//                FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return new ImagePattern(new Image(input));
+//    }
 
     @Override
     public void Interact(EconomyHero hero) {

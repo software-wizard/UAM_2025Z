@@ -20,6 +20,10 @@ import static pl.psi.MapTileIf.TileType.NECROPOLIS_COMBAT_BUILDING;
 public class NecropolisCombatBuilding implements MapTileIf {
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     public String START_NECROPOLIS_COMBAT="start_necropolis_combat";
+
+    private static final String imagePath = "economy-gui/src/main/resources/AVXbnk30.png";
+
+
     @Override
     public TileType getTileType() {
         return NECROPOLIS_COMBAT_BUILDING;
@@ -29,17 +33,21 @@ public class NecropolisCombatBuilding implements MapTileIf {
     }
 
     @Override
-    public ImagePattern getImagePattern() {
-        File goldBuilding = new File("economy-gui/src/main/resources/AVXbnk30.png");
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(goldBuilding);
-        } catch (
-                FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return new ImagePattern(new Image(input));
+    public String getImagePath(){
+        return imagePath;
     }
+//    @Override
+//    public ImagePattern getImagePattern() {
+//        File goldBuilding = new File("economy-gui/src/main/resources/AVXbnk30.png");
+//        FileInputStream input = null;
+//        try {
+//            input = new FileInputStream(goldBuilding);
+//        } catch (
+//                FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return new ImagePattern(new Image(input));
+//    }
 
     @Override
     public void Interact(EconomyHero hero) {

@@ -10,7 +10,10 @@ public interface MapTileIf {
     void addObserver(PropertyChangeListener aObserver);
     TileType getTileType();
 
-    ImagePattern getImagePattern();
+   // ImagePattern getImagePattern();
+
+    public String getImagePath();
+
 
     void Interact(EconomyHero hero);
     enum TileType {
