@@ -43,7 +43,7 @@ public class PathFindingAlg
 
             for (Point neighbor : getNeighbors(currentPoint))
             {
-                int newDistance = distances.get(currentPoint) + getCost(currentPoint, neighbor); //relaksacja
+                int newDistance = distances.get(currentPoint) + getCost(neighbor); //relaksacja
                 if (newDistance < distances.getOrDefault(neighbor, Integer.MAX_VALUE))
                 {
                     distances.put(neighbor, newDistance);
@@ -107,14 +107,19 @@ public class PathFindingAlg
         }
     }
 
-    // czy punkt jest na kracie jeszcze:
+
+
+    // czy punkt jest na kracie jeszcze i czy tile nie jest przeszkodą:
     private boolean isValidPoint(Point point)
     {
         int width = board.getWidth();
         int height = board.getHeight();
 
-        return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height;
+        return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height
+                && (board.getSpecialTile(point) == null || board.getSpecialTile(point).isPassable());
     }
+
+
 
     // czy pole jest zajete przez kreature:
     private boolean isOccupied(Point point)
@@ -124,12 +129,24 @@ public class PathFindingAlg
 
 
 
-    private int getCost(Point from, Point to)
+    private int getCost(Point to)
     {
+        Tile tile = board.getSpecialTile(to);
+        if (tile == null)
+        {
+            return 1;
+        }
+
+        //dla zajetego przez kreature punktu:
         if (isOccupied(to))
         {
-            return 1000; //koszt taki aby zawsze omijać to pole
+            return 1000;
         }
-        return 1;
+
+        return switch (tile.getType()) {
+            case DAMAGE -> 2;
+            case OBSTACLE -> 1000;
+            default -> 1;
+        };
     }
 }
