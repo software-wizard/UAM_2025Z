@@ -1,8 +1,5 @@
 package pl.psi.building.payment;
 
-import lombok.RequiredArgsConstructor;
-import pl.psi.hero.EconomyHero;
-
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 

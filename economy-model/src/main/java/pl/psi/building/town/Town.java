@@ -18,9 +18,11 @@ import java.util.Optional;
 public class Town {
 
     private final String name;
-    @Getter private final EconomyHero.Fraction fraction;
+    @Getter
+    private final EconomyHero.Fraction fraction;
     private final EconomyBuildingShop economyBuildingShop;
-    @Getter(AccessLevel.PACKAGE) private final Map<String, EconomyBuilding> buildings;
+    @Getter(AccessLevel.PACKAGE)
+    private final Map<String, EconomyBuilding> buildings;
 
     private Town(String aName,
                 EconomyHero.Fraction aFraction,
@@ -49,10 +51,9 @@ public class Town {
     }
 
     public boolean isBuildingAlreadyBuilt(String name) {
-        EconomyBuilding economyBuilding = findBuildingByName(name).orElseThrow();
-        return economyBuilding.getStatistic()
-                .name()
-                .equals(name) && economyBuilding.isBuilt();
+        return findBuildingByName(name)
+                .map(EconomyBuilding::isBuilt)
+                .orElse(false);
     }
 
     public UpgradableBuilding upgradeBuilding(EconomyHero aBuyer, String aBuildingToUpgrade) {
@@ -79,6 +80,13 @@ public class Town {
     }
 
     public static class Builder {
+
+        public Town build() {
+            if (economyBuildingShop == null) {
+                throw new IllegalArgumentException("Economy building shop not set");
+            }
+            return new Town(name, fraction, economyBuildingShop, buildings);
+        }
 
         public Builder buildings(Map<String, EconomyBuilding> buildings) {
             this.buildings = new HashMap<>(buildings);

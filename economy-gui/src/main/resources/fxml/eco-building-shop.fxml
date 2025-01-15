@@ -6,15 +6,13 @@
 <?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
-      prefHeight="750.0" prefWidth="1350.0">
-    <children>
-        <GridPane fx:id="buildingGrid">
-        </GridPane>
-        <VBox fx:id="labelVBox" alignment="CENTER">
-            <Label fx:id="resourcesLabel" text="Zasoby: "/>
-        </VBox>
-    </children>
+      prefHeight="560.0" prefWidth="1350.0">
     <stylesheets>
         <URL value="@main.css"/>
     </stylesheets>
+    <GridPane fx:id="buildingGrid">
+    </GridPane>
+    <VBox fx:id="labelVBox" alignment="CENTER">
+        <Label fx:id="resourcesLabel" text="Zasoby: "/>
+    </VBox>
 </VBox>

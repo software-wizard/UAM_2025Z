@@ -9,7 +9,7 @@ import pl.psi.resource.Resources;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.psi.resource.Resources.Type.GOLD;
+import static pl.psi.resource.Resources.Type.*;
 
 class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
 
@@ -53,7 +53,26 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
                 "Tavern",
                 EconomyBuildingStatistic.Type.BUILDING,
                 Resources.builder()
-                        .resource(GOLD, 100)
+                        .resource(GOLD, 500)
+                        .resource(WOOD, 5)
+                        .build(),
+                List.of()
+        )),
+        MARKETPLACE(new EconomyBuildingStatistic(
+                "Marketplace",
+                EconomyBuildingStatistic.Type.BUILDING,
+                Resources.builder()
+                        .resource(GOLD, 500)
+                        .resource(WOOD, 5)
+                        .build(),
+                List.of()
+        )),
+        RESOURCE_SILO(new EconomyBuildingStatistic(
+                "Resource_Silo",
+                EconomyBuildingStatistic.Type.BUILDING,
+                Resources.builder()
+                        .resource(ORE, 5)
+                        .resource(GOLD, 5000)
                         .build(),
                 List.of()
         ));

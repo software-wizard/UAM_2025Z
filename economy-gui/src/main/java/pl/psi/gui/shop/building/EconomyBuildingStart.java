@@ -44,15 +44,15 @@ public class EconomyBuildingStart extends Application {
         var town = Town.builder()
                 .buildings(Map.of())
                 .name("Test town name")
+                .economyBuildingShop(economyBuildingShop)
                 .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();
         EconomyBuildingShopController controller = new EconomyBuildingShopController(
-                new EconomyBuildingFacade(economyBuildingShop, abstractFactory), hero, town, aStage
+                new EconomyBuildingView(), new EconomyBuildingFacade(abstractFactory), hero, town, aStage
         );
         loader.setController(controller);
         final Scene scene = new Scene(loader.load());
         aStage.setScene(scene);
-        aStage.setResizable(false);
         aStage.show();
     }
 }

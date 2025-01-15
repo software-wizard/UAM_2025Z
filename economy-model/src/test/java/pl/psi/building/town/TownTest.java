@@ -1,4 +1,4 @@
-package pl.psi.town;
+package pl.psi.building.town;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +13,11 @@ import pl.psi.resource.Resources;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -52,6 +54,7 @@ class TownTest {
                 .build();
         when(buildingShop.buyBuilding(hero, buildingName))
                 .thenReturn(building);
+        when(building.isBuilt()).thenReturn(true);
         UpgradableBuilding upgradableBuilding = Mockito.mock(UpgradableBuilding.class);
         doAnswer(invocation -> {
             when(upgradableBuilding.isUpgraded()).thenReturn(true);
@@ -109,5 +112,52 @@ class TownTest {
         // THEN
         assertThat(upgradedBuilding.isUpgraded()).isTrue();
         assertThat(upgradedBuilding.getStatistic()).isEqualTo(buildingStatistic);
+    }
+
+    @Test
+    void should_throw_exception_when_building_already_built() {
+        // GIVEN
+        town.getBuildings().put(buildingName, building);
+
+        // WHEN && THEN
+        assertThatThrownBy(() -> town.buildBuilding(hero, buildingName))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void should_throw_exception_when_building_upgrade_not_found() {
+        // GIVEN && WHEN && THEN
+        assertThatThrownBy(() -> town.upgradeBuilding(hero, "Non_Existent_Building"))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    void should_return_empty_when_finding_non_existent_building() {
+        // GIVEN && WHEN
+        Optional<EconomyBuilding> buildingByName = town.findBuildingByName("Non_Existent_Building");
+
+        // THEN
+        assertThat(buildingByName.isEmpty()).isTrue();
+    }
+
+    @Test
+    void should_handle_payment_rollback_on_failure() {
+        // GIVEN
+        EconomyBuildingShop buildingShop = Mockito.mock(EconomyBuildingShop.class);
+        town = Town.builder()
+                .buildings(Map.of())
+                .economyBuildingShop(buildingShop)
+                .name(buildingName)
+                .fraction(EconomyHero.Fraction.NECROPOLIS)
+                .build();
+
+        // WHEN
+        when(buildingShop.buyBuilding(hero, buildingName)).thenThrow(new RuntimeException("Payment failed"));
+
+        // THEN
+        assertThatThrownBy(() -> town.buildBuilding(hero, buildingName))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Payment failed");
+        assertThat(town.getBuildings().size()).isEqualTo(0);
     }
 }

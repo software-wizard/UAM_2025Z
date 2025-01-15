@@ -44,11 +44,12 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
                 "Buyer has not enough gold cost to buy a building %s",
                 aBuildingToUpgrade.getStatistic().name()
         );
+        aBuyer.subtractResource(upgradableBuilding.getUpgradeCost());
         return upgradableBuilding;
     }
 
     @Override
     public void rollback(EconomyHero aHero, EconomyBuilding aBuilding) {
-
+        aHero.subtractResource(aBuilding.getStatistic().cost());
     }
 }
