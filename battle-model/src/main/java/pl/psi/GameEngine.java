@@ -25,6 +25,17 @@ public class GameEngine {
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
         heroes.add(aHero1);
         heroes.add(aHero2);
+
+        initializeOwners(aHero1, aHero2);
+    }
+
+    private void initializeOwners(final Hero aHero1, final Hero aHero2) {
+        for (Creature creature : aHero1.getCreatures()) {
+            creature.initializeOwner(aHero1);
+        }
+        for (Creature creature : aHero2.getCreatures()) {
+            creature.initializeOwner(aHero2);
+        }
     }
 
     public void attack(final Point point) {
@@ -69,9 +80,23 @@ public class GameEngine {
     public boolean canAttack(final Point point) {
         double distance = board.getPosition(turnQueue.getCurrentCreature())
                 .distance(point);
-        return board.getCreature(point)
-                .isPresent()
-                && distance < 2 && distance > 0;
+        Creature currentCreature = turnQueue.getCurrentCreature();
+        boolean isRanged = currentCreature.isRanged();
+
+        //for ranged creatures:
+        if (isRanged)
+        {
+            return board.getCreature(point)
+                    .isPresent() && distance > 0;
+        }
+        // for any other creature:
+        else
+        {
+            return board.getCreature(point)
+                    .isPresent()
+                    && distance < 2 && distance > 0;
+        }
+
     }
 
     public boolean isCurrentCreature(Point aPoint) {

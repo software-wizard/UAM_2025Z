@@ -15,10 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
-import pl.psi.AppliedSpell;
-import pl.psi.Board;
-import pl.psi.StatsBonusType;
-import pl.psi.TurnQueue;
+import pl.psi.*;
 
 import com.google.common.collect.Range;
 
@@ -40,7 +37,10 @@ public class Creature implements PropertyChangeListener {
     @Setter
     private DamageCalculatorIf calculator;
     private List<Buff> buffs = new ArrayList<>();
+    @Getter
     private Board board;
+    @Getter
+    private Hero owner;
 
     Creature() {
     }
@@ -56,6 +56,10 @@ public class Creature implements PropertyChangeListener {
 
     public void initializeBoard(final Board aBoard) {
         this.board = aBoard;
+    }
+
+    public void initializeOwner(final Hero aOwner) {
+        this.owner = aOwner;
     }
 
     public void attack(final Creature aDefender) {
@@ -114,13 +118,19 @@ public class Creature implements PropertyChangeListener {
     public boolean isUndead() {
         return stats.isUndead();
     }
-    //public boolean isRanged() {return stats.isRanged();}
+    public boolean isRanged() {return stats.isRanged();}
+
+    //czy iina kreatura nalezy do tego samego hero:
+    public boolean isAlly(Creature otherCreature) {
+        return this.getOwner() == otherCreature.getOwner();
+
+    }
 
     public void applyMagicDamage(int damage) {
         applyDamage(damage);
     }
 
-    private void applyDamage(final int aDamage) {
+    void applyDamage(final int aDamage) {
         int hpToSubstract = aDamage % getMaxHp();
         int amountToSubstract = Math.round(aDamage / getMaxHp());
 
@@ -160,7 +170,7 @@ public class Creature implements PropertyChangeListener {
         currentHp = aCurrentHp;
     }
 
-    private boolean canCounterAttack(final Creature aDefender) {
+    public boolean canCounterAttack(final Creature aDefender) {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
 
@@ -256,6 +266,7 @@ public class Creature implements PropertyChangeListener {
     }
 
 
+
     public static class Builder {
         private int amount = 1;
         private DamageCalculatorIf calculator;
@@ -271,16 +282,6 @@ public class Creature implements PropertyChangeListener {
             return this;
         }
 
-//        public Builder isRanged(final boolean aIsRanged)
-//        {
-//            isRanged = aIsRanged;
-//            return this;
-//        }
-
-//        public Builder board(final Board aBoard) {
-//            board = aBoard;
-//            return this;
-//        }
 
         Builder calculator(DamageCalculatorIf aCalc) {
             calculator = aCalc;
