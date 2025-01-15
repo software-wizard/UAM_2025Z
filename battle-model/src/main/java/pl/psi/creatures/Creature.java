@@ -11,9 +11,12 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
+import pl.psi.AppliedSpell;
+import pl.psi.StatsBonusType;
 import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
@@ -31,6 +34,8 @@ public class Creature implements PropertyChangeListener {
     @Setter
     private int currentHp;
     private int counterAttackCounter = 1;
+    private final int MINIMAL_STAT_VALUE = 0;
+    private ArrayList<AppliedSpell> appliedSpells;
     private DamageCalculatorIf calculator;
     private List<Buff> buffs = new ArrayList<>();
 
@@ -43,16 +48,55 @@ public class Creature implements PropertyChangeListener {
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
+        appliedSpells = new ArrayList<AppliedSpell>();
     }
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
-            aDefender.applyDamage(damage);
+            final int damageWithBonus = getAttackWithBonus();
+            System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
+            aDefender.applyDamage(damageWithBonus);
             if (canCounterAttack(aDefender)) {
+                System.out.println("Counter attack");
                 counterAttack(aDefender);
             }
         }
+    }
+
+    public int getBonus(StatsBonusType statsBonusType){
+        int bonus = 0;
+        switch(statsBonusType){
+            case ARMOR:
+                for(AppliedSpell appliedSpell : appliedSpells){
+                    bonus += appliedSpell.getSpell().getSpellBonus().getArmor();
+                }
+                break;
+            case ATTACK:
+                for(AppliedSpell appliedSpell : appliedSpells){
+                    bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
+                }
+                break;
+            case MOVE_RANGE:
+                for(AppliedSpell appliedSpell : appliedSpells){
+                    bonus += appliedSpell.getSpell().getSpellBonus().getMoveRange();
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown statsBonusType");
+        }
+        return bonus;
+    }
+
+    public void decreaseAppliedSpellsRound(){
+        for(AppliedSpell spell : appliedSpells){
+            spell.decreaseRoundsLeft();
+        }
+    }
+
+    public void clearNotActiveSpells(){
+        if(appliedSpells.isEmpty()) return;
+        appliedSpells.removeIf(spell -> !spell.isActive());
     }
 
     public boolean isAlive() {
@@ -63,6 +107,9 @@ public class Creature implements PropertyChangeListener {
     public boolean isUndead()
     {
         return stats.isUndead();
+    }
+    public void applyMagicDamage(int damage) {
+        applyDamage(damage);
     }
 
     private void applyDamage(final int aDamage) {
@@ -107,8 +154,16 @@ public class Creature implements PropertyChangeListener {
         return stats.getAttack();
     }
 
+    public int getAttackWithBonus(){
+        return Math.max(stats.getAttack() + getBonus(StatsBonusType.ATTACK), MINIMAL_STAT_VALUE);
+    }
+
     int getArmor() {
         return stats.getArmor();
+    }
+
+    public int getArmorWithBonus(){
+        return Math.max(stats.getArmor() + getBonus(StatsBonusType.ARMOR), MINIMAL_STAT_VALUE);
     }
 
     @Override
@@ -137,6 +192,10 @@ public class Creature implements PropertyChangeListener {
 
     public int getMoveRange() {
         return stats.getMoveRange();
+    }
+
+    public int getMoveRangeWithBonus(){
+        return Math.max(stats.getMoveRange() + getBonus(StatsBonusType.MOVE_RANGE), MINIMAL_STAT_VALUE);
     }
 
     public void takeDamage(int damage) {

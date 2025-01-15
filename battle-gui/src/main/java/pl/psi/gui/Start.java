@@ -9,7 +9,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.Spell;
+import pl.psi.SpellName;
 import pl.psi.creatures.NecropolisFactory;
+import pl.psi.creatures.SpellBonusStatistic;
 
 public class Start extends Application
 {
@@ -48,13 +51,34 @@ public class Start extends Application
 
     private Hero createP2()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ) );
+        final Hero ret = new Hero(
+                List.of( new NecropolisFactory().create( true, 1, 5 ) ),
+                10,
+                List.of(new Spell.Builder()
+                        .name(SpellName.MAGIC_ARROW)
+                        .damage(-100)
+                        .level(1)
+                        .manaCost(5)
+                        .build(),
+                        new Spell.Builder().name(SpellName.BOOST_DAMAGE).damage(0).level(1).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).build()
+                )
+        );
         return ret;
     }
 
     private Hero createP1()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ) );
+        final Hero ret = new Hero(
+                List.of( new NecropolisFactory().create( false, 1, 5 ) ),
+                15,
+                List.of(
+                        new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(5).level(1).manaCost(5).build(),
+                        new Spell.Builder()
+                                .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
+                        .build(),
+                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
+                )
+        );
         return ret;
     }
 
