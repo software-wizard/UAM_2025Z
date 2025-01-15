@@ -2,6 +2,8 @@ package pl.psi;
 
 import lombok.Value;
 
+import java.util.Objects;
+
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
@@ -28,4 +30,18 @@ public class Point
         py -= getY();
         return Math.sqrt( px * px + py * py );
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Point other = (Point) obj;
+        return x == other.x && y == other.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
 }

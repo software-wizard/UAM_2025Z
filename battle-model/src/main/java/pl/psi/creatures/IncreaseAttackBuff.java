@@ -1,5 +1,7 @@
 package pl.psi.creatures;
 
+import java.util.Objects;
+
 public class IncreaseAttackBuff extends Buff{
     private final int boost;
     private boolean applied = false;
@@ -20,5 +22,18 @@ public class IncreaseAttackBuff extends Buff{
     @Override
     public void onExpire(Creature aCreature) {
         aCreature.getStats().changeAttack(-boost);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        IncreaseAttackBuff other = (IncreaseAttackBuff) obj;
+        return boost == other.boost && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), boost);
     }
 }

@@ -1,5 +1,7 @@
 package pl.psi.creatures;
 
+import java.util.Objects;
+
 public abstract class Buff {
     private final int duration;
     protected int remainingTurns;
@@ -28,4 +30,17 @@ public abstract class Buff {
     public void onExpire(Creature aCreature){
 
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Buff other = (Buff) obj;
+        return duration == other.duration && remainingTurns == other.remainingTurns && isFirstTurn == other.isFirstTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(duration, remainingTurns, isFirstTurn);
+    }
 }

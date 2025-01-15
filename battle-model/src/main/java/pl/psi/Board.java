@@ -15,11 +15,8 @@ import pl.psi.creatures.IncreaseAttackBuff;
 public class Board
 {
     private static final int MAX_WITDH = 14;
-    private static final int OBSTACLE_COUNT = 10;
-    private static final int DAMAGE_TILE_COUNT = 10;
-    private static final int INCREASE_ATTACK_BUFFTILE_COUNT = 5;
     private final BiMap< Point, Creature > map = HashBiMap.create();
-    private final TileGenerationStrategy tileGenerationStrategy = new RandomTileGeneration(OBSTACLE_COUNT, DAMAGE_TILE_COUNT, INCREASE_ATTACK_BUFFTILE_COUNT);
+    private final TileGenerationStrategy tileGenerationStrategy = new RandomTileGeneration(10, 10, 5);
     private Map<Point, Tile> specialTiles = new HashMap<>();
 
     public Board(List<Creature> aCreatures1, List<Creature> aCreatures2) {
