@@ -16,6 +16,7 @@ import java.util.Random;
 
 import lombok.Setter;
 import pl.psi.AppliedSpell;
+import pl.psi.Board;
 import pl.psi.StatsBonusType;
 import pl.psi.TurnQueue;
 
@@ -36,8 +37,10 @@ public class Creature implements PropertyChangeListener {
     private int counterAttackCounter = 1;
     private final int MINIMAL_STAT_VALUE = 0;
     private ArrayList<AppliedSpell> appliedSpells;
+    @Setter
     private DamageCalculatorIf calculator;
     private List<Buff> buffs = new ArrayList<>();
+    private Board board;
 
     Creature() {
     }
@@ -49,6 +52,10 @@ public class Creature implements PropertyChangeListener {
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
         appliedSpells = new ArrayList<AppliedSpell>();
+    }
+
+    public void initializeBoard(final Board aBoard) {
+        this.board = aBoard;
     }
 
     public void attack(final Creature aDefender) {
@@ -64,21 +71,21 @@ public class Creature implements PropertyChangeListener {
         }
     }
 
-    public int getBonus(StatsBonusType statsBonusType){
+    public int getBonus(StatsBonusType statsBonusType) {
         int bonus = 0;
-        switch(statsBonusType){
+        switch (statsBonusType) {
             case ARMOR:
-                for(AppliedSpell appliedSpell : appliedSpells){
+                for (AppliedSpell appliedSpell : appliedSpells) {
                     bonus += appliedSpell.getSpell().getSpellBonus().getArmor();
                 }
                 break;
             case ATTACK:
-                for(AppliedSpell appliedSpell : appliedSpells){
+                for (AppliedSpell appliedSpell : appliedSpells) {
                     bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
                 }
                 break;
             case MOVE_RANGE:
-                for(AppliedSpell appliedSpell : appliedSpells){
+                for (AppliedSpell appliedSpell : appliedSpells) {
                     bonus += appliedSpell.getSpell().getSpellBonus().getMoveRange();
                 }
                 break;
@@ -88,14 +95,14 @@ public class Creature implements PropertyChangeListener {
         return bonus;
     }
 
-    public void decreaseAppliedSpellsRound(){
-        for(AppliedSpell spell : appliedSpells){
+    public void decreaseAppliedSpellsRound() {
+        for (AppliedSpell spell : appliedSpells) {
             spell.decreaseRoundsLeft();
         }
     }
 
-    public void clearNotActiveSpells(){
-        if(appliedSpells.isEmpty()) return;
+    public void clearNotActiveSpells() {
+        if (appliedSpells.isEmpty()) return;
         appliedSpells.removeIf(spell -> !spell.isActive());
     }
 
@@ -104,10 +111,11 @@ public class Creature implements PropertyChangeListener {
     }
 
     // undead is a type of creature:
-    public boolean isUndead()
-    {
+    public boolean isUndead() {
         return stats.isUndead();
     }
+    //public boolean isRanged() {return stats.isRanged();}
+
     public void applyMagicDamage(int damage) {
         applyDamage(damage);
     }
@@ -120,11 +128,28 @@ public class Creature implements PropertyChangeListener {
         if (hp <= 0) {
             setCurrentHp(getMaxHp() - hp);
             setAmount(getAmount() - 1);
-        }
-        else{
+        } else {
             setCurrentHp(hp);
         }
         setAmount(getAmount() - amountToSubstract);
+    }
+
+    public DamageCalculatorIf getCalculator()
+    {
+        if (calculator == null)
+        {
+            if (board == null) {
+                throw new IllegalStateException("Board is not initialized yet.");
+            }
+            if (stats.isRanged())
+            {
+                calculator = new RangedCreatureDamageCalculator(board);
+            }
+            else {
+                calculator = new DefaultDamageCalculator(new Random());
+            }
+        }
+        return calculator;
     }
 
     private int getMaxHp() {
@@ -154,7 +179,7 @@ public class Creature implements PropertyChangeListener {
         return stats.getAttack();
     }
 
-    public int getAttackWithBonus(){
+    public int getAttackWithBonus() {
         return Math.max(stats.getAttack() + getBonus(StatsBonusType.ATTACK), MINIMAL_STAT_VALUE);
     }
 
@@ -162,7 +187,7 @@ public class Creature implements PropertyChangeListener {
         return stats.getArmor();
     }
 
-    public int getArmorWithBonus(){
+    public int getArmorWithBonus() {
         return Math.max(stats.getArmor() + getBonus(StatsBonusType.ARMOR), MINIMAL_STAT_VALUE);
     }
 
@@ -194,7 +219,7 @@ public class Creature implements PropertyChangeListener {
         return stats.getMoveRange();
     }
 
-    public int getMoveRangeWithBonus(){
+    public int getMoveRangeWithBonus() {
         return Math.max(stats.getMoveRange() + getBonus(StatsBonusType.MOVE_RANGE), MINIMAL_STAT_VALUE);
     }
 
@@ -226,13 +251,14 @@ public class Creature implements PropertyChangeListener {
         }
     }
 
-    public void addBuff(Buff aBuff){
+    public void addBuff(Buff aBuff) {
         buffs.add(aBuff);
     }
 
+
     public static class Builder {
         private int amount = 1;
-        private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
+        private DamageCalculatorIf calculator;
         private CreatureStatisticIf statistic;
 
         public Builder statistic(final CreatureStatisticIf aStatistic) {
@@ -245,18 +271,33 @@ public class Creature implements PropertyChangeListener {
             return this;
         }
 
-        Builder calculator(final DamageCalculatorIf aCalc) {
+//        public Builder isRanged(final boolean aIsRanged)
+//        {
+//            isRanged = aIsRanged;
+//            return this;
+//        }
+
+//        public Builder board(final Board aBoard) {
+//            board = aBoard;
+//            return this;
+//        }
+
+        Builder calculator(DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
         }
 
         public Creature build() {
+
             return new Creature(statistic, calculator, amount);
+        }
+
+    }
+
+        @Override
+        public String toString() {
+            return getName() + System.lineSeparator() + getAmount();
         }
     }
 
-    @Override
-    public String toString() {
-        return getName() + System.lineSeparator() + getAmount();
-    }
-}
+

@@ -24,6 +24,7 @@ public class CreatureStats implements CreatureStatisticIf {
     private final boolean upgraded;
     private final boolean isUpgraded;
     private final boolean isUndead;
+    private final boolean isRanged;
 
     @Override
     public boolean isUpgraded() {

@@ -29,6 +29,9 @@ public class Board
         addCreatures(aCreatures2, MAX_WITDH);
         this.specialTiles = this.tileGenerationStrategy.generateSpecialTiles(MAX_WITDH, map);
 
+        initializeBoardForCreatures(aCreatures1);
+        initializeBoardForCreatures(aCreatures2);
+
     }
 
     public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2, final Map<Point, Tile> aSpecialTiles )
@@ -36,6 +39,14 @@ public class Board
         addCreatures( aCreatures1, 0 );
         addCreatures( aCreatures2, MAX_WITDH );
         this.specialTiles = aSpecialTiles;
+    }
+
+    private void initializeBoardForCreatures(List<Creature> creatures)
+    {
+        for (Creature creature : creatures)
+        {
+            creature.initializeBoard(this);
+        }
     }
 
 

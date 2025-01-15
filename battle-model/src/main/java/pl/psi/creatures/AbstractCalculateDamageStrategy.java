@@ -17,7 +17,7 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
     }
 
     @Override
-    public int calculateDamage( final Creature aAttacker, final Creature aDefender )
+    public int calculateDamage( final Creature aAttacker, final Creature aDefender)
     {
         final int armor = getArmor( aDefender );
 
