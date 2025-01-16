@@ -54,6 +54,7 @@ public class Creature implements PropertyChangeListener {
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
+            System.out.printf("Base attack: %d, Attack with bonus: %d", getBaseAttack(), getAttack());
             aDefender.applyDamage(damage);
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");

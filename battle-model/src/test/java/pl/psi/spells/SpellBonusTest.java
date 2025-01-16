@@ -9,7 +9,6 @@ import pl.psi.SpellName;
 import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
-import pl.psi.creatures.SpellBonusStatistic;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class SpellBonusTest {
     void weakenAttackBonus() {
 
         // TODO: Testy sie wykrzaczają, gdyż używamy DamageCalculator z random w środku, jak możemy użyć zwykłej wartości pod to?
-        Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusName.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(weakenAttack));
 
@@ -71,7 +70,7 @@ public class SpellBonusTest {
     @Test
     void increasedAttackBonus() {
 
-        Spell extraAttack = new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell extraAttack = new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusName.EXTRA_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(extraAttack));
 
