@@ -514,10 +514,10 @@ public class CreatureTest
     @Test
     void defenderShouldNotCounterAttack()
     {
-        //vampire lord ma takiego skilla
+        //vampire ma takiego skilla
 
-        Creature vampireLord =
-                new NecropolisFactory().create(true, 4, 1);
+        Creature vampire =
+                new NecropolisFactory().create(false, 4, 1);
 
         //defender:
         Creature Skeleton1 = new Creature.Builder().statistic( CreatureStats.builder()
@@ -531,17 +531,17 @@ public class CreatureTest
                 .build();
 
 
-        List< Creature > c1 = List.of( vampireLord );
+        List< Creature > c1 = List.of( vampire );
         List< Creature > c2 = List.of( Skeleton1 );
 
         Board board = new Board(c1, c2);
-        board.move(vampireLord, new Point(0, 0));
+        board.move(vampire, new Point(0, 0));
         board.move(Skeleton1, new Point(1, 0));
 
-        vampireLord.setCurrentHp(5);
-        vampireLord.attack(Skeleton1);
+        vampire.setCurrentHp(5);
+        vampire.attack(Skeleton1);
 
-        assertEquals(1, vampireLord.getAmount());
+        assertEquals(1, vampire.getAmount());
 
     }
 }

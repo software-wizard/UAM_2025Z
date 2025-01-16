@@ -27,9 +27,16 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 4:
-                    return new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
-                            .amount( aAmount )
+                    Creature vampire = new Creature.Builder()
+                            .statistic(CreatureStatistic.VAMPIRE)
+                            .amount(aAmount)
                             .build();
+
+                    return new NoEnemyRetaliationCreature(
+                            vampire.getStats(),
+                            null,
+                            vampire.getAmount()
+                    );
                 case 5:
                     Creature LichCreature = new Creature.Builder()
                             .statistic(CreatureStatistic.LICH)
