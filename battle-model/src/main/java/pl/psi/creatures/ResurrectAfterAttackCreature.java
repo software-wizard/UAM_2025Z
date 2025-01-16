@@ -1,46 +1,51 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
+import pl.psi.Board;
+import pl.psi.Hero;
 
 public class ResurrectAfterAttackCreature  extends Creature{
 
-    private final Creature decorated;
+    private Board board;
 
-    public ResurrectAfterAttackCreature( final Creature aDecorated )
+    private Hero owner;
+
+
+    public ResurrectAfterAttackCreature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
+                                       final int aAmount)
     {
-        decorated = aDecorated;
+        super(aStats, aCalculator, aAmount);
     }
 
     @Override
-    public CreatureStatisticIf getStats()
-    {
-        return decorated.getStats();
+    public void initializeBoard(final Board aBoard) {
+        super.initializeBoard(aBoard);
+        this.board = aBoard;
     }
 
-    @Override
-    public int getAmount()
-    {
-        return decorated.getAmount();
-    }
-
-    @Override
-    public int getCounterAttackCounter()
-    {
-        return decorated.getCounterAttackCounter();
+    public void initializeOwner(final Hero aOwner) {
+        super.initializeOwner(aOwner);
+        this.owner = aOwner;
     }
 
     @Override
     public DamageCalculatorIf getCalculator()
     {
-        return decorated.getCalculator();
+        return super.getCalculator();
+    }
+
+    @Override
+    public boolean isAlly(Creature otherCreature) {
+        return super.isAlly(otherCreature);
+
     }
 
 
     @Override
     public void attack( final Creature aDefender )
     {
-        int dealtDamage = decorated.getCalculator().calculateDamage(this, aDefender); //wyciaganiete przed atak!
-        decorated.attack( aDefender );
+        int dealtDamage = getCalculator().calculateDamage(this, aDefender); //wyciaganiete przed atak!
+        aDefender.applyDamage(dealtDamage);
 
         // po ataku uzywa nowej zdolnosci resurectCreatures - ale tylko gdy NIE atakowała undeada:
         if (!aDefender.isUndead())
@@ -77,45 +82,5 @@ public class ResurrectAfterAttackCreature  extends Creature{
         }
     }
 
-    @Override
-    public boolean isAlive()
-    {
-        return decorated.isAlive();
-    }
 
-    @Override
-    public int getCurrentHp()
-    {
-        return decorated.getCurrentHp();
-    }
-
-    @Override
-    protected void setCurrentHp( final int aCurrentHp )
-    {
-        decorated.setCurrentHp( aCurrentHp );
-    }
-
-    @Override
-    Range< Integer > getDamage()
-    {
-        return decorated.getDamage();
-    }
-
-    @Override
-    public int getAttack()
-    {
-        return decorated.getAttack();
-    }
-
-    @Override
-    int getArmor()
-    {
-        return decorated.getArmor();
-    }
-
-    @Override
-    protected void restoreCurrentHpToMax()
-    {
-        decorated.restoreCurrentHpToMax();
-    }
 }

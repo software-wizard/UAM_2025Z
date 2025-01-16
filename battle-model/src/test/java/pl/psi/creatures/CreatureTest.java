@@ -1,6 +1,7 @@
 package pl.psi.creatures;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -508,5 +509,39 @@ public class CreatureTest
         dreadKnight.attack(Skeleton1);
         int skeleton1Hp = Skeleton1.getCurrentHp();
         assertThat(skeleton1Hp).isLessThan(30);
+    }
+
+    @Test
+    void defenderShouldNotCounterAttack()
+    {
+        //vampire lord ma takiego skilla
+
+        Creature vampireLord =
+                new NecropolisFactory().create(true, 4, 1);
+
+        //defender:
+        Creature Skeleton1 = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( Range.closed(10, 10) )
+                        .attack( NOT_IMPORTANT )
+                        .armor( 10)
+                        .isRanged( false )
+                        .moveRange(20)
+                        .build() )
+                .build();
+
+
+        List< Creature > c1 = List.of( vampireLord );
+        List< Creature > c2 = List.of( Skeleton1 );
+
+        Board board = new Board(c1, c2);
+        board.move(vampireLord, new Point(0, 0));
+        board.move(Skeleton1, new Point(1, 0));
+
+        vampireLord.setCurrentHp(5);
+        vampireLord.attack(Skeleton1);
+
+        assertEquals(1, vampireLord.getAmount());
+
     }
 }
