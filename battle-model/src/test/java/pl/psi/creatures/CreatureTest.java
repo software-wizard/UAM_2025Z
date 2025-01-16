@@ -474,4 +474,39 @@ public class CreatureTest
         assertThat(skeleton2Hp).isLessThan(30);
 
     }
+
+
+    @Test
+    void shouldHaveChanceForDoubleDamage()
+    {
+        Creature dreadKnight =
+                new NecropolisFactory().create(true, 6, 1);
+
+        //defender:
+        Creature Skeleton1 = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( NOT_IMPORTANT_DMG )
+                        .attack( NOT_IMPORTANT )
+                        .armor( 10)
+                        .isRanged( false )
+                        .moveRange(20)
+                        .build() )
+                .build();
+
+
+        List< Creature > c1 = List.of( dreadKnight );
+        List< Creature > c2 = List.of( Skeleton1 );
+        Hero hero1 = new Hero( c1 );
+        Hero hero2 = new Hero( c2 );
+        final GameEngine gameEngine =
+                new GameEngine( hero1, hero2 );
+        Board board = new Board(c1, c2);
+        board.move(dreadKnight, new Point(0, 0));
+        board.move(Skeleton1, new Point(1, 0));
+
+        Skeleton1.setCurrentHp(30);
+        dreadKnight.attack(Skeleton1);
+        int skeleton1Hp = Skeleton1.getCurrentHp();
+        assertThat(skeleton1Hp).isLessThan(30);
+    }
 }

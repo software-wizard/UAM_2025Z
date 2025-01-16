@@ -70,10 +70,16 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 4:
-                    Creature VampireLord = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
-                        .amount( aAmount )
-                        .build();
-                    return new ResurrectAfterAttackCreature(VampireLord);
+                    Creature vampireLord = new Creature.Builder()
+                            .statistic(CreatureStatistic.VAMPIRE_LORD)
+                            .amount(aAmount)
+                            .build();
+
+                    return new ResurrectAfterAttackCreature(
+                            vampireLord.getStats(),
+                            null,
+                            vampireLord.getAmount()
+                    );
 
                 case 5:
                     Creature powerLich = new Creature.Builder()
@@ -88,9 +94,17 @@ public class NecropolisFactory
                     );
 
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )
-                        .amount( aAmount )
-                        .build();
+
+                    Creature dreadKnight = new Creature.Builder()
+                            .statistic(CreatureStatistic.DREAD_KNIGHT)
+                            .amount(aAmount)
+                            .build();
+
+                    return new ChanceToDoubleDamageCreature(
+                            dreadKnight.getStats(),
+                            null,
+                            dreadKnight.getAmount()
+                    );
                 case 7:
                     return new Creature.Builder().statistic( CreatureStatistic.GHOST_DRAGON )
                         .amount( aAmount )

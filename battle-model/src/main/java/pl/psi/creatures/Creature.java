@@ -182,7 +182,7 @@ public class Creature implements PropertyChangeListener {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
 
-    private void counterAttack(final Creature aAttacker) {
+    void counterAttack(final Creature aAttacker) {
         final int damage = aAttacker.getCalculator()
                 .calculateDamage(aAttacker, this);
         applyDamage(damage);
