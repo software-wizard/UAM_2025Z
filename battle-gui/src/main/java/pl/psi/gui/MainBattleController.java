@@ -56,12 +56,7 @@ public class MainBattleController {
     private void refreshGui() {
         gridMap.getChildren().clear();
 
-        TileContext tileContext = new TileContext();
-        tileContext.addStrategy(new CreatureTileStrategy(gameEngine));
-        tileContext.addStrategy(new MoveTileStrategy(gameEngine, sharedState));
-        tileContext.addStrategy(new AttackTileStrategy(gameEngine));
-        tileContext.addStrategy(new TileTypeStrategy(gameEngine));
-        tileContext.addStrategy(new CastTileStrategy(gameEngine, sharedState));
+        ColorTile colorTile = new ColorTile(gameEngine, sharedState);
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
@@ -69,7 +64,7 @@ public class MainBattleController {
                 gameEngine.getCreature(new Point(x, y))
                         .ifPresent(c -> mapTile.setName(c.toString()));
 
-                tileContext.applyStrategies(mapTile, new Point(x,y));
+                colorTile.applyStrategies(mapTile, new Point(x,y));
 
                 gridMap.add(mapTile, x, y);
             }
