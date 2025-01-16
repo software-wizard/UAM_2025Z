@@ -54,9 +54,7 @@ public class Creature implements PropertyChangeListener {
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
-            final int damageWithBonus = getAttackWithBonus();
-            System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
-            aDefender.applyDamage(damageWithBonus);
+            aDefender.applyDamage(damage);
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");
                 counterAttack(aDefender);
@@ -150,20 +148,20 @@ public class Creature implements PropertyChangeListener {
         return stats.getDamage();
     }
 
-    public int getAttack() {
+    int getBaseAttack() {
         return stats.getAttack();
     }
 
-    public int getAttackWithBonus(){
-        return Math.max(stats.getAttack() + getBonus(StatsBonusType.ATTACK), MINIMAL_STAT_VALUE);
+    public int getAttack(){
+        return Math.max(getBaseAttack() + getBonus(StatsBonusType.ATTACK), MINIMAL_STAT_VALUE);
     }
 
-    int getArmor() {
+    int getBaseArmor() {
         return stats.getArmor();
     }
 
-    public int getArmorWithBonus(){
-        return Math.max(stats.getArmor() + getBonus(StatsBonusType.ARMOR), MINIMAL_STAT_VALUE);
+     public int getArmor(){
+        return Math.max(getBaseArmor() + getBonus(StatsBonusType.ARMOR), MINIMAL_STAT_VALUE);
     }
 
     @Override
@@ -190,12 +188,12 @@ public class Creature implements PropertyChangeListener {
         return stats.getName();
     }
 
-    public int getMoveRange() {
+    int getBaseMoveRange() {
         return stats.getMoveRange();
     }
 
-    public int getMoveRangeWithBonus(){
-        return Math.max(stats.getMoveRange() + getBonus(StatsBonusType.MOVE_RANGE), MINIMAL_STAT_VALUE);
+    public int getMoveRange(){
+        return Math.max(getBaseMoveRange() + getBonus(StatsBonusType.MOVE_RANGE), MINIMAL_STAT_VALUE);
     }
 
     public void takeDamage(int damage) {

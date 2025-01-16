@@ -21,6 +21,7 @@ public class SpellBonusTest {
     @Test
     void weakenAttackBonus() {
 
+        // TODO: Testy sie wykrzaczają, gdyż używamy DamageCalculator z random w środku, jak możemy użyć zwykłej wartości pod to?
         Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(weakenAttack));

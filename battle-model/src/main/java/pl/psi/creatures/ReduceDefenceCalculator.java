@@ -21,6 +21,6 @@ class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
     @Override
     protected int getArmor( final Creature aDefender )
     {
-        return (int)(aDefender.getArmorWithBonus() * factor);
+        return (int)(aDefender.getArmor() * factor);
     }
 }
