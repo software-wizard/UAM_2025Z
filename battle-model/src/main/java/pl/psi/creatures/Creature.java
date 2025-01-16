@@ -45,13 +45,21 @@ public class Creature implements PropertyChangeListener {
     Creature() {
     }
 
-    private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-                     final int aAmount) {
+    Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
+             final int aAmount)
+    {
+        if (aStats == null) {
+            throw new IllegalArgumentException("Creature statistic cannot be null");
+        }
         stats = aStats;
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
         appliedSpells = new ArrayList<AppliedSpell>();
+    }
+
+    public CreatureStatisticIf getStats() {
+        return stats;
     }
 
     public void initializeBoard(final Board aBoard) {
@@ -162,7 +170,7 @@ public class Creature implements PropertyChangeListener {
         return calculator;
     }
 
-    private int getMaxHp() {
+    int getMaxHp() {
         return stats.getMaxHp();
     }
 
@@ -289,7 +297,9 @@ public class Creature implements PropertyChangeListener {
         }
 
         public Creature build() {
-
+            if (statistic == null) {
+                throw new IllegalStateException("Statistic must be provided before building a Creature.");
+            }
             return new Creature(statistic, calculator, amount);
         }
 

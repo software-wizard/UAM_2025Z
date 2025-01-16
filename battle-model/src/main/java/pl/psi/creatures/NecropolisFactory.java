@@ -28,12 +28,19 @@ public class NecropolisFactory
                         .build();
                 case 4:
                     return new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
-                        .amount( aAmount )
-                        .build();
+                            .amount( aAmount )
+                            .build();
                 case 5:
-                    return new Creature.Builder().statistic( CreatureStatistic.LICH )
-                        .amount( aAmount )
-                        .build();
+                    Creature LichCreature = new Creature.Builder()
+                            .statistic(CreatureStatistic.LICH)
+                            .amount(aAmount)
+                            .build();
+                    return new AdjacentTilesAttackCreature(
+                            LichCreature.getStats(),
+                            null,
+                            LichCreature.getAmount()
+                    );
+
                 case 6:
                     return new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                         .amount( aAmount )
@@ -67,10 +74,19 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                     return new ResurrectAfterAttackCreature(VampireLord);
+
                 case 5:
-                    return new Creature.Builder().statistic( CreatureStatistic.POWER_LICH )
-                        .amount( aAmount )
-                        .build();
+                    Creature powerLich = new Creature.Builder()
+                            .statistic(CreatureStatistic.POWER_LICH)
+                            .amount(aAmount)
+                            .build();
+
+                    return new AdjacentTilesAttackCreature(
+                            powerLich.getStats(),
+                            null,
+                            powerLich.getAmount()
+                    );
+
                 case 6:
                     return new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )
                         .amount( aAmount )

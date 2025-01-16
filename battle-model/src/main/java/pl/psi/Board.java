@@ -50,6 +50,7 @@ public class Board
     }
 
 
+
     public int getWidth() {
         return MAX_WITDH;
     }
@@ -65,7 +66,7 @@ public class Board
         }
     }
 
-Optional< Creature > getCreature( final Point aPoint )
+public Optional< Creature > getCreature(final Point aPoint)
     {
         return Optional.ofNullable( map.get( aPoint ) );
     }
