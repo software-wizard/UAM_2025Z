@@ -28,6 +28,10 @@ public class SharedState {
         }
     }
 
+    public boolean isSpellSelected(){
+        return selectedSpellIdx >= 0;
+    }
+
     public void resetSelectedSpellIdx() {
         this.selectedSpellIdx = INITIAL_SELECTED_SPELL_IDX;
     }

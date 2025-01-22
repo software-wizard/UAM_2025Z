@@ -72,7 +72,7 @@ Optional< Creature > getCreature( final Point aPoint )
             return false;
         }
         final Point oldPosition = getPosition(aCreature);
-        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRangeWithBonus();
+        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
     }
     public Point getPosition(Creature aCreature)
     {

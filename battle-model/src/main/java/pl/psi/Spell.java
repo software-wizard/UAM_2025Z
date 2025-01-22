@@ -2,7 +2,9 @@ package pl.psi;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.SpellBonusStatistic;
+import pl.psi.spells.SpellBonus;
+import pl.psi.spells.SpellBonusFactory;
+import pl.psi.spells.SpellBonusName;
 
 @Getter
 public class Spell {
@@ -11,10 +13,10 @@ public class Spell {
     private final int level;
     private final int manaCost;
     private final int spellBonusRoundsDuration;
-
     private final int radius;
-    private SpellBonusStatistic spellBonus;
-    public Spell(final SpellName aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonusStatistic aSpellBonus, final int aSpellBonusRoundsDuration, final int aRadius) {
+    private final SpellBonus spellBonus;
+
+    public Spell(final SpellName aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonus aSpellBonus, final int aSpellBonusRoundsDuration, final int aRadius) {
         name = aName;
         damage = aDamage;
         level = aLevel;
@@ -30,9 +32,8 @@ public class Spell {
         private int level = 1;
         private int manaCost = 0;
         private int spellBonusRoundsDuration = 3;
-
         private int radius = 0;
-        private SpellBonusStatistic spellBonus = SpellBonusStatistic.NO_BONUS;
+        private SpellBonus spellBonus = SpellBonusFactory.createSpellBonus(SpellBonusName.NONE);
         public Builder name(SpellName aName) {
             name = aName;
             return this;
@@ -58,8 +59,8 @@ public class Spell {
             return this;
         }
 
-        public Builder spellBonus(SpellBonusStatistic aSpellBonus){
-            spellBonus = aSpellBonus;
+        public Builder spellBonus(SpellBonusName aSpellBonusName){
+            spellBonus = SpellBonusFactory.createSpellBonus(aSpellBonusName);
             return this;
         }
 
@@ -73,6 +74,7 @@ public class Spell {
     }
 
     public void castSpell(Creature aDefender) {
+        System.out.printf("Casting spell '%s' to a %s\n", getName(), aDefender.getName());
         aDefender.applyMagicDamage(damage);
         aDefender.getAppliedSpells().add(
                 new AppliedSpell(this, spellBonusRoundsDuration)

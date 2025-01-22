@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import pl.psi.Spell;
 import pl.psi.SpellName;
 import pl.psi.creatures.NecropolisFactory;
-import pl.psi.creatures.SpellBonusStatistic;
+import pl.psi.spells.SpellBonusName;
 
 public class Start extends Application
 {
@@ -60,7 +60,7 @@ public class Start extends Application
                         .level(1)
                         .manaCost(5)
                         .build(),
-                        new Spell.Builder().name(SpellName.BOOST_DAMAGE).damage(0).level(1).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_ATTACK).build()
+                        new Spell.Builder().name(SpellName.BOOST_DAMAGE).damage(0).level(1).manaCost(5).spellBonus(SpellBonusName.EXTRA_ATTACK).build()
                 )
         );
         return ret;
@@ -74,10 +74,10 @@ public class Start extends Application
                 List.of(
                         new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(5).level(1).manaCost(5).build(),
                         new Spell.Builder()
-                                .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
+                                .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellBonusName.WEAKEN_ATTACK)
                         .build(),
-                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build(),
-                        new Spell.Builder().name(SpellName.SPLASH_ATTACK).damage(5).level(1).radius(3).manaCost(5).build()
+                        new Spell.Builder().name(SpellName.SPLASH_ATTACK).damage(5).level(1).radius(3).manaCost(5).build(),
+                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusName.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
                 )
         );
         return ret;
