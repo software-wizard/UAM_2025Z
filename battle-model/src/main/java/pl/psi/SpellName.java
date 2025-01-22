@@ -7,8 +7,9 @@ public enum SpellName {
     BOOST_DAMAGE("Boost Damage"),
     WEAKEN_ATTACK("Weaken Attack"),
     STRONGER_ATTACK("Stronger Attack"),
-    EXTRA_MOVE_RANGE("Extra Move Range");
+    EXTRA_MOVE_RANGE("Extra Move Range"),
 
+    SPLASH_ATTACK("Splash Attack");
     @Getter
     private final String displayName;
 

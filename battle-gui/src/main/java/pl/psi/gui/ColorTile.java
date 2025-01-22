@@ -10,6 +10,7 @@ public class ColorTile {
     private List<TileStrategy> strategies = new ArrayList<>();
 
     public ColorTile(GameEngine aGameEngine, SharedState aSharedState) {
+        this.addStrategy(new CastSplashStrategy(aGameEngine, aSharedState));
         this.addStrategy(new CreatureTileStrategy(aGameEngine));
         this.addStrategy(new MoveTileStrategy(aGameEngine, aSharedState));
         this.addStrategy(new AttackTileStrategy(aGameEngine));

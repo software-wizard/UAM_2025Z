@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 public class MainBattleController {
     public int INITIAL_SELECTED_SPELL_IDX = -1;
     private final GameEngine gameEngine;
+    @Getter
     @FXML
     private GridPane gridMap;
     @FXML
@@ -26,7 +27,7 @@ public class MainBattleController {
     private SpellsTab spellsTab;
 
     @Getter
-    private SharedState sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui);
+    private SharedState sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui, this.getGridMap());
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
