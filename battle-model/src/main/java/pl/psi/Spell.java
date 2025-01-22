@@ -13,7 +13,6 @@ public class Spell {
     private final int level;
     private final int manaCost;
     private final int spellBonusRoundsDuration;
-
     private final int radius;
     private final SpellBonus spellBonus;
 
