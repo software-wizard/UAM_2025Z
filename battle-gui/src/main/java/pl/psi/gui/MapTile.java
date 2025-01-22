@@ -13,7 +13,7 @@ public class MapTile extends StackPane
     private final Rectangle rect;
     private final Label label;
 
-    MapTile( final String aName )
+    public MapTile( final String aName )
     {
         rect = new Rectangle( 60, 60 );
         rect.setFill( Color.WHITE );

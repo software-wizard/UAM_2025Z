@@ -36,11 +36,12 @@ public abstract class Buff {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Buff other = (Buff) obj;
-        return duration == other.duration && remainingTurns == other.remainingTurns && isFirstTurn == other.isFirstTurn;
+        return duration == other.duration;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(duration, remainingTurns, isFirstTurn);
+        return Objects.hash(duration);
     }
+
 }

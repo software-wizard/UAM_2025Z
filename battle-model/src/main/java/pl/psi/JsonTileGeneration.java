@@ -37,14 +37,14 @@ public class JsonTileGeneration implements TileGenerationStrategy {
                 }
 
                 switch (tileDef.getType()) {
-                    case "Obstacle":
+                    case "OBSTACLE":
                         specialTiles.put(point, new ObstacleTile());
                         break;
-                    case "Damage":
+                    case "DAMAGE":
                         specialTiles.put(point, new DamageTile(tileDef.getValue()));
                         break;
-                    case "IncreaseAttackBuff":
-                        specialTiles.put(point, new BuffTile(new IncreaseAttackBuff(tileDef.getValue(), tileDef.getDuration())));
+                    case "INCREASE_ATTACK_BUFF":
+                        specialTiles.put(point, new BuffTile(new IncreaseAttackBuff(tileDef.getDuration(), tileDef.getValue() )));
                         break;
                     default:
                         throw new IllegalArgumentException("Unknown tile type: " + tileDef.getType());

@@ -64,7 +64,7 @@ public class MainBattleController {
                     switch (tile.getType()) {
                         case OBSTACLE -> mapTile.setBackground(Color.BLACK);
                         case DAMAGE -> mapTile.setBackground(Color.ORANGE);
-                        case BUFF -> mapTile.setBackground(Color.BLUE);
+                        case INCREASE_ATTACK_BUFF -> mapTile.setBackground(Color.BLUE);
                     }
                 }
                 gridMap.add(mapTile, x, y);

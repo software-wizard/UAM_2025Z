@@ -34,6 +34,6 @@ public class IncreaseAttackBuff extends Buff{
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), boost);
+        return Objects.hash(boost, super.hashCode());
     }
 }
