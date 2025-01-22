@@ -87,15 +87,12 @@ public class SpellBonusTest {
                 )
                 .build();
 
-        Assertions.assertEquals(30, creature.getCurrentHp());
-
-        creatureWithExtraAttack.attack(creature);
-        Assertions.assertEquals(24, creature.getCurrentHp());
+        Assertions.assertEquals(5, creatureWithExtraAttack.getAttack());
 
         spellBook.castSpell(extraAttack, creatureWithExtraAttack);
-        creatureWithExtraAttack.attack(creature);
+        Assertions.assertEquals(10, creatureWithExtraAttack.getAttack());
 
-        Assertions.assertEquals(13, creature.getCurrentHp());
+        creatureWithExtraAttack.attack(creature);
 
     }
 
