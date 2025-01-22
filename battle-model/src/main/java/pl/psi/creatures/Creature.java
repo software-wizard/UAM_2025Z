@@ -73,6 +73,7 @@ public class Creature implements PropertyChangeListener {
                 break;
             case ATTACK:
                 for(AppliedSpell appliedSpell : appliedSpells){
+                    System.out.println(bonus);
                     bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
                 }
                 break;
@@ -83,7 +84,9 @@ public class Creature implements PropertyChangeListener {
                 break;
             default:
                 throw new IllegalArgumentException("Unknown statsBonusType");
+
         }
+        System.out.println(bonus);
         return bonus;
     }
 
