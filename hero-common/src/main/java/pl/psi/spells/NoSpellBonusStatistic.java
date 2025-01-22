@@ -1,8 +1,9 @@
-package pl.psi.creatures;
+package pl.psi.spells;
 
 import com.google.common.collect.Range;
+import pl.psi.creatures.CreatureStatisticIf;
 
-public class BaseCreatureStatistic implements CreatureStatisticIf {
+public class NoSpellBonusStatistic implements CreatureStatisticIf {
     private final String name;
     private int attack;
     private final int armor;
@@ -14,15 +15,15 @@ public class BaseCreatureStatistic implements CreatureStatisticIf {
     private final boolean isUpgraded;
     private final boolean isUndead;
 
-    public BaseCreatureStatistic() {
-        this.name = "Base creature";
-        this.attack = 5;
-        this.armor = 5;
-        this.maxHp = 5;
-        this.moveRange = 4;
-        this.damage = Range.closed(1, 3);
+    public NoSpellBonusStatistic() {
+        this.name = "No spell bonus statistic";
+        this.attack = 0;
+        this.armor = 0;
+        this.maxHp = 0;
+        this.moveRange = 0;
+        this.damage = Range.closed(0, 0);
         this.tier = 1;
-        this.description = "Base creature, nothing special";
+        this.description = "No spell bonus, nothing special";
         this.isUpgraded = false;
         this.isUndead = false;
     }

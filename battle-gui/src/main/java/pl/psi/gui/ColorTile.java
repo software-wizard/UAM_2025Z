@@ -13,7 +13,7 @@ public class ColorTile {
         this.addStrategy(new CastSplashStrategy(aGameEngine, aSharedState));
         this.addStrategy(new CreatureTileStrategy(aGameEngine));
         this.addStrategy(new MoveTileStrategy(aGameEngine, aSharedState));
-        this.addStrategy(new AttackTileStrategy(aGameEngine));
+        this.addStrategy(new AttackTileStrategy(aGameEngine, aSharedState));
         this.addStrategy(new TileTypeStrategy(aGameEngine));
         this.addStrategy(new CastTileStrategy(aGameEngine, aSharedState));
     }

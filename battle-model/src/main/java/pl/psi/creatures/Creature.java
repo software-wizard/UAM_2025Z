@@ -54,7 +54,7 @@ public class Creature implements PropertyChangeListener {
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final int damage = getCalculator().calculateDamage(this, aDefender);
-            System.out.printf("Base attack: %d, Attack with bonus: %d", getBaseAttack(), getAttack());
+            System.out.printf("Base attack: %d, Attack with bonus: %d\n", getBaseAttack(), getAttack());
             aDefender.applyDamage(damage);
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");
@@ -73,7 +73,6 @@ public class Creature implements PropertyChangeListener {
                 break;
             case ATTACK:
                 for(AppliedSpell appliedSpell : appliedSpells){
-                    System.out.println(bonus);
                     bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
                 }
                 break;
@@ -86,7 +85,6 @@ public class Creature implements PropertyChangeListener {
                 throw new IllegalArgumentException("Unknown statsBonusType");
 
         }
-        System.out.println(bonus);
         return bonus;
     }
 
