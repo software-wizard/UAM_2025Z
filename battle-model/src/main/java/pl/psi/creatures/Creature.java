@@ -15,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
-import pl.psi.AppliedSpell;
-import pl.psi.StatsBonusType;
-import pl.psi.TurnQueue;
+import pl.psi.*;
 
 import com.google.common.collect.Range;
 
 import lombok.Getter;
+import pl.psi.spells.SpellFactory;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -53,6 +52,13 @@ public class Creature implements PropertyChangeListener {
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
+//            TODO: KOD DO INTEGRACJI Z MARKIEM
+//            Random random = new Random();
+//            double chance = random.nextDouble(); // Losuje liczbę od 0 do 1
+//            if (chance < 0.8) {
+//                SystemSpellBook.getSpellBookInstance().castSpell(SpellFactory.createSpell(SpellName.WEAKEN_ATTACK), aDefender);
+//            }
+
             final int damage = getCalculator().calculateDamage(this, aDefender);
             System.out.printf("Base attack: %d, Attack with bonus: %d\n", getBaseAttack(), getAttack());
             aDefender.applyDamage(damage);

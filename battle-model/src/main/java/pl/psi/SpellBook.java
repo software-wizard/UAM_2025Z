@@ -7,17 +7,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public class SpellBook {
-    @Getter
     private boolean isCastingSpell = false;
 
-    @Getter
     private Spell selectedSpell = null;
 
-    @Getter
     private int mana = 0;
 
-    @Getter
     private List<Spell> spells;
 
     public SpellBook(int initialMana, List<Spell> initialSpells) {
