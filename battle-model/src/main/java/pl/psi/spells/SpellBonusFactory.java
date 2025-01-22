@@ -26,7 +26,7 @@ public class SpellBonusFactory {
                 baseStatsAttack = -5;
                 break;
             case EXTRA_MOVE_RANGE:
-                baseStatsMoveRange += 5;
+                baseStatsMoveRange = 1;
                 break;
             case NONE:
             default:
