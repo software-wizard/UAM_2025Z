@@ -74,6 +74,7 @@ public class Spell {
     }
 
     public void castSpell(Creature aDefender) {
+        System.out.printf("Casting spell '%s' to a %s\n", getName(), aDefender.getName());
         aDefender.applyMagicDamage(damage);
         aDefender.getAppliedSpells().add(
                 new AppliedSpell(this, spellBonusRoundsDuration) // Wartość przekazywana jako argument
