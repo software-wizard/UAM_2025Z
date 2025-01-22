@@ -59,7 +59,7 @@ public class MainBattleController {
         TileContext tileContext = new TileContext();
         tileContext.addStrategy(new CreatureTileStrategy(gameEngine));
         tileContext.addStrategy(new MoveTileStrategy(gameEngine, sharedState));
-        tileContext.addStrategy(new AttackTileStrategy(gameEngine));
+        tileContext.addStrategy(new AttackTileStrategy(gameEngine, sharedState));
         tileContext.addStrategy(new TileTypeStrategy(gameEngine));
         tileContext.addStrategy(new CastTileStrategy(gameEngine, sharedState));
 

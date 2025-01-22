@@ -29,7 +29,7 @@ public class CastTileStrategy implements TileStrategy {
 
                     if (selectedSpell != null) {
                         spellBook.castSpell(selectedSpell, creature);
-                        System.out.println("Spell cast on creature" + creature.getName());
+                        System.out.printf("Spell '%s' cast on creature %s\n", selectedSpell.getName(),creature.getName());
                     } else {
                         System.out.println("Not enough mana/invalid spell");
                     }

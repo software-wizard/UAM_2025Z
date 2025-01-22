@@ -16,12 +16,11 @@ import java.util.Random;
 
 public class SpellBonusTest {
 
-    final int NOT_IMPORTANT = 6;
+    final int NOT_IMPORTANT = 5;
 
     @Test
     void weakenAttackBonus() {
 
-        // TODO: Testy sie wykrzaczają, gdyż używamy DamageCalculator z random w środku, jak możemy użyć zwykłej wartości pod to?
         Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusName.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(weakenAttack));
@@ -48,23 +47,17 @@ public class SpellBonusTest {
 
         TurnQueue turnQueue = new TurnQueue(List.of( weakenCreature), List.of(creature));
 
-
+        Assertions.assertEquals(5, weakenCreature.getAttack());
         spellBook.castSpell(weakenAttack, weakenCreature);
+        Assertions.assertEquals(0, weakenCreature.getAttack());
+
+        turnQueue.next();
+        Assertions.assertEquals(0, weakenCreature.getAttack());
 
         turnQueue.next();
 
-        weakenCreature.attack(creature);
-        Assertions.assertEquals(29, creature.getCurrentHp());
-
         turnQueue.next();
-
-        weakenCreature.attack(creature);
-        Assertions.assertEquals(28, creature.getCurrentHp());
-
-        turnQueue.next();
-
-        weakenCreature.attack(creature);
-        Assertions.assertEquals(22, creature.getCurrentHp());
+        Assertions.assertEquals(5, weakenCreature.getAttack());
 
     }
 

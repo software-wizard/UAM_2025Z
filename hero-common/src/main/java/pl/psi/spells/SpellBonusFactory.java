@@ -1,12 +1,11 @@
 package pl.psi.spells;
 
 import com.google.common.collect.Range;
-import pl.psi.creatures.BaseCreatureStatistic;
 
 public class SpellBonusFactory {
     public static SpellBonus createSpellBonus(SpellBonusName spellBonusName){
 
-        BaseCreatureStatistic baseStats = new BaseCreatureStatistic();
+        NoSpellBonusStatistic baseStats = new NoSpellBonusStatistic();
 
         int baseStatsAttack  = baseStats.getAttack();
         int baseStatsArmor   = baseStats.getArmor();
@@ -19,16 +18,16 @@ public class SpellBonusFactory {
         String spellBonusNameStringified = spellBonusName.toString();
         String spellBonusDescription = spellBonusNameStringified + " spell bonus";
 
-        // TODO: Damage is not working correctly with damage calculator, fix
         switch(spellBonusName){
             case EXTRA_ATTACK:
-                baseStatsDamage = Range.closed(baseStatsDamage.lowerEndpoint() + 3, baseStatsDamage.upperEndpoint() + 3);
+                baseStatsAttack = 5;
                 break;
             case WEAKEN_ATTACK:
-                baseStatsDamage = Range.closed(baseStatsDamage.lowerEndpoint() - 3, baseStatsDamage.upperEndpoint() - 3);
-
+                baseStatsAttack = -5;
+                break;
             case EXTRA_MOVE_RANGE:
                 baseStatsMoveRange += 5;
+                break;
             case NONE:
             default:
                 break;
