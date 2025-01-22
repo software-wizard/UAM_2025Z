@@ -39,9 +39,15 @@ public class GameEngine {
     }
 
     public void attack(final Point point) {
-        board.getCreature(point)
-                .ifPresent(defender -> turnQueue.getCurrentCreature()
-                        .attack(defender));
+        Optional<Creature> defender = board.getCreature(point);
+        Creature attacker = turnQueue.getCurrentCreature();
+
+        defender.ifPresent(def ->
+        {
+            //Point sourcePoint = board.getPosition(attacker);
+            attacker.attack(def, board);
+        });
+
         pass();
     }
 
@@ -52,6 +58,15 @@ public class GameEngine {
     public void move(final Point aPoint) {
         board.move(turnQueue.getCurrentCreature(), aPoint);
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
+    }
+
+    public List<Point> getPath(Point targetPoint)
+    {
+        Creature currentCreature = turnQueue.getCurrentCreature();
+        Point startPoint = board.getPosition(currentCreature);
+        PathFindingAlg alg = new PathFindingAlg(board);
+
+        return alg.findPath(startPoint, targetPoint, currentCreature.getMoveRange());
     }
 
     public Optional<Creature> getCreature(final Point aPoint) {
