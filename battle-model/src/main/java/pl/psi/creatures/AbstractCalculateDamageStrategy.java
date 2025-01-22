@@ -1,5 +1,8 @@
 package pl.psi.creatures;
 
+import pl.psi.GameContext;
+import pl.psi.Point;
+
 import java.util.Random;
 
 abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
@@ -17,7 +20,7 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
     }
 
     @Override
-    public int calculateDamage( final Creature aAttacker, final Creature aDefender)
+    public int calculateDamage(final Creature aAttacker, final Creature aDefender, Point sourcePoint, Point targetPoint)
     {
         final int armor = getArmor( aDefender );
 

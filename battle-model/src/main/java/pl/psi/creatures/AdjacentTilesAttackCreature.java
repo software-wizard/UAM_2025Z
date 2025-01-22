@@ -10,7 +10,6 @@ import java.util.Random;
 
 public class AdjacentTilesAttackCreature extends Creature
 {
-    private Board board;
 
     private Hero owner;
 
@@ -21,11 +20,7 @@ public class AdjacentTilesAttackCreature extends Creature
         super(aStats, aCalculator, aAmount);
     }
 
-    @Override
-    public void initializeBoard(final Board aBoard) {
-        super.initializeBoard(aBoard);
-        this.board = aBoard;
-    }
+
 
     public void initializeOwner(final Hero aOwner) {
         super.initializeOwner(aOwner);
@@ -45,26 +40,26 @@ public class AdjacentTilesAttackCreature extends Creature
     }
 
     @Override
-    public void attack(Creature aDefender)
+    public void attack(final Creature aDefender, GameContext context)
     {
-        super.attack(aDefender);
-        cloudAttack(aDefender);
+        super.attack(aDefender, context);
+        cloudAttack(aDefender, context);
     }
 
 
-    private void cloudAttack(Creature aDefender)
+    private void cloudAttack(Creature aDefender, GameContext context)
     {
-        Point defenderPosition = board.getPosition(aDefender);
-        List<Point> adjacentTiles = getAdjacentTiles(defenderPosition);
+        Point sourcePoint = context.getPosition(aDefender); //source tutaj to pozycja defendera bo target to kafelki wokół niego
+        List<Point> adjacentTiles = getAdjacentTiles(sourcePoint);
         for (Point tile : adjacentTiles)
         {
-            Optional<Creature> adjacentCreature = board.getCreature(tile);
+            Optional<Creature> adjacentCreature = context.getCreature(tile);
 
-            //nie chcemy atakowac naszych jendostek
+            //nie chcemy atakowac naszych jendostek ani na nowo defendera:
             adjacentCreature.ifPresent(creature -> {
-                if (creature != aDefender && creature.isAlive())
+                if (creature != aDefender && creature.isAlive() && creature.isAlly(aDefender))
                 {
-                    int damage = getCalculator().calculateDamage(this, creature);
+                    int damage = getCalculator().calculateDamage(this, creature, sourcePoint, tile);
                     creature.applyDamage(damage);
                     System.out.println("Cloud attack applied damage to other creatures");
                 }
@@ -79,7 +74,7 @@ public class AdjacentTilesAttackCreature extends Creature
         int x = defenderPosition.getX();
         int y = defenderPosition.getY();
 
-        List<Point> adjacentTiles = List.of(
+        return List.of(
                 new Point(x+1, y),
                 new Point(x-1, y),
                 new Point(x, y+1),
@@ -90,7 +85,6 @@ public class AdjacentTilesAttackCreature extends Creature
                 new Point(x-1, y-1)
 
         );
-        return adjacentTiles;
 
     }
 

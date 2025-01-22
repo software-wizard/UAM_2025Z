@@ -1,6 +1,7 @@
 package pl.psi.creatures;
 
 import pl.psi.Board;
+import pl.psi.GameContext;
 import pl.psi.Hero;
 import pl.psi.Point;
 
@@ -10,12 +11,10 @@ import java.util.Random;
 
 public class ChanceToDoubleDamageCreature extends Creature
 {
-    private Board board;
-
     private Hero owner;
     private final Random random;
     private final double DOUBLE_DMG_CHANCE = 0.2;
-    private final double CURSE_CHANCE = 0.2;
+    private final double SPELL_CAST_CHANCE = 0.2;
 
     public ChanceToDoubleDamageCreature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
                                        final int aAmount)
@@ -24,11 +23,6 @@ public class ChanceToDoubleDamageCreature extends Creature
         this.random = new Random();
     }
 
-    @Override
-    public void initializeBoard(final Board aBoard) {
-        super.initializeBoard(aBoard);
-        this.board = aBoard;
-    }
 
     public void initializeOwner(final Hero aOwner) {
         super.initializeOwner(aOwner);
@@ -48,13 +42,15 @@ public class ChanceToDoubleDamageCreature extends Creature
     }
 
     @Override
-    public void attack(Creature aDefender)
+    public void attack(Creature aDefender, GameContext context)
     {
-        boolean cursed = random.nextDouble() < CURSE_CHANCE;
+        boolean cursed = random.nextDouble() < SPELL_CAST_CHANCE;
         boolean doubleDamage = random.nextDouble() < DOUBLE_DMG_CHANCE;
 
         if (isAlive()) {
-            int damage = getCalculator().calculateDamage(this, aDefender);
+            Point sourcePoint = context.getPosition(this);
+            Point targetPoint = context.getPosition(aDefender);
+            int damage = getCalculator().calculateDamage(this, aDefender, sourcePoint, targetPoint);
             final int damageWithBonus = getAttackWithBonus();
             System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
 
@@ -71,7 +67,7 @@ public class ChanceToDoubleDamageCreature extends Creature
             aDefender.applyDamage(damageWithBonus);
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");
-                counterAttack(aDefender);
+                counterAttack(aDefender, context);
             }
         }
 

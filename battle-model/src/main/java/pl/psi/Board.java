@@ -13,7 +13,7 @@ import pl.psi.creatures.IncreaseAttackBuff;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class Board
+public class Board implements GameContext
 {
     private static final int MAX_WITDH = 14;
     private static final int OBSTACLE_COUNT = 10;
@@ -29,8 +29,8 @@ public class Board
         addCreatures(aCreatures2, MAX_WITDH);
         this.specialTiles = this.tileGenerationStrategy.generateSpecialTiles(MAX_WITDH, map);
 
-        initializeBoardForCreatures(aCreatures1);
-        initializeBoardForCreatures(aCreatures2);
+        //initializeBoardForCreatures(aCreatures1);
+        //initializeBoardForCreatures(aCreatures2);
 
     }
 
@@ -41,13 +41,13 @@ public class Board
         this.specialTiles = aSpecialTiles;
     }
 
-    private void initializeBoardForCreatures(List<Creature> creatures)
+/*    private void initializeBoardForCreatures(List<Creature> creatures)
     {
         for (Creature creature : creatures)
         {
             creature.initializeBoard(this);
         }
-    }
+    }*/
 
 
 
@@ -80,7 +80,7 @@ public Optional< Creature > getCreature(final Point aPoint)
         {
             PathFindingAlg alg = new PathFindingAlg(this);
             Point startPoint = getPosition(aCreature);
-            int creatureMoveRange = aCreature.getMoveRangeWithBonus();
+            int creatureMoveRange = aCreature.getMoveRange();
             List<Point> path = alg.findPath(startPoint, aPoint, creatureMoveRange);
 
             //dla kazdefo punktu z path - kreatura musi przejsc przez kazdy punkt z listy:

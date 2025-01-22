@@ -38,8 +38,6 @@ public class Creature implements PropertyChangeListener {
     private DamageCalculatorIf calculator;
     private List<Buff> buffs = new ArrayList<>();
     @Getter
-    private Board board;
-    @Getter
     private Hero owner;
 
     Creature() {
@@ -62,23 +60,26 @@ public class Creature implements PropertyChangeListener {
         return stats;
     }
 
-    public void initializeBoard(final Board aBoard) {
-        this.board = aBoard;
-    }
 
     public void initializeOwner(final Hero aOwner) {
         this.owner = aOwner;
     }
 
-    public void attack(final Creature aDefender) {
+    public void attack(final Creature aDefender, GameContext context)
+    {
         if (isAlive()) {
-            final int damage = getCalculator().calculateDamage(this, aDefender);
+
+            Point sourcePoint = context.getPosition(this);
+            Point targetPoint = context.getPosition(aDefender);
+
+
+            final int damage = getCalculator().calculateDamage(this, aDefender, sourcePoint, targetPoint);
             final int damageWithBonus = getAttackWithBonus();
             System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
             aDefender.applyDamage(damageWithBonus);
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");
-                counterAttack(aDefender);
+                counterAttack(aDefender, context);
             }
         }
     }
@@ -152,16 +153,16 @@ public class Creature implements PropertyChangeListener {
         setAmount(getAmount() - amountToSubstract);
     }
 
+
+
+
     public DamageCalculatorIf getCalculator()
     {
         if (calculator == null)
         {
-            if (board == null) {
-                throw new IllegalStateException("Board is not initialized yet.");
-            }
             if (stats.isRanged())
             {
-                calculator = new RangedCreatureDamageCalculator(board);
+                calculator = new RangedCreatureDamageCalculator();
             }
             else {
                 calculator = new DefaultDamageCalculator(new Random());
@@ -169,6 +170,8 @@ public class Creature implements PropertyChangeListener {
         }
         return calculator;
     }
+
+
 
     int getMaxHp() {
         return stats.getMaxHp();
@@ -178,13 +181,17 @@ public class Creature implements PropertyChangeListener {
         currentHp = aCurrentHp;
     }
 
+
     public boolean canCounterAttack(final Creature aDefender) {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
 
-    void counterAttack(final Creature aAttacker) {
+    void counterAttack(final Creature aAttacker, GameContext context)
+    {
+        Point sourcePoint = context.getPosition(aAttacker);
+        Point targetPoint = context.getPosition(this);
         final int damage = aAttacker.getCalculator()
-                .calculateDamage(aAttacker, this);
+                .calculateDamage(aAttacker, this, sourcePoint, targetPoint);
         applyDamage(damage);
         aAttacker.counterAttackCounter--;
     }

@@ -1,29 +1,27 @@
 package pl.psi.creatures;
 
 import pl.psi.Board;
+import pl.psi.GameContext;
 import pl.psi.Point;
 
 import java.util.Random;
 
 public class RangedCreatureDamageCalculator extends AbstractCalculateDamageStrategy
 {
-    Board board;
 
-    public RangedCreatureDamageCalculator(Board board)
+
+    public RangedCreatureDamageCalculator()
     {
         super(new Random());
-        this.board = board;
 
     }
 
     @Override
-    public int calculateDamage( final Creature aAttacker, final Creature aDefender)
+    public int calculateDamage( final Creature aAttacker, final Creature aDefender,  Point sourcePoint, Point targetPoint )
     {
-        int baseDamage = super.calculateDamage(aAttacker, aDefender);
+        int baseDamage = super.calculateDamage(aAttacker, aDefender, sourcePoint, targetPoint);
 
-        Point attackerPosition = board.getPosition(aAttacker);
-        Point defenderPosition = board.getPosition(aDefender);
-        int distance = (int) Math.round(attackerPosition.distance(defenderPosition.getX(), defenderPosition.getY()));
+        int distance = (int) Math.round(sourcePoint.distance(targetPoint.getX(), targetPoint.getY()));
 
         if (distance > 10)
         {

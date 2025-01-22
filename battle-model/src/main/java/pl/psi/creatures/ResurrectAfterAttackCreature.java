@@ -2,11 +2,12 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 import pl.psi.Board;
+import pl.psi.GameContext;
 import pl.psi.Hero;
+import pl.psi.Point;
 
 public class ResurrectAfterAttackCreature  extends Creature{
 
-    private Board board;
 
     private Hero owner;
 
@@ -17,11 +18,6 @@ public class ResurrectAfterAttackCreature  extends Creature{
         super(aStats, aCalculator, aAmount);
     }
 
-    @Override
-    public void initializeBoard(final Board aBoard) {
-        super.initializeBoard(aBoard);
-        this.board = aBoard;
-    }
 
     public void initializeOwner(final Hero aOwner) {
         super.initializeOwner(aOwner);
@@ -42,10 +38,13 @@ public class ResurrectAfterAttackCreature  extends Creature{
 
 
     @Override
-    public void attack( final Creature aDefender )
+    public void attack(final Creature aDefender, GameContext context)
     {
-        int dealtDamage = getCalculator().calculateDamage(this, aDefender); //wyciaganiete przed atak!
-        aDefender.applyDamage(dealtDamage);
+        Point sourcePoint = context.getPosition(this);
+        Point targetPoint = context.getPosition(aDefender);
+
+        int dealtDamage = getCalculator().calculateDamage(this, aDefender, sourcePoint, targetPoint); //wyciaganiete przed atak!
+        super.attack(aDefender, context);
 
         // po ataku uzywa nowej zdolnosci resurectCreatures - ale tylko gdy NIE atakowała undeada:
         if (!aDefender.isUndead())

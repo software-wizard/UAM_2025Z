@@ -1,12 +1,12 @@
 package pl.psi.creatures;
 
 import pl.psi.Board;
+import pl.psi.GameContext;
 import pl.psi.Hero;
+import pl.psi.Point;
 
 public class NoEnemyRetaliationCreature extends Creature
 {
-    private Board board;
-
     private Hero owner;
 
 
@@ -16,11 +16,6 @@ public class NoEnemyRetaliationCreature extends Creature
         super(aStats, aCalculator, aAmount);
     }
 
-    @Override
-    public void initializeBoard(final Board aBoard) {
-        super.initializeBoard(aBoard);
-        this.board = aBoard;
-    }
 
     public void initializeOwner(final Hero aOwner) {
         super.initializeOwner(aOwner);
@@ -41,10 +36,13 @@ public class NoEnemyRetaliationCreature extends Creature
 
 
     @Override
-    public void attack( final Creature aDefender )
+    public void attack(final Creature aDefender, GameContext context)
     {
-        int dealtDamage = getCalculator().calculateDamage(this, aDefender);
+        Point sourcePoint = context.getPosition(this);
+        Point targetPoint = context.getPosition(aDefender);
+        int dealtDamage = getCalculator().calculateDamage(this, aDefender, sourcePoint, targetPoint);
         aDefender.applyDamage(dealtDamage);
+        //bez kontry
 
     }
 
