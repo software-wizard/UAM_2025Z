@@ -32,21 +32,6 @@ public class SpellBonus implements CreatureStatisticIf {
         this.isUndead = isUndead;
     }
 
-    public SpellBonus(SpellBonusName aName) {
-        SpellBonus receivedSpellBonus = SpellBonusFactory.createSpellBonus(aName);
-        this.name = receivedSpellBonus.getName();
-        this.attack = receivedSpellBonus.getAttack();
-        this.armor = receivedSpellBonus.getArmor();
-        this.maxHp = receivedSpellBonus.getMaxHp();
-        this.moveRange = receivedSpellBonus.getMoveRange();
-        this.damage = receivedSpellBonus.getDamage();
-        this.tier = receivedSpellBonus.getTier();
-        this.description = receivedSpellBonus.getDescription();
-        this.isUpgraded = receivedSpellBonus.isUpgraded();
-        this.isUndead = receivedSpellBonus.isUndead();
-
-    }
-
     public void changeAttack(int change) {
         attack += change;
     }
