@@ -18,7 +18,7 @@ public class CastTileStrategy implements TileStrategy {
 
     @Override
     public void apply(MapTile aMapTile, Point aPoint) {
-        if (sharedState.getSelectedSpellIdx() >= 0) {
+        if (sharedState.isSpellSelected()) {
             gameEngine.getCreature(aPoint).ifPresent(creature -> {
                 if (!gameEngine.getCurrentHero().getCreatures().contains(creature)) {
                     aMapTile.setBackground(Color.HOTPINK);
