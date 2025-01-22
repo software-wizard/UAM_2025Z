@@ -1,5 +1,6 @@
 package pl.psi.gui;
 
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import pl.psi.*;
 
@@ -58,18 +59,30 @@ public class MainBattleController {
 
         TileContext tileContext = new TileContext();
         tileContext.addStrategy(new CreatureTileStrategy(gameEngine));
-        tileContext.addStrategy(new MoveTileStrategy(gameEngine, sharedState));
+        tileContext.addStrategy(new MoveTileStrategy(gameEngine, sharedState, tileContext));
         tileContext.addStrategy(new AttackTileStrategy(gameEngine));
         tileContext.addStrategy(new TileTypeStrategy(gameEngine));
         tileContext.addStrategy(new CastTileStrategy(gameEngine, sharedState));
 
+        tileContext.clearTiles();
+
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
+                Point point = new Point(x, y);
                 final MapTile mapTile = new MapTile("");
-                gameEngine.getCreature(new Point(x, y))
-                        .ifPresent(c -> mapTile.setName(c.toString()));
 
-                tileContext.applyStrategies(mapTile, new Point(x,y));
+                gameEngine.getCreature(point).ifPresent(c -> mapTile.setName(c.toString()));
+                /*gameEngine.getTile(point).ifPresent(tile ->{
+                    switch (tile.getType())
+                    {
+                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
+                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
+                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
+                        default -> mapTile.setBackground(Color.WHITE);
+                    }
+                });*/
+
+                tileContext.applyStrategies(mapTile, point);
 
                 gridMap.add(mapTile, x, y);
             }
