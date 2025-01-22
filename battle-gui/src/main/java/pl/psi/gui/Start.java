@@ -76,7 +76,8 @@ public class Start extends Application
                         new Spell.Builder()
                                 .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellBonusStatistic.WEAKEN_ATTACK)
                         .build(),
-                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
+                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellBonusStatistic.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build(),
+                        new Spell.Builder().name(SpellName.SPLASH_ATTACK).damage(5).level(1).radius(3).manaCost(5).build()
                 )
         );
         return ret;
