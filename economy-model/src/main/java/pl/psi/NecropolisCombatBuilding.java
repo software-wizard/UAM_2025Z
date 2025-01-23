@@ -42,7 +42,7 @@ public class NecropolisCombatBuilding implements MapTileIf {
     }
 
     public EconomyHero createBattleOpponent() {
-        EconomyHero opponent = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, Resources.builder().build());
+        EconomyHero opponent = new EconomyHero("B", EconomyHero.Fraction.NECROPOLIS, Resources.builder().build());
         Random rand = new Random();
         int aAmount = rand.nextInt(3) + 3;
 

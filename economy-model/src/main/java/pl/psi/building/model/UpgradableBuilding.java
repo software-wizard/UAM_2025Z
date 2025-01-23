@@ -7,4 +7,5 @@ public interface UpgradableBuilding extends EconomyBuilding {
     void upgrade();
     boolean isUpgraded();
     Resources getUpgradeCost();
+    int getCreatureTier();
 }

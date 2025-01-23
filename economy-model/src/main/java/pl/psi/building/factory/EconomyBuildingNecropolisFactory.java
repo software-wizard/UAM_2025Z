@@ -74,7 +74,7 @@ class EconomyBuildingNecropolisFactory implements EconomyBuildingFactory {
                         .resource(ORE, 5)
                         .resource(GOLD, 5000)
                         .build(),
-                List.of()
+                List.of(MARKETPLACE.buildingStatistic)
         ));
     
         private final EconomyBuildingStatistic buildingStatistic;

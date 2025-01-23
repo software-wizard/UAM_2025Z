@@ -6,7 +6,7 @@
 <?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
       minWidth="-Infinity"
-      prefHeight="560.0" prefWidth="1350.0">
+      prefHeight="570.0" prefWidth="1350.0">
     <stylesheets>
         <URL value="@main.css"/>
     </stylesheets>

@@ -1,5 +1,8 @@
 package pl.psi.gui;
 
+import javafx.scene.control.Alert;
+import javafx.scene.image.ImageView;
+import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 
 import javafx.geometry.Pos;
@@ -11,6 +14,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resources;
+
+import static javafx.scene.control.Alert.AlertType.INFORMATION;
 
 public class CreatureButton extends Button
 {
@@ -18,7 +25,7 @@ public class CreatureButton extends Button
     private final String creatureName;
     private Stage dialog;
 
-    public CreatureButton( final EcoController aEcoController, final EconomyNecropolisFactory aFactory,
+    public CreatureButton( final EcoController aEcoController, final EconomyHero aBuyer, final EconomyNecropolisFactory aFactory,
         final boolean aUpgraded, final int aTier )
     {
         super( aFactory.create( aUpgraded, aTier, 1 )
@@ -28,22 +35,32 @@ public class CreatureButton extends Button
         getStyleClass().add( "creatureButton" );
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            final int amount = startDialogAndGetCreatureAmount();
-            if( amount != 0 )
-            {
+            EconomyCreature creature = aFactory.create(aUpgraded, aTier, 1);
+            Resources singleCreatureCost = creature.getCost();
+            int maxAffordableCreaturesAmount = aBuyer.calculateMaxCreatures(singleCreatureCost);
+            if (maxAffordableCreaturesAmount <= 0) {
+                Alert alert = new Alert(INFORMATION);
+                alert.setTitle("Za mało zasobów");
+                alert.setHeaderText("Masz za mało zasobów aby zakupić chociaż jedną jednostkę.");
+                alert.setContentText("Potrzebujesz " + singleCreatureCost + " na jedną jednostkę.");
+                alert.showAndWait();
+                return;
+            }
+            final int amount = startDialogAndGetCreatureAmount(maxAffordableCreaturesAmount);
+            if( amount != 0 ) {
                 aEcoController.buy( aFactory.create( aUpgraded, aTier, amount ) );
             }
             aEcoController.refreshGui();
         } );
     }
 
-    private int startDialogAndGetCreatureAmount()
+    private int startDialogAndGetCreatureAmount(int aMaxAffordableCreaturesAmount)
     {
         final VBox centerPane = new VBox();
         final HBox bottomPane = new HBox();
         final HBox topPane = new HBox();
         final Stage dialog = prepareWindow( centerPane, bottomPane, topPane );
-        final Slider slider = createSlider();
+        final Slider slider = createSlider(aMaxAffordableCreaturesAmount);
         prepareConfirmAndCancelButton( bottomPane, slider );
         prepareTop( topPane, slider );
         centerPane.getChildren()
@@ -108,11 +125,10 @@ public class CreatureButton extends Button
             .add( cancelButton );
     }
 
-    private Slider createSlider()
-    {
+    private Slider createSlider(int aMaxAffordableCreaturesAmount) {
         final Slider slider = new Slider();
         slider.setMin( 0 );
-        slider.setMax( 100 );
+        slider.setMax( aMaxAffordableCreaturesAmount );
         slider.setValue( 0 );
         slider.setShowTickLabels( true );
         slider.setShowTickMarks( true );

@@ -5,12 +5,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import pl.psi.building.model.EconomyBuilding;
+import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.building.payment.Payment;
 import pl.psi.building.shop.EconomyBuildingShop;
 import pl.psi.hero.EconomyHero;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,7 +23,6 @@ public class Town {
     @Getter
     private final EconomyHero.Fraction fraction;
     private final EconomyBuildingShop economyBuildingShop;
-    @Getter(AccessLevel.PACKAGE)
     private final Map<String, EconomyBuilding> buildings;
 
     private Town(String aName,
@@ -63,6 +64,16 @@ public class Town {
         return upgradableBuilding;
     }
 
+    public Map<String, EconomyBuilding> getBuildings() {
+        return Map.copyOf(buildings);
+    }
+
+    public boolean containsBuildings(List<EconomyBuildingStatistic> aBuildingStatisticList) {
+        return aBuildingStatisticList.stream()
+                    .allMatch(buildingStatistic -> buildings.get(buildingStatistic.name()) != null
+                            && buildings.get(buildingStatistic.name()).isBuilt());
+    }
+
     private Payment<EconomyBuilding> getPayment(EconomyHero aHero, String aBuildingName) {
         return new Payment<>(
                 () -> {
@@ -73,13 +84,13 @@ public class Town {
                     return boughtBuilding;
                 },
                 building -> {
-                    economyBuildingShop.rollback(aHero, building);
+                    economyBuildingShop.refund(aHero, building);
                     buildings.remove(aBuildingName);
                 }
         );
     }
 
-    public static class Builder {
+    public static final class Builder {
 
         public Town build() {
             if (economyBuildingShop == null) {

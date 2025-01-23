@@ -3,7 +3,9 @@ package pl.psi.building;
 import com.google.common.base.Preconditions;
 import lombok.RequiredArgsConstructor;
 import pl.psi.building.factory.EconomyBuildingAbstractFactory;
+import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 
@@ -41,5 +43,9 @@ public class EconomyBuildingFacade {
                 .flatMap(factory -> factory.getAllAvailableBuildingsToBuild().stream())
                 .filter(economyBuildingStatistic -> economyBuildingStatistic.type().equals(aType))
                 .collect(Collectors.toList());
+    }
+
+    public boolean isBuildingUpgradable(EconomyBuilding aBuilding) {
+        return aBuilding instanceof UpgradableBuilding;
     }
 }

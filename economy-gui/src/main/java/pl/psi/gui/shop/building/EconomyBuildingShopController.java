@@ -3,8 +3,10 @@ package pl.psi.gui.shop.building;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -16,22 +18,23 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.building.town.Town;
+import pl.psi.gui.EcoController;
 import pl.psi.hero.EconomyHero;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class EconomyBuildingShopController {
+@RequiredArgsConstructor
+public class EconomyBuildingShopController {
 
     @FXML
     private GridPane buildingGrid;
@@ -85,8 +88,11 @@ class EconomyBuildingShopController {
                 createBuildingGrid(EconomyBuildingStatistic.Type.DWELLINGS, 2, buildingBoxes));
     }
 
-    private Map<EconomyBuildingStatistic, VBox> createBuildingGrid(EconomyBuildingStatistic.Type buildingType, int row,
-                                                                   Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings) {
+    private Map<EconomyBuildingStatistic, VBox> createBuildingGrid(
+                EconomyBuildingStatistic.Type buildingType,
+                int row,
+                Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
+    ) {
         List<EconomyBuildingStatistic> availableBuildings = economyBuildingFacade.getAllAvailableBuildingsToBuild(buildingType, town.getFraction());
         Map<EconomyBuildingStatistic, VBox> buildingBoxes = new HashMap<>();
 
@@ -95,7 +101,7 @@ class EconomyBuildingShopController {
             VBox buildingBox = createBuildingBox(statistic);
             buildingBoxes.put(statistic, buildingBox);
 
-            addBuildingClickHandler(row, statistic, buildingBox, allBuildings, i);
+            addBuildingClickHandler(row, statistic, buildingBox, allBuildings);
             buildingGrid.add(buildingBox, i, row);
         }
 
@@ -119,8 +125,11 @@ class EconomyBuildingShopController {
         return buildingBox;
     }
 
-    private void addBuildingClickHandler(int row, EconomyBuildingStatistic statistic, VBox buildingBox,
-                                         Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings, int column) {
+    private void addBuildingClickHandler(int row,
+                                         EconomyBuildingStatistic statistic,
+                                         VBox buildingBox,
+                                         Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
+    ) {
         ImageView buildingIcon = (ImageView) buildingBox.getChildren().get(0);
         Popup popup = createPurchasePopup(statistic.name());
 
@@ -133,12 +142,25 @@ class EconomyBuildingShopController {
         });
     }
 
-    private void handlePrimaryClick(EconomyBuildingStatistic statistic, Popup popup,
-                                    Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings) {
+    private void handlePrimaryClick(EconomyBuildingStatistic statistic,
+                                    Popup popup,
+                                    Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
+    ) {
         if (town.isBuildingAlreadyBuilt(statistic.name())) {
-            view.showAlert("Budynek już zbudowany", "Ten budynek już został zbudowany w tym mieście.");
+            EconomyBuilding building = town.findBuildingByName(statistic.name()).orElseThrow();
+            if (economyBuildingFacade.isBuildingUpgradable(building)) {
+                openCreatureShop((UpgradableBuilding) building, buyer);
+            } else {
+                view.showAlert("Budynek już zbudowany", "", "Ten budynek już został zbudowany w tym mieście.");
+            }
+        } else if (!town.containsBuildings(statistic.prerequisites())) {
+            List<String> namesOfRequiredBuildings = statistic.prerequisites()
+                    .stream()
+                    .map(EconomyBuildingStatistic::name)
+                    .toList();
+            view.showAlert("Wymagany budynek nie jest zbudowany","",  "Aby zbudować ten budynek potrzebujesz zbudować:" + namesOfRequiredBuildings);
         } else if (!statistic.hasEnoughResourcesToBuild(buyer)) {
-            view.showAlert("Brak zasobów", "Nie masz wystarczająco zasobów, aby kupić ten budynek.");
+            view.showAlert("Brak zasobów", "", "Nie masz wystarczająco zasobów, aby kupić ten budynek.");
         } else {
             economyBuildingFacade.buildBuilding(buyer, town, statistic.name());
             view.updateResources(resourcesLabel, buyer);
@@ -153,22 +175,29 @@ class EconomyBuildingShopController {
     private void handleSecondaryClick(EconomyBuildingStatistic statistic, ImageView buildingIcon,
                                       Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings) {
         if (!town.isBuildingAlreadyBuilt(statistic.name())) {
-            view.showAlert("Nie zbudowano budynku", "Aby ulepszyć budynek należy go wybudować.");
+            view.showAlert("Nie zbudowano budynku", "", "Aby ulepszyć budynek należy go wybudować.");
             return;
         }
 
         Optional<EconomyBuilding> buildingOptional = town.findBuildingByName(statistic.name());
-        if (buildingOptional.isEmpty() || !(buildingOptional.get() instanceof UpgradableBuilding upgradableBuilding)) {
-            throw new IllegalStateException("Building is not upgradable!");
+        if (buildingOptional.isEmpty()) {
+            throw new IllegalStateException("Building cannot be null!");
+        }
+
+        UpgradableBuilding upgradableBuilding;
+        if (!economyBuildingFacade.isBuildingUpgradable(buildingOptional.get())) {
+            throw new IllegalStateException("Building cannot be null!");
+        } else {
+            upgradableBuilding = (UpgradableBuilding) buildingOptional.get();
         }
 
         if (upgradableBuilding.isUpgraded()) {
-            view.showAlert("Budynek już ulepszony", "Budynek został już ulepszony.");
+            view.showAlert("Budynek już ulepszony", "", "Budynek został już ulepszony.");
             return;
         }
 
         if (!buyer.canAfford(upgradableBuilding.getUpgradeCost())) {
-            view.showAlert("Brak zasobów", "Nie masz wystarczająco zasobów, aby ulepszyć ten budynek.");
+            view.showAlert("Brak zasobów", "", "Nie masz wystarczająco zasobów, aby ulepszyć ten budynek.");
             return;
         }
 
@@ -176,8 +205,8 @@ class EconomyBuildingShopController {
         if (response == ButtonType.OK) {
             town.upgradeBuilding(buyer, statistic.name());
             view.updateResources(resourcesLabel, buyer);
-            view.showAlert("Sukces", "Budynek " + statistic.name() + " został ulepszony!");
             view.updateBuildingStatuses(allBuildings, town, buyer);
+            view.showAlert("Sukces", "", "Budynek " + statistic.name() + " został ulepszony!");
         }
     }
 
@@ -188,5 +217,24 @@ class EconomyBuildingShopController {
         label.setStyle("-fx-background-color: #81fa81; -fx-padding: 10;");
         popup.getContent().add(label);
         return popup;
+    }
+
+    private void openCreatureShop(UpgradableBuilding aBuilding, EconomyHero aHero) {
+        final FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader()
+                .getResource("fxml/eco.fxml"));
+        var controller = new EcoController(aHero, aBuilding);
+        loader.setController(controller);
+        final Scene scene;
+        try {
+            scene = new Scene(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setX(5);
+        stage.setY(5);
+        stage.show();
     }
 }

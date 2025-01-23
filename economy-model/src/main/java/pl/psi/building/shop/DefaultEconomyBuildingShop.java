@@ -49,7 +49,7 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
     }
 
     @Override
-    public void rollback(EconomyHero aHero, EconomyBuilding aBuilding) {
+    public void refund(EconomyHero aHero, EconomyBuilding aBuilding) {
         aHero.subtractResource(aBuilding.getStatistic().cost());
     }
 }

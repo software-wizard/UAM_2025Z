@@ -32,6 +32,11 @@ public final class Resources {
                 resources.put(key, resources.getOrDefault(key, 0) + value));
     }
 
+    public Resources multiplyBy(int multiplier) {
+        resources.forEach((key, value) -> resources.put(key, value * multiplier));
+        return this;
+    }
+
     public Integer getResourceAmount(Type type) {
         return resources.getOrDefault(type, 0);
     }

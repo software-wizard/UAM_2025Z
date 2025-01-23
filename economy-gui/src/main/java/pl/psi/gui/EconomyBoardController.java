@@ -5,11 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pl.psi.*;
+import pl.psi.building.EconomyBuildingFacade;
+import pl.psi.building.factory.EconomyBuildingAbstractFactory;
+import pl.psi.building.town.Town;
 import pl.psi.converter.EcoBattleConverter;
+import pl.psi.gui.shop.building.DefaultEconomyBuildingView;
+import pl.psi.gui.shop.building.EconomyBuildingShopController;
 import pl.psi.hero.EconomyHero;
 
 import java.io.IOException;
@@ -23,18 +28,20 @@ public class EconomyBoardController {
     private final EconomyTurnQueue economyTurnQueue;
     private final EconomyBoard board;
     private EcoBattleConverter ecoBattleConverter;
+    private final Town town;
     @FXML
     private GridPane gridMap;
     @FXML
     private Button passButton;
 
-    public EconomyBoardController(final EconomyHero aHero1, final EconomyHero aHero2) {
+    public EconomyBoardController(final EconomyHero aHero1, final EconomyHero aHero2, final Town aTown) {
 
         economyBoardEngine = new EconomyBoardEngine(aHero1, aHero2);
         economyTurnQueue = new EconomyTurnQueue(aHero1, aHero2);
         board = new EconomyBoard(aHero1, aHero2);
         hero1 = aHero1;
         hero2 = aHero2;
+        this.town = aTown;
     }
 
     @FXML
@@ -49,19 +56,25 @@ public class EconomyBoardController {
     }
 
     private void openShop(EconomyHero hero) {
-
         try {
             final FXMLLoader loader = new FXMLLoader();
+            Stage stage = new Stage();
             loader.setLocation(getClass().getClassLoader()
-                    .getResource("fxml/eco.fxml"));
-            loader.setController(new EcoController(hero));
-
+                    .getResource("fxml/eco-building-shop.fxml"));
+            EconomyBuildingAbstractFactory abstractFactory = new EconomyBuildingAbstractFactory();
+            var facade = new EconomyBuildingFacade(abstractFactory);
+            loader.setController(new EconomyBuildingShopController(
+                    new DefaultEconomyBuildingView(facade),
+                    facade,
+                    hero,
+                    town,
+                    stage
+            ));
             final Scene scene = new Scene(loader.load());
-            Stage aStage = new Stage();
-            aStage.setScene(scene);
-            aStage.setX(5);
-            aStage.setY(5);
-            aStage.show();
+            stage.setScene(scene);
+            stage.setX(5);
+            stage.setY(5);
+            stage.show();
         } catch (final IOException aE) {
             aE.printStackTrace();
         }

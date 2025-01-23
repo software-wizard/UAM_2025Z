@@ -134,7 +134,7 @@ class DefaultEconomyBuildingShopTest {
 
     @Test
     @DisplayName("Should rollback resources after a failed building purchase.")
-    void should_rollback_resources_after_failed_purchase() {
+    void should_refund_resources_after_failed_purchase() {
         // GIVEN
         var buildingStatistic = EconomyBuildingStatistic.builder()
                 .cost(Resources.builder().resource(GOLD, 100).build())
@@ -144,7 +144,7 @@ class DefaultEconomyBuildingShopTest {
 
         // WHEN
         when(building.getStatistic()).thenReturn(buildingStatistic);
-        economyBuildingShop.rollback(buyer, building);
+        economyBuildingShop.refund(buyer, building);
 
         // THEN
         assertThat(buyer.getResourceAmount(GOLD)).isEqualTo(900);

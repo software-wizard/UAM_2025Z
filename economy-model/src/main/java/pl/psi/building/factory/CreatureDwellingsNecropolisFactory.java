@@ -44,7 +44,10 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                 .name(name)
                 .build();
         return new CreatureDwellingsBuilding(
-                economyBuildingStatistic, building.creatureNames, building.upgradeCost, building.costPerWeek
+                economyBuildingStatistic,
+                building.creatureTier,
+                building.upgradeCost,
+                building.costPerWeek
         );
     }
 
@@ -60,7 +63,7 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(ORE, 5)
                         .build(),
                 List.of()
-        ), Set.of("SKELETON", "SKELETON_WARRIOR"),
+        ), 1,
                 Resources.builder()
                         .resource(GOLD, 1000)
                         .resource(WOOD, 5)
@@ -77,8 +80,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(ORE, 5)
                         .resource(GOLD, 1000)
                         .build(),
-                List.of()
-        ), Set.of("WALKING_DEAD", "ZOMBIE"),
+                List.of(CURSED_TEMPLE.buildingStatistic)
+        ), 2,
                 Resources.builder()
                         .resource(WOOD, 5)
                         .resource(ORE, 5)
@@ -96,8 +99,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(WOOD, 5)
                         .resource(GOLD, 1500)
                         .build(),
-                List.of()
-        ), Set.of("WIGHT", "WRAITH"),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 3,
                 Resources.builder()
                         .resource(MERCURY, 1)
                         .resource(GOLD, 1500)
@@ -114,8 +117,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(WOOD, 5)
                         .resource(GOLD, 2000)
                         .build(),
-                List.of()
-        ), Set.of("VAMPIRE", "VAMPIRE_LORD"),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 4,
                 Resources.builder()
                         .resource(WOOD, 10)
                         .resource(CRYSTAL, 10)
@@ -134,8 +137,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(SULFUR, 1)
                         .resource(GOLD, 2000)
                         .build(),
-                List.of()
-        ), Set.of("LICH", "POWER_LICH"),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 5,
                 Resources.builder()
                         .resource(ORE, 1)
                         .resource(SULFUR, 1)
@@ -153,8 +156,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(WOOD, 10)
                         .resource(Resources.Type.GOLD, 6000)
                         .build(),
-                List.of()
-        ), Set.of("BLACK_KNIGHT", "DREAD_KNIGHT"),
+                List.of(ESTATE.buildingStatistic, MAUSOLEUM.buildingStatistic)
+        ), 6,
                 Resources.builder()
                         .resource(Resources.Type.ORE, 5)
                         .resource(WOOD, 5)
@@ -180,8 +183,8 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
                         .resource(Resources.Type.CRYSTAL, 5)
                         .resource(Resources.Type.GOLD, 10000)
                         .build(),
-                List.of()
-        ), Set.of("BLACK_KNIGHT", "DREAD_KNIGHT"),
+                List.of(HALL_OF_DARKNESS.buildingStatistic)
+        ), 7,
                 Resources.builder()
                         .resource(WOOD, 5)
                         .resource(Resources.Type.ORE, 5)
@@ -195,7 +198,7 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
         );
 
         private final EconomyBuildingStatistic buildingStatistic;
-        private final Set<String> creatureNames;
+        private final int creatureTier;
         private final Resources upgradeCost;
         private final Resources costPerWeek;
     }
