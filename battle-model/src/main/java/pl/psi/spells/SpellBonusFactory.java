@@ -3,7 +3,7 @@ package pl.psi.spells;
 import com.google.common.collect.Range;
 
 public class SpellBonusFactory {
-    public static SpellBonus createSpellBonus(SpellBonusName spellBonusName){
+    public static SpellBonus createSpellBonus(SpellName spellName){
 
         NoSpellBonusStatistic baseStats = new NoSpellBonusStatistic();
 
@@ -15,11 +15,11 @@ public class SpellBonusFactory {
         int baseStatsTier   = baseStats.getTier();
         boolean baseStatsUpgraded  = baseStats.isUpgraded();
         boolean baseStatsUndead   = baseStats.isUndead();
-        String spellBonusNameStringified = spellBonusName.toString();
+        String spellBonusNameStringified = spellName.toString();
         String spellBonusDescription = spellBonusNameStringified + " spell bonus";
 
-        switch(spellBonusName){
-            case EXTRA_ATTACK:
+        switch(spellName){
+            case STRONGER_ATTACK:
                 baseStatsAttack = 5;
                 break;
             case WEAKEN_ATTACK:
@@ -28,7 +28,8 @@ public class SpellBonusFactory {
             case EXTRA_MOVE_RANGE:
                 baseStatsMoveRange = 1;
                 break;
-            case NONE:
+            case SPLASH_ATTACK:
+            case MAGIC_ARROW:
             default:
                 break;
         }
