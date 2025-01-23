@@ -64,7 +64,7 @@ public class MainBattleController {
         tileContext.addStrategy(new TileTypeStrategy(gameEngine));
         tileContext.addStrategy(new CastTileStrategy(gameEngine, sharedState));
 
-        tileContext.clearTiles();
+        //tileContext.clearTiles();
 
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
@@ -72,15 +72,6 @@ public class MainBattleController {
                 final MapTile mapTile = new MapTile("");
 
                 gameEngine.getCreature(point).ifPresent(c -> mapTile.setName(c.toString()));
-                /*gameEngine.getTile(point).ifPresent(tile ->{
-                    switch (tile.getType())
-                    {
-                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
-                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
-                        case OBSTACLE -> mapTile.setBackground(Color.BLACK);
-                        default -> mapTile.setBackground(Color.WHITE);
-                    }
-                });*/
 
                 tileContext.applyStrategies(mapTile, point);
 

@@ -86,16 +86,18 @@ public Optional< Creature > getCreature(final Point aPoint)
             //dla kazdefo punktu z path - kreatura musi przejsc przez kazdy punkt z listy:
             for (Point point : path)
             {
-                map.inverse()
-                        .remove( aCreature );
-                map.put( point, aCreature );
+                if (!getCreature(point).isPresent())
+                {
+                    map.inverse()
+                            .remove(aCreature);
+                    map.put(point, aCreature);
 
-            }
 
-            Tile tile = specialTiles.get(aPoint);
-            if(tile!=null)
-            {
-                tile.apply(aCreature);
+                    Tile tile = specialTiles.get(point);
+                    if (tile != null) {
+                        tile.apply(aCreature);
+                    }
+                }
             }
 
         }

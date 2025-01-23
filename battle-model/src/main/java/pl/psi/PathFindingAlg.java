@@ -116,7 +116,7 @@ public class PathFindingAlg
         int height = board.getHeight();
 
         return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height
-                && (board.getSpecialTile(point) == null || board.getSpecialTile(point).isPassable());
+                && (board.getSpecialTile(point) == null || board.getSpecialTile(point).isPassable() && !isOccupied(point));
     }
 
 
@@ -140,12 +140,12 @@ public class PathFindingAlg
         //dla zajetego przez kreature punktu:
         if (isOccupied(to))
         {
-            return 1000;
+            return 10000;
         }
 
         return switch (tile.getType()) {
-            case DAMAGE -> 2;
-            case OBSTACLE -> 1000;
+            case DAMAGE -> 5;
+            case OBSTACLE -> 10000;
             default -> 1;
         };
     }
