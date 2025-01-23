@@ -556,4 +556,37 @@ public class CreatureTest
         assertEquals(1, vampire.getAmount());
 
     }
+
+    @Test
+    void shouldHaveAChanceToCastSpell()
+    {
+        //pogladowy test zeby odroznic BlackKnighta od DreadKnighta - ten nie ma miec double damage
+        Creature blackKnight =
+                new NecropolisFactory().create(false, 6, 1);
+
+        //defender:
+        Creature Skeleton1 = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( NOT_IMPORTANT_DMG )
+                        .attack( NOT_IMPORTANT )
+                        .armor( 10)
+                        .isRanged( false )
+                        .moveRange(20)
+                        .build() )
+                .build();
+
+
+        List< Creature > c1 = List.of( blackKnight );
+        List< Creature > c2 = List.of( Skeleton1 );
+
+        Board board = new Board(c1, c2);
+        board.move(blackKnight, new Point(0, 0));
+        board.move(Skeleton1, new Point(1, 0));
+
+
+        Skeleton1.setCurrentHp(30);
+        blackKnight.attack(Skeleton1, board);
+        int skeleton1Hp = Skeleton1.getCurrentHp();
+        assertThat(skeleton1Hp).isGreaterThan(13);
+    }
 }

@@ -50,9 +50,17 @@ public class NecropolisFactory
                     );
 
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
-                        .amount( aAmount )
-                        .build();
+                    Creature blackKnight = new Creature.Builder()
+                            .statistic(CreatureStatistic.BLACK_KNIGHT)
+                            .amount(aAmount)
+                            .build();
+
+                    return new ChanceToCastSpellCreature(
+                            blackKnight.getStats(),
+                            null,
+                            blackKnight.getAmount()
+                    );
+
                 case 7:
                     return new Creature.Builder().statistic( CreatureStatistic.BONE_DRAGON )
                         .amount( aAmount )

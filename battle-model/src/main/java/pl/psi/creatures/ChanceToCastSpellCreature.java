@@ -28,7 +28,10 @@ public class ChanceToCastSpellCreature extends Creature
     @Override
     public DamageCalculatorIf getCalculator()
     {
-        return new DoubleDamageCalculator(random);
+        if (this.getStats().isUpgraded()) {
+            return new DoubleDamageCalculator(random);
+        }
+        return super.getCalculator();
     }
 
     @Override
