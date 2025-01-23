@@ -9,8 +9,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pl.psi.Spell;
-import pl.psi.SpellName;
+import pl.psi.spells.Spell;
+import pl.psi.spells.SpellName;
 import pl.psi.creatures.NecropolisFactory;
 import pl.psi.spells.SpellBonusName;
 

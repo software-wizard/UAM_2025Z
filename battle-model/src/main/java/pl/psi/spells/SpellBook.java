@@ -1,10 +1,8 @@
-package pl.psi;
+package pl.psi.spells;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Getter

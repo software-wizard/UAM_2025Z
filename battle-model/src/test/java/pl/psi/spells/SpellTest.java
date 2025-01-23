@@ -2,10 +2,6 @@ package pl.psi.spells;
 
 import com.google.common.collect.Range;
 import org.junit.jupiter.api.Test;
-import pl.psi.Hero;
-import pl.psi.Spell;
-import pl.psi.SpellBook;
-import pl.psi.SpellName;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 

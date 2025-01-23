@@ -1,8 +1,5 @@
 package pl.psi.spells;
 
-import pl.psi.Spell;
-import pl.psi.SpellName;
-
 public class SpellFactory {
 
     public static Spell createSpell(SpellName aSpellName) {

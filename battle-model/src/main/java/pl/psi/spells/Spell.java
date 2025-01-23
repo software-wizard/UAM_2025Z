@@ -1,10 +1,9 @@
-package pl.psi;
+package pl.psi.spells;
 
 import lombok.Getter;
+import pl.psi.GameEngine;
+import pl.psi.Point;
 import pl.psi.creatures.Creature;
-import pl.psi.spells.SpellBonus;
-import pl.psi.spells.SpellBonusFactory;
-import pl.psi.spells.SpellBonusName;
 
 @Getter
 public class Spell {

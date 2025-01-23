@@ -1,6 +1,7 @@
-package pl.psi;
+package pl.psi.spells;
 
 import lombok.Getter;
+import pl.psi.spells.Spell;
 
 @Getter
 public class AppliedSpell {

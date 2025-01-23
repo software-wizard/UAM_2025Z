@@ -11,7 +11,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
 
 import lombok.Setter;
@@ -20,7 +19,7 @@ import pl.psi.*;
 import com.google.common.collect.Range;
 
 import lombok.Getter;
-import pl.psi.spells.SpellFactory;
+import pl.psi.spells.AppliedSpell;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
