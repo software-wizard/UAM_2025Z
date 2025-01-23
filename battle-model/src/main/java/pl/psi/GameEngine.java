@@ -66,7 +66,11 @@ public class GameEngine {
         Point startPoint = board.getPosition(currentCreature);
         PathFindingAlg alg = new PathFindingAlg(board);
 
-        return alg.findPath(startPoint, targetPoint, currentCreature.getMoveRange());
+        List<Point> path = alg.findPath(startPoint, targetPoint, currentCreature.getMoveRange());
+        if (!path.isEmpty() && path.getFirst().equals(startPoint)) {
+            path.removeFirst();
+        }
+        return path;
     }
 
     public Optional<Creature> getCreature(final Point aPoint) {
@@ -120,5 +124,9 @@ public class GameEngine {
 
     public Tile getTile(Point point) {
         return board.getSpecialTile(point);
+    }
+
+    public boolean isOccupied(Point point) {
+        return board.getCreature(point).isPresent();
     }
 }

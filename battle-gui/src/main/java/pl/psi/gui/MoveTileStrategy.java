@@ -61,7 +61,9 @@ public class MoveTileStrategy implements TileStrategy {
             MapTile tile = tileContext.getTile(p);
             if (tile != null)
             {
-                tile.setBackground(color);
+                if(!gameEngine.isOccupied(p)) {
+                    tile.setBackground(color);
+                }
             }
             else {
                 System.out.println("No tile found for point: " + p);

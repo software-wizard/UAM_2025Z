@@ -140,7 +140,7 @@ public class PathFindingAlg
         //dla zajetego przez kreature punktu:
         if (isOccupied(to))
         {
-            return 10000;
+            return 100;
         }
 
         return switch (tile.getType()) {
