@@ -16,17 +16,17 @@ import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class DefaultEconomyBuildingView implements EconomyBuildingView {
+class DefaultEconomyBuildingView implements EconomyBuildingView {
 
     private final EconomyBuildingFacade economyBuildingFacade;
-
-    @Override
-    public void updateResources(Label resourcesLabel, EconomyHero hero) {
-        resourcesLabel.setText(hero.getResources().toString());
-    }
+    private final Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> buildingBoxes;
+    private final Town town;
+    private final EconomyHero buyer;
+    private final Label resourcesLabel;
 
     @Override
     public void showAlert(String title, String header, String content) {
@@ -40,17 +40,6 @@ public class DefaultEconomyBuildingView implements EconomyBuildingView {
     }
 
     @Override
-    public void updateBuildingStatuses(
-            Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> buildingBoxes,
-            Town town,
-            EconomyHero buyer
-    ) {
-        buildingBoxes.forEach((type, buildings) ->
-                buildings.forEach((statistic, buildingBox) -> updateBuildingStatus(buildingBox, statistic, town, buyer))
-        );
-    }
-
-    @Override
     public ButtonType showUpgradeConfirmationPopup(String buildingName, Resources upgradeCost, Image buildingImage) {
         String title = "Ulepszanie budynku";
         String header = "Czy chcesz ulepszyć budynek " + buildingName + "?";
@@ -58,6 +47,12 @@ public class DefaultEconomyBuildingView implements EconomyBuildingView {
         Alert alert = createAlert(Alert.AlertType.CONFIRMATION, title, "", content, buildingImage);
         alert.setHeaderText(header);
         return alert.showAndWait().orElse(null);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        updateBuildingStatuses();
+        updateResources();
     }
 
     private void updateBuildingStatus(
@@ -94,5 +89,15 @@ public class DefaultEconomyBuildingView implements EconomyBuildingView {
         alert.setContentText(content);
         alert.setGraphic(new ImageView(image));
         return alert;
+    }
+
+    private void updateResources() {
+        resourcesLabel.setText(buyer.getResources().toString());
+    }
+
+    private void updateBuildingStatuses() {
+        buildingBoxes.forEach((type, buildings) ->
+                buildings.forEach((statistic, buildingBox) -> updateBuildingStatus(buildingBox, statistic, town, buyer))
+        );
     }
 }

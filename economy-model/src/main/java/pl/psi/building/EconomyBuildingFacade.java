@@ -48,4 +48,8 @@ public class EconomyBuildingFacade {
     public boolean isBuildingUpgradable(EconomyBuilding aBuilding) {
         return aBuilding instanceof UpgradableBuilding;
     }
+
+    public UpgradableBuilding upgradeBuilding(Town aTown, EconomyHero aBuyer, String aBuildingToUpgrade) {
+        return aTown.upgradeBuilding(aBuyer, aBuildingToUpgrade);
+    }
 }

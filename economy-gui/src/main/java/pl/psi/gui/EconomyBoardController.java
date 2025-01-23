@@ -13,7 +13,6 @@ import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.factory.EconomyBuildingAbstractFactory;
 import pl.psi.building.town.Town;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.gui.shop.building.DefaultEconomyBuildingView;
 import pl.psi.gui.shop.building.EconomyBuildingShopController;
 import pl.psi.hero.EconomyHero;
 
@@ -64,11 +63,7 @@ public class EconomyBoardController {
             EconomyBuildingAbstractFactory abstractFactory = new EconomyBuildingAbstractFactory();
             var facade = new EconomyBuildingFacade(abstractFactory);
             loader.setController(new EconomyBuildingShopController(
-                    new DefaultEconomyBuildingView(facade),
-                    facade,
-                    hero,
-                    town,
-                    stage
+                    facade, hero, town, stage
             ));
             final Scene scene = new Scene(loader.load());
             stage.setScene(scene);

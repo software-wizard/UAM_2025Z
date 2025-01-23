@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lombok.RequiredArgsConstructor;
+import pl.psi.EconomyEngine;
 import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
@@ -27,13 +27,13 @@ import pl.psi.building.town.Town;
 import pl.psi.gui.EcoController;
 import pl.psi.hero.EconomyHero;
 
+import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class EconomyBuildingShopController {
 
     @FXML
@@ -45,17 +45,30 @@ public class EconomyBuildingShopController {
     @FXML
     private Label resourcesLabel;
 
-    private final EconomyBuildingView view;
+    private EconomyBuildingView view;
+
     private final EconomyBuildingFacade economyBuildingFacade;
     private final EconomyHero buyer;
     private final Town town;
     private final Stage stage;
+    private final EconomyEngine economyEngine;
+
+    public EconomyBuildingShopController(EconomyBuildingFacade economyBuildingFacade, EconomyHero buyer, Town town, Stage stage) {
+        this.economyBuildingFacade = economyBuildingFacade;
+        this.buyer = buyer;
+        this.town = town;
+        this.stage = stage;
+        this.economyEngine = new EconomyEngine(buyer);
+    }
 
     @FXML
     void initialize() {
         setupUI();
-        view.updateResources(resourcesLabel, buyer);
         populateBuildingGrid();
+        economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_BUILDING, view);
+        economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_BUILDING_UPGRADE, view);
+        economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_CREATURE, view);
+        view.propertyChange(new PropertyChangeEvent(this, null, null, null));
     }
 
     private void setupUI() {
@@ -86,6 +99,7 @@ public class EconomyBuildingShopController {
                 createBuildingGrid(EconomyBuildingStatistic.Type.BUILDING, 1, buildingBoxes));
         buildingBoxes.put(EconomyBuildingStatistic.Type.DWELLINGS,
                 createBuildingGrid(EconomyBuildingStatistic.Type.DWELLINGS, 2, buildingBoxes));
+        this.view = new DefaultEconomyBuildingView(economyBuildingFacade, buildingBoxes, town, buyer, resourcesLabel);
     }
 
     private Map<EconomyBuildingStatistic, VBox> createBuildingGrid(
@@ -104,8 +118,6 @@ public class EconomyBuildingShopController {
             addBuildingClickHandler(row, statistic, buildingBox, allBuildings);
             buildingGrid.add(buildingBox, i, row);
         }
-
-        view.updateBuildingStatuses(Map.of(buildingType, buildingBoxes), town, buyer);
         return buildingBoxes;
     }
 
@@ -130,7 +142,7 @@ public class EconomyBuildingShopController {
                                          VBox buildingBox,
                                          Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
     ) {
-        ImageView buildingIcon = (ImageView) buildingBox.getChildren().get(0);
+        ImageView buildingIcon = (ImageView) buildingBox.getChildren().getFirst();
         Popup popup = createPurchasePopup(statistic.name());
 
         buildingIcon.setOnMouseClicked(event -> {
@@ -163,10 +175,8 @@ public class EconomyBuildingShopController {
             view.showAlert("Brak zasobów", "", "Nie masz wystarczająco zasobów, aby kupić ten budynek.");
         } else {
             economyBuildingFacade.buildBuilding(buyer, town, statistic.name());
-            view.updateResources(resourcesLabel, buyer);
             view.showPopUp(stage, popup);
-            view.updateBuildingStatuses(allBuildings, town, buyer);
-
+            economyEngine.buyBuilding();
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), ae -> popup.hide()));
             timeline.play();
         }
@@ -203,9 +213,8 @@ public class EconomyBuildingShopController {
 
         ButtonType response = view.showUpgradeConfirmationPopup(statistic.name(), upgradableBuilding.getUpgradeCost(), buildingIcon.getImage());
         if (response == ButtonType.OK) {
-            town.upgradeBuilding(buyer, statistic.name());
-            view.updateResources(resourcesLabel, buyer);
-            view.updateBuildingStatuses(allBuildings, town, buyer);
+            economyBuildingFacade.upgradeBuilding(town, buyer, statistic.name());
+            economyEngine.buyUpgrade();
             view.showAlert("Sukces", "", "Budynek " + statistic.name() + " został ulepszony!");
         }
     }
@@ -223,7 +232,7 @@ public class EconomyBuildingShopController {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader()
                 .getResource("fxml/eco.fxml"));
-        var controller = new EcoController(aHero, aBuilding);
+        var controller = new EcoController(aBuilding, economyEngine);
         loader.setController(controller);
         final Scene scene;
         try {

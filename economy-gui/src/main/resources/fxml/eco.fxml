@@ -27,7 +27,7 @@
                     <Label fx:id="roundNumberLabel" text="Y"/>
                 </HBox>
                 <HBox>
-                    <Label fx:id="resourcesStaticLabel" text="Zasoby: "/>
+                    <Label fx:id="resourcesStaticLabel" text="Resources: "/>
                     <Label fx:id="resourcesLabel" text="Z"/>
                 </HBox>
             </children>

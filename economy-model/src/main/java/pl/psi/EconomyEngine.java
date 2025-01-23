@@ -15,6 +15,8 @@ public class EconomyEngine
     public static final String HERO_BOUGHT_CREATURE = "HERO_BOUGHT_CREATURE";
     public static final String ACTIVE_HERO_CHANGED = "ACTIVE_HERO_CHANGED";
     public static final String NEXT_ROUND = "NEXT_ROUND";
+    public static final String HERO_BOUGHT_BUILDING = "HERO_BOUGHT_BUILDING";
+    public static final String HERO_BOUGHT_BUILDING_UPGRADE = "HERO_BOUGHT_BUILDING_UPGRADE";
     //private final EconomyHero hero1;
     //private final EconomyHero hero2;
     private final CreatureShop creatureShop = new CreatureShop();
@@ -37,6 +39,13 @@ public class EconomyEngine
         observerSupport.firePropertyChange( HERO_BOUGHT_CREATURE, null, null );
     }
 
+    public void buyBuilding() {
+        observerSupport.firePropertyChange( HERO_BOUGHT_BUILDING, null, null );
+    }
+
+    public void buyUpgrade() {
+        observerSupport.firePropertyChange( HERO_BOUGHT_BUILDING_UPGRADE, null, null );
+    }
 
     public void addObserver( final String aPropertyName, final PropertyChangeListener aObserver )
     {

@@ -28,9 +28,9 @@ public class EcoController implements PropertyChangeListener
     @FXML
     Label resourcesLabel;
 
-    public EcoController(final EconomyHero aHero1, final UpgradableBuilding aBuilding)
+    public EcoController(final UpgradableBuilding aBuilding, final EconomyEngine aEconomyEngine)
     {
-        economyEngine = new EconomyEngine( aHero1 );
+        economyEngine = aEconomyEngine;
         building = aBuilding;
     }
 
