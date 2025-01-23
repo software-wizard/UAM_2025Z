@@ -8,6 +8,7 @@ package pl.psi.creatures;//  ***************************************************
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,9 @@ public class Creature implements PropertyChangeListener {
     private DamageCalculatorIf calculator;
     private List<Buff> buffs = new ArrayList<>();
 
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    public static final String DEAD = "dead";
+
     Creature() {
     }
 
@@ -57,10 +61,16 @@ public class Creature implements PropertyChangeListener {
             final int damageWithBonus = getAttackWithBonus();
             System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
             aDefender.applyDamage(damageWithBonus);
+            if (aDefender.getAmount()<=0) {
+                aDefender.observerSupport.firePropertyChange(DEAD, false, true);
+            }
             if (canCounterAttack(aDefender)) {
                 System.out.println("Counter attack");
                 counterAttack(aDefender);
             }
+        }
+        if (!isAlive()) {
+            observerSupport.firePropertyChange(DEAD, false, true);
         }
     }
 
@@ -211,6 +221,7 @@ public class Creature implements PropertyChangeListener {
 
         if (amount <= 0) {
             System.out.println(getName() + " has been defeated.");
+            observerSupport.firePropertyChange(DEAD, false, true);
         }
     }
 
@@ -259,4 +270,19 @@ public class Creature implements PropertyChangeListener {
     public String toString() {
         return getName() + System.lineSeparator() + getAmount();
     }
+
+    public void addObserver(PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aObserver);
+    }
+
+    private void updateAmount(int newAmount) {
+        int oldAmount = getAmount();
+        setAmount(newAmount);
+
+        if (oldAmount > 0 && newAmount <= 0) {
+            System.out.println(getName() + " has been defeated.");
+            observerSupport.firePropertyChange(DEAD, false, true);
+        }
+    }
+
 }

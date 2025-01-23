@@ -35,20 +35,6 @@ public class EconomyBoard {
             }
     }
 
-//    private void addObjectsToBoard(){
-//        MapTileIf castle = new Castle();
-//        Point castleCoords = new Point(5,5);
-//        boardObjectsMap.put(castleCoords,castle);
-//
-//        MapTileIf goldBuilding = new GoldBuilding();
-//        Point goldBuildingCoords = new Point(4,3);
-//        boardObjectsMap.put(goldBuildingCoords,goldBuilding);
-//
-//        MapTileIf necropolisCombatBuilding = new NecropolisCombatBuilding();
-//        Point necComCoord = new Point(7,6);
-//        boardObjectsMap.put(necComCoord,necropolisCombatBuilding);
-//    }
-
     private void addHeroes( final EconomyHero hero, final int aPosition )
     {
             heroMap.put( new Point( aPosition, aPosition ), hero);
@@ -63,7 +49,7 @@ public class EconomyBoard {
     {
         if(getMapTile(aPoint).isPresent()){
             MapTileIf maybeCastle = boardObjectsMap.get(aPoint);
-            return maybeCastle.getTileType() == ZAMEK;
+            return maybeCastle.getTileType() == CASTLE;
         }
         return false;
     }
@@ -118,7 +104,6 @@ public class EconomyBoard {
 
     }
 
-    // na razie hero ma range poruszania się (hardcoded 5) - TODO stamina?
     boolean canMove( final EconomyHero hero, final Point aPoint )
     {
         if( heroMap.containsKey( aPoint ) )

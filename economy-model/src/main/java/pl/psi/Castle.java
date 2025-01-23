@@ -15,35 +15,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static pl.psi.MapTileIf.TileType.ZAMEK;
+import static pl.psi.MapTileIf.TileType.CASTLE;
 
 public class Castle implements MapTileIf{
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     public static final String OPEN_SHOP= "open_shop";
-
     private static final String imagePath = "economy-gui/src/main/resources/AVXhilg0.png";
 
     @Override
     public TileType getTileType() {
-        return ZAMEK;
+        return CASTLE;
     }
     @Override
     public String getImagePath(){
         return imagePath;
     }
-//
-//    @Override
-//    public ImagePattern getImagePattern() {
-//        File castle = new File("economy-gui/src/main/resources/AVXhilg0.png");
-//        FileInputStream input = null;
-//        try {
-//            input = new FileInputStream(castle);
-//        } catch (
-//                FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return new ImagePattern(new Image(input));
-//    }
 
     public void addObserver(PropertyChangeListener aObserver) {
         observerSupport.addPropertyChangeListener(aObserver);

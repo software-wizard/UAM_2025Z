@@ -16,11 +16,15 @@ public class EconomyTurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
     public static final String NEXT_HERO = "NEXT_HERO";
+    public static final String PLAYER1 = "PLAYER 1";
+    public static final String PLAYER2 = "PLAYER 2";
     private final Collection<EconomyHero> heroes;
     private final Queue<EconomyHero> heroesQueue;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private EconomyHero currentHero;
     private int roundNumber;
+    private EconomyHero player1;
+    private EconomyHero player2;
 
 
 
@@ -31,6 +35,8 @@ public class EconomyTurnQueue {
         initQueue();
         heroes.forEach(observerSupport::addPropertyChangeListener);
         next();
+        player1 = aHero1;
+        player2 = aHero2;
     }
 
     private void initQueue() {
@@ -39,6 +45,15 @@ public class EconomyTurnQueue {
 
     public EconomyHero getCurrentHero() {
         return currentHero;
+    }
+
+    public String getCurrentHeroName() {
+        if (currentHero == player1) {
+            return PLAYER1;
+        }
+        else {
+            return PLAYER2;
+        }
     }
 
     public void next() {

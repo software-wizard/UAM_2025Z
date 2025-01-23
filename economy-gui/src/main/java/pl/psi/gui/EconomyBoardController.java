@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -13,11 +15,13 @@ import javafx.stage.Stage;
 import pl.psi.*;
 import pl.psi.converter.EcoBattleConverter;
 import pl.psi.hero.EconomyHero;
+import pl.psi.resource.Resources;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class EconomyBoardController {
@@ -27,20 +31,36 @@ public class EconomyBoardController {
     private EconomyHero hero2;
     private final EconomyBoardEngine economyBoardEngine;
     private final EconomyTurnQueue economyTurnQueue;
-  //  private final EconomyBoard board;
     private EcoBattleConverter ecoBattleConverter;
     private EconomyShopLoader economyShopLoader;
     @FXML
     private GridPane gridMap;
     @FXML
     private Button passButton;
+    @FXML
+    private Label activeHero;
+    @FXML
+    private Label goldLabel;
+    @FXML
+    private Label goldIcon;
+    @FXML
+    private Label woodLabel;
+    @FXML
+    private Label oreLabel;
+    @FXML
+    private Label mercuryLabel;
+    @FXML
+    private Label sulfurLabel;
+    @FXML
+    private Label crystalLabel;
+    @FXML
+    private Label gemLabel;
 
     public EconomyBoardController(final EconomyHero aHero1, final EconomyHero aHero2) {
 
         economyBoardEngine = new EconomyBoardEngine(aHero1, aHero2);//w tym jest tworzone board
         economyTurnQueue = new EconomyTurnQueue(aHero1, aHero2);
         economyShopLoader = new EconomyShopLoader();
-       // board = new EconomyBoard(aHero1, aHero2);
         hero1 = aHero1;
         hero2 = aHero2;
 
@@ -55,7 +75,6 @@ public class EconomyBoardController {
         economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero()));
         economyBoardEngine.addObjectObserver(goldBuilding,(e)->refreshGui());
         economyBoardEngine.addObjectObserver(necropolisCombatBuilding,(e)->ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), necropolisCombatBuilding.createBattleOpponent()));
-
     }
 
     @FXML
@@ -68,11 +87,6 @@ public class EconomyBoardController {
         });
 
         economyBoardEngine.addObserver((e) -> refreshGui());
-//        if(economyBoardEngine.containsCastle()){
-//            Castle castle = economyBoardEngine.getCastle();
-//            economyBoardEngine.addBuildingObserver(castle,(e) -> economyShopLoader.openShop(economyTurnQueue.getCurrentHero()));
-//        } zamiast tego zmienic to na dodawanie obiektow
-
     }
 
 
@@ -97,6 +111,17 @@ public class EconomyBoardController {
                 economyBoardEngine.getHero(new Point(x, y))
                         .ifPresent(c -> mapTile.setBackground(Color.GREEN));
 
+                activeHero.setText( economyTurnQueue.getCurrentHeroName() );
+
+                goldLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.GOLD)).orElse(0).toString());
+                woodLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.WOOD)).orElse(0).toString());
+                oreLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.ORE)).orElse(0).toString());
+                mercuryLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.MERCURY)).orElse(0).toString());
+                sulfurLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.SULFUR)).orElse(0).toString());
+                crystalLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.CRYSTAL)).orElse(0).toString());
+                gemLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.GEM)).orElse(0).toString());
+
+
                 Optional<MapTileIf> mapObject = economyBoardEngine.getMapTile(new Point(x, y));
                 mapObject.ifPresent(c -> mapTile.setBackgroundImage(getImagePattern(mapObject.get().getImagePath())));
 
@@ -110,17 +135,6 @@ public class EconomyBoardController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> economyBoardEngine.interact(new Point(x1, y1)));
                 }//dla obiektow na mapie
-
-//                if (economyBoardEngine.canEnter(new Point(x, y))) {
-//                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-//                            e -> openShop(economyTurnQueue.getCurrentHero())
-//                    );
-//                }
-//                if (economyBoardEngine.canEnterCombatBuilding(new Point(x, y))) {
-//                    EconomyHero opponent = economyBoardEngine.createCombatBuildingOpponent(new Point(x,y));
-//                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-//                            e -> ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), opponent));
-//                }
 
                 if (economyBoardEngine.canAttack(new Point(x, y))) {
                     mapTile.setBackground(Color.RED);

@@ -1,5 +1,7 @@
 package pl.psi.gui;
 
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import lombok.Getter;
 import pl.psi.*;
 
@@ -13,18 +15,16 @@ public class MainBattleController {
     public int INITIAL_SELECTED_SPELL_IDX = -1;
     private final GameEngine gameEngine;
     @FXML
+    private BorderPane borderPane;
+    @FXML
     private GridPane gridMap;
     @FXML
     private Button passButton;
-
     @FXML
     private Button windowButton;
-
     @FXML
     private VBox sideBarSpells;
-
     private SpellsTab spellsTab;
-
     @Getter
     private SharedState sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui);
 
@@ -50,11 +50,21 @@ public class MainBattleController {
             refreshGui();
         });
 
+        gameEngine.addObserver(e -> {
+            if ("end_battle".equals(e.getPropertyName())) {
+                handleBattleEnd();
+            }
+            if ("dead_creature".equals(e.getPropertyName())){
+                refreshGui();
+            }
+            });
+
         gameEngine.addObserver((e) -> refreshGui());
     }
 
     private void refreshGui() {
         gridMap.getChildren().clear();
+
 
         TileContext tileContext = new TileContext();
         tileContext.addStrategy(new CreatureTileStrategy(gameEngine));
@@ -80,4 +90,11 @@ public class MainBattleController {
     void triggerRefreshGui(){
         refreshGui();
     }
+
+
+    @FXML
+    public void handleBattleEnd() {
+
+    }
+
 }

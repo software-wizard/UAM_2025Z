@@ -36,11 +36,6 @@ public class EconomyBoardEngine {
         return board.getEconomyHero(aPoint);
     }
 
-  //  public Optional<Castle> getCastle(final Point aPoint) {
-   //     return board.getCastle(aPoint);
-  //  }
-
-
     public Optional<MapTileIf> getMapTile(final Point aPoint) {
         return board.getMapTile(aPoint);
     }
@@ -62,18 +57,6 @@ public class EconomyBoardEngine {
                 .isPresent()
                 && distance < 2 && distance > 0;
     }
-//    public boolean canEnter(final Point point) {// przeniesc do Interact
-//        double distance = board.getPosition(economyTurnQueue.getCurrentHero())
-//                .distance(point);
-//        return board.isCastle(point)
-//                && distance < 2 && distance > 0;
-//    }
-//    public boolean canEnterCombatBuilding(final Point point) {// przeniesc do Interact
-//        double distance = board.getPosition(economyTurnQueue.getCurrentHero())
-//                .distance(point);
-//        return board.isCombatBuilding(point)
-//                && distance < 2 && distance > 0;
-//    }
 
 
     public void move(final Point aPoint) {
@@ -90,10 +73,4 @@ public class EconomyBoardEngine {
         board.interact(economyTurnQueue.getCurrentHero(), aPoint);
     }
 
-//    public boolean containsCastle() {
-//        return board.containsCastle();
-//    }
-//    public EconomyHero createCombatBuildingOpponent(Point aPoint){
-//        return board.createCombatBuildingOpponent(aPoint);
-//    }
 }
