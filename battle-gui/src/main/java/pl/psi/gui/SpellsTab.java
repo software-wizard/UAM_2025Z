@@ -4,8 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import pl.psi.GameEngine;
-import pl.psi.Spell;
-import pl.psi.SpellBook;
+import pl.psi.spells.Spell;
 
 import java.util.List;
 

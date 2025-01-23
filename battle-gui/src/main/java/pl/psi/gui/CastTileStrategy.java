@@ -3,9 +3,8 @@ package pl.psi.gui;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import pl.psi.*;
-import pl.psi.creatures.Creature;
-
-import java.util.List;
+import pl.psi.spells.Spell;
+import pl.psi.spells.SpellBook;
 
 public class CastTileStrategy implements TileStrategy {
     private GameEngine gameEngine;

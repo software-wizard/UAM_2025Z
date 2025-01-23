@@ -6,6 +6,8 @@ import java.util.List;
 import pl.psi.creatures.Creature;
 
 import lombok.Getter;
+import pl.psi.spells.Spell;
+import pl.psi.spells.SpellBook;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

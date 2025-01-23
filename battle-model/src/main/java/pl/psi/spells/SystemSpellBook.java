@@ -1,4 +1,4 @@
-package pl.psi;
+package pl.psi.spells;
 
 import java.util.ArrayList;
 

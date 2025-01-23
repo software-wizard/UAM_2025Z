@@ -3,9 +3,6 @@ package pl.psi.spells;
 import com.google.common.collect.Range;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pl.psi.Spell;
-import pl.psi.SpellBook;
-import pl.psi.SpellName;
 import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
@@ -20,7 +17,7 @@ public class SpellBonusTest {
     @Test
     void weakenAttackBonus() {
 
-        Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusName.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell weakenAttack = new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellName.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
 
         SpellBook spellBook = new SpellBook(50, List.of(weakenAttack));
 
@@ -63,9 +60,9 @@ public class SpellBonusTest {
     @Test
     void increasedAttackBonus() {
 
-        Spell extraAttack = new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellBonusName.EXTRA_ATTACK).spellBonusRoundsDuration(2).build();
+        Spell strongerAttack = new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellName.STRONGER_ATTACK).spellBonusRoundsDuration(2).build();
 
-        SpellBook spellBook = new SpellBook(50, List.of(extraAttack));
+        SpellBook spellBook = new SpellBook(50, List.of(strongerAttack));
 
         final Creature creatureWithExtraAttack = new Creature.Builder().statistic(
                         CreatureStats.builder()
@@ -89,7 +86,7 @@ public class SpellBonusTest {
 
         Assertions.assertEquals(5, creatureWithExtraAttack.getAttack());
 
-        spellBook.castSpell(extraAttack, creatureWithExtraAttack);
+        spellBook.castSpell(strongerAttack, creatureWithExtraAttack);
         Assertions.assertEquals(10, creatureWithExtraAttack.getAttack());
 
         creatureWithExtraAttack.attack(creature);

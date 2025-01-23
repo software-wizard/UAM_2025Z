@@ -6,9 +6,8 @@ import pl.psi.*;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-
-import java.util.Objects;
-import java.util.Optional;
+import pl.psi.spells.Spell;
+import pl.psi.spells.SpellBook;
 
 public class CastSplashStrategy implements TileStrategy {
     private final GameEngine gameEngine;
