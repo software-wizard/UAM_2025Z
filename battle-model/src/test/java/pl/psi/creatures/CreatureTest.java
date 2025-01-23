@@ -52,7 +52,7 @@ public class CreatureTest
         board.move(angel, new Point(0, 0));
         board.move(dragon, new Point(1, 0));
         // when
-        angel.attack( dragon );
+        angel.attack( dragon, board );
         // then
         assertThat( dragon.getCurrentHp() ).isEqualTo( 70 );
     }
@@ -83,7 +83,7 @@ public class CreatureTest
         board.move(angel, new Point(0, 0));
         board.move(dragon, new Point(1, 0));
         // when
-        angel.attack( dragon );
+        angel.attack( dragon, board );
         // then
         assertThat( dragon.getCurrentHp() ).isEqualTo( 100 );
     }
@@ -113,7 +113,7 @@ public class CreatureTest
         board.move(attacker, new Point(0, 0));
         board.move(defender, new Point(1, 0));
         // when
-        attacker.attack( defender );
+        attacker.attack( defender, board );
         // then
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
     }
@@ -144,7 +144,7 @@ public class CreatureTest
         board.move(attacker, new Point(0, 0));
         board.move(defender, new Point(1, 0));
         // when
-        attacker.attack( defender );
+        attacker.attack( defender, board );
         // then
         assertThat( attacker.getCurrentHp() ).isEqualTo( 100 );
     }
@@ -176,8 +176,8 @@ public class CreatureTest
         board.move(defender, new Point(1, 0));
 
         // when
-        attacker.attack( defender );
-        attacker.attack( defender );
+        attacker.attack( defender, board );
+        attacker.attack( defender, board );
         // then
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
     }
@@ -206,12 +206,12 @@ public class CreatureTest
         board.move(attacker, new Point(0, 0));
         board.move(defender, new Point(1, 0));
 
-        attacker.attack( defender );
-        attacker.attack( defender );
+        attacker.attack( defender, board );
+        attacker.attack( defender, board );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
         turnQueue.next();
         turnQueue.next();
-        attacker.attack( defender );
+        attacker.attack( defender, board );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 80 );
         // end of turn
     }
@@ -241,7 +241,7 @@ public class CreatureTest
         //wykorzystac stałą, get mozę popsuć
         int initialHp = VampireLord.getCurrentHp();
 
-        VampireLord.attack(dragon);
+        VampireLord.attack(dragon, board);
 
 
         assertThat(VampireLord.getAmount()).isEqualTo(initialAmount);
@@ -265,7 +265,7 @@ public class CreatureTest
 
         int initialAmount = VampireLord.getAmount();
 
-        VampireLord.attack(Zombie);
+        VampireLord.attack(Zombie, board);
 
         assertThat(VampireLord.getAmount()).isLessThan( initialAmount ); // zly zapis -> konkreten wartosci jakich sie spodziewam
         // mozna podejrzec w debugu wartosc
@@ -301,7 +301,7 @@ public class CreatureTest
         final TurnQueue turnQueue =
             new TurnQueue( List.of( attacker ), List.of( selfHealAfterEndOfTurnCreature ) );
 
-        attacker.attack( selfHealAfterEndOfTurnCreature );
+        attacker.attack( selfHealAfterEndOfTurnCreature, board);
         assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 90 );
         turnQueue.next();
         turnQueue.next();
@@ -337,14 +337,17 @@ public class CreatureTest
         List< Creature > c1 = List.of( Lich );
         List< Creature > c2 = List.of( Skeleton );
         Board board = new Board(c1, c2);
+        //GameEngine gameEngine = new GameEngine(board);
 
         //odleglosc miedzy 1 a 10 zapewni pelny dmg bez zadnych kar:
         board.move(Lich, new Point(0, 0));
         board.move(Skeleton, new Point(9, 0));
+        Point sourcePoint = board.getPosition(Lich);
+        Point targetPoint = board.getPosition(Skeleton);
 
         //czy zadamy pelne obrazenia:
         int fullDmg = 30;
-        int dealtDmg = Lich.getCalculator().calculateDamage(Lich, Skeleton);
+        int dealtDmg = Lich.getCalculator().calculateDamage(Lich, Skeleton,sourcePoint,targetPoint );
         assertThat(dealtDmg).isEqualTo(fullDmg);
     }
 
@@ -384,9 +387,11 @@ public class CreatureTest
         //ustaw pozycje licha tak by był zaraz obok celu:
         board.move(Lich, new Point(0, 0));
         board.move(Skeleton, new Point(1, 0));
+        Point sourcePoint = board.getPosition(Lich);
+        Point targetPoint = board.getPosition(Skeleton);
 
         int damageWithoutPenalty = 30;
-        int dealtDamage = Lich.getCalculator().calculateDamage(Lich, Skeleton);
+        int dealtDamage = Lich.getCalculator().calculateDamage(Lich, Skeleton, sourcePoint, targetPoint );
 
         assertThat(dealtDamage).isEqualTo((int) (damageWithoutPenalty*0.5));
     }
@@ -423,9 +428,11 @@ public class CreatureTest
         Board board = new Board(c1, c2);
         board.move(Lich, new Point(0, 0));
         board.move(Skeleton, new Point(11, 0));
+        Point sourcePoint = board.getPosition(Lich);
+        Point targetPoint = board.getPosition(Skeleton);
 
         int damageWithoutPenalty = 30;
-        int dealtDamage = Lich.getCalculator().calculateDamage(Lich, Skeleton);
+        int dealtDamage = Lich.getCalculator().calculateDamage(Lich, Skeleton, sourcePoint, targetPoint );
 
         assertThat(dealtDamage).isEqualTo((int) (damageWithoutPenalty*0.5));
     }
@@ -467,10 +474,11 @@ public class CreatureTest
         board.move(Lich, new Point(0, 0));
         board.move(Skeleton1, new Point(9, 0));
         board.move(Skeleton2, new Point(9, 1));
-
+/*        Point sourcePoint = board.getPosition(Lich);
+        Point targetPoint = board.getPosition(Skeleton1);*/
 
         Skeleton2.setCurrentHp(30);
-        Lich.attack(Skeleton1);
+        Lich.attack(Skeleton1, board);
         int skeleton2Hp = Skeleton2.getCurrentHp();
         assertThat(skeleton2Hp).isLessThan(30);
 
@@ -504,9 +512,11 @@ public class CreatureTest
         Board board = new Board(c1, c2);
         board.move(dreadKnight, new Point(0, 0));
         board.move(Skeleton1, new Point(1, 0));
+/*        Point sourcePoint = board.getPosition(dreadKnight);
+        Point targetPoint = board.getPosition(Skeleton1);*/
 
         Skeleton1.setCurrentHp(30);
-        dreadKnight.attack(Skeleton1);
+        dreadKnight.attack(Skeleton1, board);
         int skeleton1Hp = Skeleton1.getCurrentHp();
         assertThat(skeleton1Hp).isLessThan(30);
     }
@@ -537,9 +547,11 @@ public class CreatureTest
         Board board = new Board(c1, c2);
         board.move(vampire, new Point(0, 0));
         board.move(Skeleton1, new Point(1, 0));
+/*        Point sourcePoint = board.getPosition(vampire);
+        Point targetPoint = board.getPosition(Skeleton1);*/
 
         vampire.setCurrentHp(5);
-        vampire.attack(Skeleton1);
+        vampire.attack(Skeleton1, board);
 
         assertEquals(1, vampire.getAmount());
 

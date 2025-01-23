@@ -3,6 +3,7 @@ package pl.psi.creatures;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStatistic;
 
+
 public class NecropolisFactory
 {
 
@@ -107,7 +108,7 @@ public class NecropolisFactory
                             .amount(aAmount)
                             .build();
 
-                    return new ChanceToDoubleDamageCreature(
+                    return new ChanceToCastSpellCreature(
                             dreadKnight.getStats(),
                             null,
                             dreadKnight.getAmount()
