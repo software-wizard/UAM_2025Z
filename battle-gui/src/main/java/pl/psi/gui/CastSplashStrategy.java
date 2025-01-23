@@ -6,8 +6,12 @@ import pl.psi.*;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import pl.psi.creatures.Creature;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellBook;
+import pl.psi.spells.SpellName;
+
+import java.util.List;
 
 public class CastSplashStrategy implements TileStrategy {
     private final GameEngine gameEngine;
@@ -24,17 +28,31 @@ public class CastSplashStrategy implements TileStrategy {
                 sharedState.getSelectedSpellIdx() > 0
         ) {
             SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-            Spell splashSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx());
-            mapTile.setBackground(Color.LIGHTPINK);
-            int radius = splashSpell.getRadius();
-            mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> highlightRadius(point, true, radius));
-            mapTile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> highlightRadius(point, false, radius));
+            Spell selectedSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx());
+            if (selectedSpell.getName().equals(SpellName.SPLASH_ATTACK)) {
+                Spell splashSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx());
+                mapTile.setBackground(Color.LIGHTPINK);
+                int radius = splashSpell.getRadius();
+                mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
+                    mapTile.setBackground(Color.PURPLE);
+                    highlightRadius(point, true, radius);
+                });
+                mapTile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
+                    mapTile.setBackground(Color.LIGHTPINK);
+                    highlightRadius(point, false, radius);
+                });
 
-           mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                splashSpell.castSplashSpell(point, gameEngine);
-                sharedState.resetSelectedSpellIdx();
-                sharedState.refreshGui();
-            });
+               mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                    List<Creature> targets = splashSpell.getCreaturesInRadius(point, gameEngine);
+                    if (targets.size() > 0) {
+                        for (Creature creature : targets) {
+                            spellBook.castSpell(splashSpell, creature);
+                            sharedState.resetSelectedSpellIdx();
+                            sharedState.refreshGui();
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -46,7 +64,7 @@ public class CastSplashStrategy implements TileStrategy {
                 Point targetPoint = new Point( centerX + dx, centerY + dy);
                 MapTile theMapTile = this.getGridMapTile(sharedState.getGridPane(), targetPoint);
                 if (theMapTile != null) {
-                    theMapTile.setBackground(highlight ? Color.LIGHTBLUE : Color.BLUE);
+                    theMapTile.setBackground(highlight ? Color.LIGHTBLUE : Color.WHITE);
                 }
             }
         }

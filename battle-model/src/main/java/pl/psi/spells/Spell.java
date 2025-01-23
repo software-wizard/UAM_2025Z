@@ -5,6 +5,9 @@ import pl.psi.GameEngine;
 import pl.psi.Point;
 import pl.psi.creatures.Creature;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 public class Spell {
     private final SpellName name;
@@ -80,16 +83,19 @@ public class Spell {
         );
     }
 
-    public void castSplashSpell(Point aTargetPoint, GameEngine aGameEngine) { // lista terget pointów i polimorfizm lub przekazanie jednej metody
+    public List<Creature> getCreaturesInRadius(Point aTargetPoint, GameEngine aGameEngine) { // lista terget pointów i polimorfizm lub przekazanie jednej metody
+        List<Creature> targets = new ArrayList<>();
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
                 Point targetPoint = new Point(aTargetPoint.getX() + dx, aTargetPoint.getY() + dy);
                 if (aGameEngine.getCreature(targetPoint).isPresent()) {
                     Creature target = aGameEngine.getCreature(targetPoint).get();
-                    target.applyMagicDamage(damage);
+//                    target.applyMagicDamage(damage);
+                    targets.add(target);
                 }
             }
         }
+        return targets;
     }
 
     @Override
