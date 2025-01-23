@@ -7,7 +7,6 @@ import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.building.shop.EconomyBuildingShop;
-import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
@@ -44,7 +43,7 @@ class TownTest {
         Resources resources = Resources.builder()
                 .resource(Resources.Type.GOLD, 100)
                 .build();
-        hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, resources);
+        hero = new EconomyHero("A", EconomyHero.Fraction.NECROPOLIS, resources);
         building = Mockito.mock(EconomyBuilding.class);
         town = Town.builder()
                 .buildings(Map.of())
@@ -79,7 +78,9 @@ class TownTest {
     @Test
     void should_find_building_in_town() {
         // GIVEN
-        town.getBuildings().put(buildingName, building);
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
 
         // WHEN
         Optional<EconomyBuilding> buildingByName = town.findBuildingByName(buildingName);
@@ -92,7 +93,9 @@ class TownTest {
     @Test
     void should_check_if_building_is_built_in_town() {
         // GIVEN
-        town.getBuildings().put(buildingName, building);
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
 
         // WHEN
         boolean buildingAlreadyBuilt = town.isBuildingAlreadyBuilt(buildingName);
@@ -104,7 +107,9 @@ class TownTest {
     @Test
     void should_upgrade_building() {
         // GIVEN
-        town.getBuildings().put(buildingName, building);
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
 
         // WHEN
         UpgradableBuilding upgradedBuilding = town.upgradeBuilding(hero, buildingName);
@@ -117,7 +122,9 @@ class TownTest {
     @Test
     void should_throw_exception_when_building_already_built() {
         // GIVEN
-        town.getBuildings().put(buildingName, building);
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
 
         // WHEN && THEN
         assertThatThrownBy(() -> town.buildBuilding(hero, buildingName))
@@ -144,20 +151,52 @@ class TownTest {
     void should_handle_payment_rollback_on_failure() {
         // GIVEN
         EconomyBuildingShop buildingShop = Mockito.mock(EconomyBuildingShop.class);
-        town = Town.builder()
-                .buildings(Map.of())
+        town = town.toBuilder()
                 .economyBuildingShop(buildingShop)
-                .name(buildingName)
-                .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();
 
         // WHEN
-        when(buildingShop.buyBuilding(hero, buildingName)).thenThrow(new RuntimeException("Payment failed"));
+        when(buildingShop.buyBuilding(hero, buildingName))
+                .thenThrow(new RuntimeException("Payment failed"));
 
         // THEN
         assertThatThrownBy(() -> town.buildBuilding(hero, buildingName))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Payment failed");
         assertThat(town.getBuildings().size()).isEqualTo(0);
+    }
+
+    @Test
+    void should_return_true_if_building_is_built() {
+        // GIVEN
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
+
+        // WHEN && THEN
+        assertThat(town.isBuildingAlreadyBuilt(buildingName)).isTrue();
+    }
+
+    @Test
+    void should_return_false_if_building_is_not_built() {
+        // GIVEN && WHEN && THEN
+        assertThat(town.isBuildingAlreadyBuilt(buildingName)).isFalse();
+    }
+
+    @Test
+    void should_return_true_if_town_contains_given_buildings() {
+        // GIVEN
+        town = town.toBuilder()
+                .buildings(Map.of(buildingName, building))
+                .build();
+
+        // WHEN && THEN
+        assertThat(town.containsBuildings(List.of(buildingStatistic))).isTrue();
+    }
+
+    @Test
+    void should_return_false_if_town_doesnt_contain_given_buildings() {
+        // GIVEN && WHEN && THEN
+        assertThat(town.containsBuildings(List.of(buildingStatistic))).isFalse();
     }
 }

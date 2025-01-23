@@ -17,12 +17,14 @@ public class EconomyBoardTest {
     @BeforeEach
     void init() {
         hero1 = new EconomyHero(
+                "A",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 3000)
                         .build()
         );
         hero2 = new EconomyHero(
+                "B",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 2000)

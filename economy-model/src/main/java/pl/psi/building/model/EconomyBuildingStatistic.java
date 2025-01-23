@@ -6,7 +6,7 @@ import pl.psi.resource.Resources;
 
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 public record EconomyBuildingStatistic(
         String name,
         Type type,

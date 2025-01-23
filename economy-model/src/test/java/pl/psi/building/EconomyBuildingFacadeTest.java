@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import pl.psi.building.factory.EconomyBuildingAbstractFactory;
 import pl.psi.building.factory.EconomyBuildingFactory;
+import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
+import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
@@ -14,8 +16,8 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static pl.psi.resource.Resources.Type.GOLD;
 
 class EconomyBuildingFacadeTest {
@@ -25,7 +27,7 @@ class EconomyBuildingFacadeTest {
 
     @BeforeEach
     void setUp() {
-        abstractFactory = Mockito.mock(EconomyBuildingAbstractFactory.class);
+        abstractFactory = mock(EconomyBuildingAbstractFactory.class);
         this.economyBuildingFacade = new EconomyBuildingFacade(abstractFactory);
     }
 
@@ -34,12 +36,13 @@ class EconomyBuildingFacadeTest {
         // GIVEN
         var buildingName = "test";
         var buyer = new EconomyHero(
+                "A",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)
                         .build()
         );
-        var town = Mockito.mock(Town.class);
+        var town = mock(Town.class);
 
         // WHEN
         economyBuildingFacade.buildBuilding(buyer, town, buildingName);
@@ -51,12 +54,13 @@ class EconomyBuildingFacadeTest {
     @Test
     void should_throw_exception_when_building_name_is_blank() {
         var buyer = new EconomyHero(
+                "B",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)
                         .build()
         );
-        var town = Mockito.mock(Town.class);
+        var town = mock(Town.class);
 
         assertThatThrownBy(() -> economyBuildingFacade.buildBuilding(buyer, town, ""))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -70,7 +74,7 @@ class EconomyBuildingFacadeTest {
                 .name(buildingName)
                 .build();
 
-        var factory = Mockito.mock(EconomyBuildingFactory.class);
+        var factory = mock(EconomyBuildingFactory.class);
         when(factory.getAllAvailableBuildingsToBuild()).thenReturn(Set.of(statistic));
 
         when(abstractFactory.getAllFactories(fraction)).thenReturn(Set.of(factory));
@@ -101,7 +105,7 @@ class EconomyBuildingFacadeTest {
                 .type(type)
                 .build();
 
-        var factory = Mockito.mock(EconomyBuildingFactory.class);
+        var factory = mock(EconomyBuildingFactory.class);
         when(factory.getAllAvailableBuildingsToBuild()).thenReturn(Set.of(statistic));
 
         when(abstractFactory.getAllFactories(fraction)).thenReturn(Set.of(factory));
@@ -121,5 +125,67 @@ class EconomyBuildingFacadeTest {
         var result = economyBuildingFacade.getAllAvailableBuildingsToBuild(type, fraction);
 
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    void isBuildingUpgradable_shouldReturnTrueForUpgradableBuilding() {
+        // GIVEN
+        EconomyBuilding upgradableBuilding = mock(UpgradableBuilding.class);
+
+        // WHEN
+        boolean result = economyBuildingFacade.isBuildingUpgradable(upgradableBuilding);
+
+        // THEN
+        assertTrue(result, "Expected building to be upgradable");
+    }
+
+    @Test
+    void isBuildingUpgradable_shouldReturnFalseForNonUpgradableBuilding() {
+        // GIVEN
+        EconomyBuilding nonUpgradableBuilding = mock(EconomyBuilding.class);
+
+        // WHEN
+        boolean result = economyBuildingFacade.isBuildingUpgradable(nonUpgradableBuilding);
+
+        // THEN
+        assertFalse(result, "Expected building to not be upgradable");
+    }
+
+    @Test
+    void upgradeBuilding_shouldUpgradeBuildingSuccessfully() {
+        // GIVEN
+        Town town = mock(Town.class);
+        EconomyHero buyer = mock(EconomyHero.class);
+        String buildingToUpgrade = "Cursed_Temple";
+
+        UpgradableBuilding upgradedBuilding = mock(UpgradableBuilding.class);
+        when(town.upgradeBuilding(buyer, buildingToUpgrade)).thenReturn(upgradedBuilding);
+
+        // WHEN
+        UpgradableBuilding result = economyBuildingFacade.upgradeBuilding(town, buyer, buildingToUpgrade);
+
+        // THEN
+        assertNotNull(result, "Upgraded building should not be null");
+        assertEquals(upgradedBuilding, result, "Expected the upgraded building to match the mock result");
+        verify(town, times(1)).upgradeBuilding(buyer, buildingToUpgrade);
+    }
+
+    @Test
+    void upgradeBuilding_shouldThrowExceptionIfBuildingCannotBeUpgraded() {
+        // GIVEN
+        Town town = mock(Town.class);
+        EconomyHero buyer = mock(EconomyHero.class);
+        String buildingToUpgrade = "Non_Existent_Building";
+
+        when(town.upgradeBuilding(buyer, buildingToUpgrade)).thenThrow(new IllegalArgumentException("Cannot upgrade building"));
+
+        // WHEN & THEN
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> economyBuildingFacade.upgradeBuilding(town, buyer, buildingToUpgrade),
+                "Expected upgradeBuilding to throw an exception"
+        );
+
+        assertEquals("Cannot upgrade building", exception.getMessage(), "Exception message does not match");
     }
 }

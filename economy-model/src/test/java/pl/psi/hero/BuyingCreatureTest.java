@@ -21,6 +21,7 @@ public class BuyingCreatureTest
     void init()
     {
         hero1 = new EconomyHero(
+                "A",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder().resource(GOLD, 1000).build()
         );
@@ -32,7 +33,7 @@ public class BuyingCreatureTest
     {
         economyEngine.buy( creatureFactory.create( false, 1, 1 ) );
 
-        assertEquals( 940, hero1.getResourceAmount(GOLD) );
+        assertEquals( 950, hero1.getResourceAmount(GOLD) );
     }
 
     @Test
@@ -40,7 +41,7 @@ public class BuyingCreatureTest
     {
         economyEngine.buy( creatureFactory.create( false, 1, 2 ) );
 
-        assertEquals( 880, hero1.getResourceAmount(GOLD) );
+        assertEquals( 900, hero1.getResourceAmount(GOLD) );
     }
 
     @Test
@@ -49,13 +50,13 @@ public class BuyingCreatureTest
         economyEngine.buy( creatureFactory.create( false, 1, 2 ) );
         economyEngine.buy( creatureFactory.create( true, 2, 2 ) );
 
-        assertEquals( 630, hero1.getResourceAmount(GOLD) );
+        assertEquals( 650, hero1.getResourceAmount(GOLD) );
     }
 
     @Test
     void heroCannotBuyCreatureWhenHasNotEnoughtGold()
     {
-        assertThrows( IllegalStateException.class,
+        assertThrows( IllegalArgumentException.class,
             () -> economyEngine.buy( creatureFactory.create( false, 1, 100 ) ) );
         assertEquals( 1000, hero1.getResourceAmount(GOLD) );
         assertEquals( 0, hero1.getCreatures()
@@ -75,8 +76,8 @@ public class BuyingCreatureTest
         assertThrows( IllegalStateException.class,
             () -> economyEngine.buy( creatureFactory.create( false, 1, 1 ) ) );
 
-        assertEquals( 580, hero1.getResourceAmount(GOLD) );
-        assertEquals( 7, hero1.getCreatures()
+        assertEquals( 650, hero1.getResourceAmount(GOLD) );
+        assertEquals( 1, hero1.getCreatures()
             .size() );
     }
 }

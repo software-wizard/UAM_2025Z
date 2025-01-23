@@ -24,6 +24,7 @@ class EconomyEngineTest
     void init()
     {
         h1 = new EconomyHero(
+                "A",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)

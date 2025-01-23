@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.resource.Resources;
 
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CreatureDwellingsBuildingTest {
@@ -29,7 +27,7 @@ class CreatureDwellingsBuildingTest {
 
         building = new CreatureDwellingsBuilding(
                 statistic,
-                Set.of("Creature A", "Creature B"),
+                1,
                 upgradeCost,
                 costPerWeek
         );
@@ -48,19 +46,19 @@ class CreatureDwellingsBuildingTest {
     }
 
     @Test
-    void shouldReturnCorrectCostPerWeek() {
+    void should_return_correct_cost_per_week() {
         // GIVEN && WHEN && THEN
         assertThat(building.getCostPerWeek()).isEqualTo(costPerWeek);
     }
 
     @Test
-    void shouldStartAsNotUpgraded() {
+    void should_start_as_not_upgraded() {
         // GIVEN && WHEN && THEN
         assertThat(building.isUpgraded()).isFalse();
     }
 
     @Test
-    void shouldUpgradeBuilding() {
+    void should_upgrade_building() {
         // GIVEN && WHEN
         building.upgrade();
 
@@ -69,8 +67,8 @@ class CreatureDwellingsBuildingTest {
     }
 
     @Test
-    void shouldReturnCorrectCreatureNames() {
+    void should_return_correct_creature_names() {
         // GIVEN && WHEN && THEN
-        assertThat(building.getCreatureNames()).containsExactlyInAnyOrder("Creature A", "Creature B");
+        assertThat(building.getCreatureTier()).isEqualTo(1);
     }
 }
