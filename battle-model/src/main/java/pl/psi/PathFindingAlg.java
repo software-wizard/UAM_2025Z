@@ -115,8 +115,8 @@ public class PathFindingAlg
         int width = board.getWidth();
         int height = board.getHeight();
 
-        return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height
-                && (board.getSpecialTile(point) == null || board.getSpecialTile(point).isPassable() && !isOccupied(point));
+        return (point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height
+                && !isOccupied(point)) && ((board.getSpecialTile(point) == null  || board.getSpecialTile(point).isPassable()));
     }
 
 
