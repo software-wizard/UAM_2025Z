@@ -4,9 +4,11 @@ import pl.psi.GameEngine;
 import pl.psi.Point;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import pl.psi.creatures.Creature;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MoveTileStrategy implements TileStrategy {
     private GameEngine gameEngine;
@@ -28,10 +30,10 @@ public class MoveTileStrategy implements TileStrategy {
         if (sharedState.getSelectedSpellIdx() == -1)
         {
             mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                showMoveRadius(point, Color.LIGHTGRAY);
                 if (currentPath == null)
                 {
                     if (gameEngine.canMove(point)) {
-
                         currentPath = gameEngine.getPath(point);
                         //sharedState.refreshGui();
                         showPathOnScreen(currentPath, Color.GREY);
@@ -47,6 +49,7 @@ public class MoveTileStrategy implements TileStrategy {
                     }
                     showPathOnScreen(currentPath, Color.WHITE);
                     currentPath = null;
+                    sharedState.refreshGui();
                 }
 
             });
@@ -71,4 +74,27 @@ public class MoveTileStrategy implements TileStrategy {
         }
 
     }
+
+    private void showMoveRadius(Point point, Color color)
+    {
+        List<Point> moveRadius = gameEngine.getMoveRadius(point);
+        for (Point p : moveRadius)
+        {
+            MapTile tile = tileContext.getTile(p);
+            if (tile != null)
+            {
+
+                tile.setBackground(color);
+
+
+            }
+
+
+        }
+
+    }
+
+
+
+
 }

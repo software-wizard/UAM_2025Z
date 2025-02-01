@@ -73,6 +73,33 @@ public class GameEngine {
         return path;
     }
 
+    public List<Point> getMoveRadius(Point creaturePosition)
+    {
+        int x = creaturePosition.getX();
+        int y = creaturePosition.getY();
+
+        List<Point> moveRadius = new ArrayList<>();
+        Optional<Creature> creature = getCreature(creaturePosition);
+
+
+        if (creature.isEmpty()){return List.of();}
+        int moveRange = creature.get().getMoveRange();
+
+        for (int dx = -moveRange; dx <= moveRange; dx++)
+        {
+            for (int dy = -moveRange; dy <= moveRange; dy++){
+                Point p = new Point(x + dx, y + dy);
+
+                if (isValidMove(p) && canMove(p) && board.getSpecialTile(p) == null) {
+                    moveRadius.add(p);
+                }
+            }
+        }
+
+        return moveRadius;
+    }
+
+
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
     }
@@ -128,5 +155,16 @@ public class GameEngine {
 
     public boolean isOccupied(Point point) {
         return board.getCreature(point).isPresent();
+    }
+
+    public boolean isValidMove(Point point) {
+        return !isOccupied(point) && isWithinBounds(point);
+    }
+
+    public boolean isWithinBounds(Point point) {
+        int width = board.getWidth();
+        int height = board.getHeight();
+
+        return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height;
     }
 }

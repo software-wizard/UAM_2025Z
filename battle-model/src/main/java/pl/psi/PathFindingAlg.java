@@ -35,7 +35,7 @@ public class PathFindingAlg
 
                 if (path.size() - 1 > moveRange)
                 {
-                    System.out.println("Not enough speed to reach this target!");
+                    //System.out.println("Not enough speed to reach this target!");
                     return Collections.emptyList();
                 }
                 return path;
