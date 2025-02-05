@@ -20,6 +20,7 @@ import com.google.common.collect.Range;
 
 import lombok.Getter;
 import pl.psi.spells.AppliedSpell;
+import pl.psi.spells.SpellBonus;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -78,12 +79,18 @@ public class Creature implements PropertyChangeListener {
                 break;
             case ATTACK:
                 for(AppliedSpell appliedSpell : appliedSpells){
-                    bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
+                    SpellBonus spellBonus = appliedSpell.getSpell().getSpellBonus();
+                    if (spellBonus != null) {
+                        bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
+                    }
                 }
                 break;
             case MOVE_RANGE:
                 for(AppliedSpell appliedSpell : appliedSpells){
-                    bonus += appliedSpell.getSpell().getSpellBonus().getMoveRange();
+                    SpellBonus spellBonus = appliedSpell.getSpell().getSpellBonus();
+                        if (spellBonus != null) {
+                            bonus += spellBonus.getMoveRange();
+                        }
                 }
                 break;
             default:

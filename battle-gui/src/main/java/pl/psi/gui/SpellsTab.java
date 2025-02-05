@@ -32,7 +32,10 @@ public class SpellsTab {
 
             for(int i = 0; i < heroSpells.size(); i++){
                 Spell spell = heroSpells.get(i);
-                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost());
+                if (spell.getRadius() > 0) {
+
+                }
+                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost() + ((spell.getRadius() > 0) ? ("\nRadius: " + spell.getRadius()) : ""));
                 button.setPrefWidth(104);
                 button.setFocusTraversable(false);
                 int finalI = i;

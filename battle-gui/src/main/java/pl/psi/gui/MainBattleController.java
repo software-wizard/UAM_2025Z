@@ -55,6 +55,7 @@ public class MainBattleController {
     }
 
     private void refreshGui() {
+//        sharedState.getGridPane().getChildren().clear();
         gridMap.getChildren().clear();
 
         ColorTile colorTile = new ColorTile(gameEngine, sharedState);
@@ -67,6 +68,7 @@ public class MainBattleController {
 
                 colorTile.applyStrategies(mapTile, new Point(x,y));
 
+//                sharedState.getGridPane().add(mapTile, x, y);
                 gridMap.add(mapTile, x, y);
             }
         }
