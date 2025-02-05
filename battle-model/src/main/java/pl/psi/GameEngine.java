@@ -1,23 +1,29 @@
 package pl.psi;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import pl.psi.creatures.Creature;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class GameEngine {
+public class GameEngine implements PropertyChangeListener{
 
     public static final String CREATURE_MOVED = "CREATURE_MOVED";
     private final TurnQueue turnQueue;
     private final Board board;
+    private final Hero aHero1;
+    private final Hero aHero2;
+    private final Collection<Creature> creatures;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
-
     private final List<Hero> heroes = new ArrayList<>();
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
@@ -25,6 +31,11 @@ public class GameEngine {
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
         heroes.add(aHero1);
         heroes.add(aHero2);
+        this.aHero1 = aHero1;
+        this.aHero2 = aHero2;
+        creatures = Stream.concat(aHero1.getCreatures().stream(), aHero2.getCreatures().stream())
+                .collect(Collectors.toList());
+        creatures.forEach(creature -> creature.addObserver(this));
     }
 
     public void attack(final Point point) {
@@ -47,10 +58,10 @@ public class GameEngine {
         return board.getCreature(aPoint);
     }
 
-    public Hero getCurrentHero(){
+    public Hero getCurrentHero() {
         Creature currentCreature = turnQueue.getCurrentCreature();
-        for(Hero hero : heroes){
-            if(hero.getCreatures().contains(currentCreature)){
+        for (Hero hero : heroes) {
+            if (hero.getCreatures().contains(currentCreature)) {
                 return hero;
             }
         }
@@ -80,5 +91,32 @@ public class GameEngine {
 
     public Tile getTile(Point point) {
         return board.getSpecialTile(point);
+    }
+
+    public void checkIfBattleIsOver(Hero aHero1, Hero aHero2) {
+            if(aHero1.getCreatures().isEmpty()) {
+                System.out.println("End Battle");
+                observerSupport.firePropertyChange("end_battle", false, true);
+            }
+            if(aHero2.getCreatures().isEmpty()) {
+                System.out.println("End Battle");
+                observerSupport.firePropertyChange("end_battle", false, true);
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if("dead".equals(evt.getPropertyName())){
+            Creature deadCreature = (Creature) evt.getSource();
+            turnQueue.next();
+            turnQueue.removeCreature(deadCreature);
+            board.removeCreature(deadCreature);
+            for (Hero hero : heroes) {
+                if (hero.getCreatures().contains(deadCreature)) {
+                    hero.removeCreature(deadCreature);
+                }
+            }
+            checkIfBattleIsOver(aHero1, aHero2);
+        }
     }
 }

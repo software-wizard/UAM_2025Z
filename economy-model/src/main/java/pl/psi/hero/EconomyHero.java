@@ -11,12 +11,13 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 @Getter
-public class EconomyHero implements PropertyChangeListener, MapTileIf
+public class EconomyHero implements PropertyChangeListener
 {
     private final String name;
     private final Fraction fraction;
     private final Map<String, EconomyCreature> creatures;
     private final Resources resources;
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
 
     public EconomyHero(final String aName, final Fraction aFraction, final Resources aResources )
     {

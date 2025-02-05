@@ -6,8 +6,7 @@ import pl.psi.hero.EconomyHero;
 
 import java.util.Optional;
 
-import static pl.psi.MapTileIf.TileType.NECROPOLIS_COMBAT_BUILDING;
-import static pl.psi.MapTileIf.TileType.ZAMEK;
+import static pl.psi.MapTileIf.TileType.*;
 
 public class EconomyBoard {
 
@@ -16,25 +15,24 @@ public class EconomyBoard {
 
     private final BiMap<Point,MapTileIf> boardObjectsMap = HashBiMap.create();
 
-    public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2 )
+    private void removeGoldBuilding(MapTileIf goldBuilding){
+        if(boardObjectsMap.containsValue(goldBuilding)){
+            boardObjectsMap.inverse()
+                    .remove(goldBuilding);
+        }
+    }
+
+    public EconomyBoard(final EconomyHero hero1, final EconomyHero hero2)
     {
         addHeroes( hero1, 0 );
         addHeroes( hero2, MAX_WITDH );
-        addObjectsToBoard();
+        //addObjectsToBoard();
     }
-
-    private void addObjectsToBoard(){
-        MapTileIf castle = new Castle();
-        Point castleCoords = new Point(5,5);
-        boardObjectsMap.put(castleCoords,castle);
-
-        MapTileIf goldBuilding = new GoldBuilding();
-        Point goldBuildingCoords = new Point(4,3);
-        boardObjectsMap.put(goldBuildingCoords,goldBuilding);
-
-        MapTileIf necropolisCombatBuilding = new NecropolisCombatBuilding();
-        Point necComCoord = new Point(7,6);
-        boardObjectsMap.put(necComCoord,necropolisCombatBuilding);
+    public void addBuildingToBoard(Point buildingCoord,MapTileIf building){
+            boardObjectsMap.put(buildingCoord,building);
+            if(building.getTileType()==GOLD_BUILDING){
+                building.addObserver((e)->removeGoldBuilding(building));
+            }
     }
 
     private void addHeroes( final EconomyHero hero, final int aPosition )
@@ -51,7 +49,7 @@ public class EconomyBoard {
     {
         if(getMapTile(aPoint).isPresent()){
             MapTileIf maybeCastle = boardObjectsMap.get(aPoint);
-            return maybeCastle.getTileType() == ZAMEK;
+            return maybeCastle.getTileType() == CASTLE;
         }
         return false;
     }
@@ -106,7 +104,6 @@ public class EconomyBoard {
 
     }
 
-    // na razie hero ma range poruszania się (hardcoded 5) - TODO stamina?
     boolean canMove( final EconomyHero hero, final Point aPoint )
     {
         if( heroMap.containsKey( aPoint ) )

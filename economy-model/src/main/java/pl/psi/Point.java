@@ -19,6 +19,13 @@ public class Point
         return distance( aPoint.getX(), aPoint.getY() );
     }
 
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
     public double distance( double px, double py )
     {
         px -= getX();

@@ -43,6 +43,10 @@ public class Board
         }
     }
 
+    public void removeCreature(Creature creature){
+            map.inverse().remove(creature);
+    }
+
 Optional< Creature > getCreature( final Point aPoint )
     {
         return Optional.ofNullable( map.get( aPoint ) );
