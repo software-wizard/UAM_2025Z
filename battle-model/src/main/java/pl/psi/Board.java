@@ -132,5 +132,11 @@ public Optional< Creature > getCreature(final Point aPoint)
     public Tile getSpecialTile(Point point) {
         return specialTiles.get(point);
     }
+
+
+    //metoda bardziej pod testy, aby losowo generowane przeszkody nie psuły scenariuszy testowych:
+    public void removeSpecialTiles() {
+        this.specialTiles.clear();
+    }
 }
 

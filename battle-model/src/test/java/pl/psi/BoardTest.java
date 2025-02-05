@@ -22,7 +22,8 @@ class BoardTest
         final List< Creature > c1 = List.of( creature );
         final List< Creature > c2 = List.of();
         final Board board = new Board( c1, c2 );
-
+        //usun pola specjalne - aby losowe przeszkody nie psuły testów:
+        board.removeSpecialTiles();
         board.move( creature, new Point( 3, 3 ) );
 
         assertThat( board.getCreature( new Point( 3, 3 ) )
@@ -36,14 +37,12 @@ class BoardTest
                         .moveRange( 10 )
                         .build() )
                 .build();
-        final Creature creature2 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
-                        .build() )
-                .build();
         final List< Creature > c1 = List.of( creature1 );
-        final List< Creature > c2 = List.of(creature2);
+        final List< Creature > c2 = List.of();
 
         final Board board = new Board( c1, c2 );
+        //usun pola specjalne - aby losowe przeszkody nie psuły testów:
+        board.removeSpecialTiles();
         PathFindingAlg alg = new PathFindingAlg(board);
 
         Point startPoint = new Point(0, 1);
@@ -63,14 +62,12 @@ class BoardTest
                         .moveRange( 10 )
                         .build() )
                 .build();
-        final Creature creature2 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
-                        .build() )
-                .build();
         final List< Creature > c1 = List.of( creature1 );
-        final List< Creature > c2 = List.of(creature2);
+        final List< Creature > c2 = List.of();
 
         final Board board = new Board( c1, c2 );
+        //usun pola specjalne - aby losowe przeszkody nie psuły testów:
+        board.removeSpecialTiles();
         PathFindingAlg alg = new PathFindingAlg(board);
 
         Point startPoint = new Point(0, 1);
@@ -88,38 +85,23 @@ class BoardTest
     void shouldAvoidObstacles()
     {
         final Creature creature1 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
+                        .moveRange( 15 )
                         .build() )
                 .build();
 
-        Creature blockingCreature = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
-                        .build() )
-                .build();
-        Creature blockingCreature2 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
-                        .build() )
-                .build();
-        Creature blockingCreature3 = new Creature.Builder().statistic( CreatureStats.builder()
-                        .moveRange( 10 )
-                        .build() )
-                .build();
-
-        final List< Creature > c1 = List.of( blockingCreature, blockingCreature2, blockingCreature3 );
+        final List< Creature > c1 = List.of( creature1 );
         final List< Creature > c2 = List.of();
         final Board board = new Board( c1, c2 );
-        PathFindingAlg alg = new PathFindingAlg(board);
+        board.removeSpecialTiles();
 
         Point startPoint = new Point(0, 1);
         Point endPoint = new Point( 3, 4);
 
-/*        board.move(blockingCreature, new Point(2, 2));
-        board.move(blockingCreature2, new Point(2, 3));
-        board.move(blockingCreature3, new Point(2, 4));*/
         board.addTile(new Point(2, 2), new ObstacleTile());
         board.addTile(new Point(2, 3), new ObstacleTile());
         board.addTile(new Point(2, 4), new ObstacleTile());
 
+        PathFindingAlg alg = new PathFindingAlg(board);
         List<Point> path = alg.findPath(startPoint, endPoint, creature1.getMoveRange());
 
         List<Point> expectedPath = List.of(
@@ -158,9 +140,12 @@ class BoardTest
                         .build() )
                 .build();
 
-        final List< Creature > c1 = List.of( blockingCreature, blockingCreature2, blockingCreature3 );
+        final List< Creature > c1 = List.of( creature1, blockingCreature, blockingCreature2, blockingCreature3 );
         final List< Creature > c2 = List.of();
         final Board board = new Board( c1, c2 );
+
+        //usun pola specjalne - nie chce aby losowo generowana obstacle psuł mi test:
+        board.removeSpecialTiles();
         PathFindingAlg alg = new PathFindingAlg(board);
 
         Point startPoint = new Point(0, 1);
@@ -197,10 +182,10 @@ class BoardTest
                         .build() )
                 .build();
 
-        int moveRange = creature1.getMoveRange(); //is 5
+        int moveRange = creature1.getMoveRange();
         Point startPoint = new Point(0, 1);
         Point endPoint = new Point( 3, 4 );
-        List<Point> path = alg.findPath(startPoint, endPoint, moveRange); //6 points (without the start point)
+        List<Point> path = alg.findPath(startPoint, endPoint, moveRange); //6 punktow (bez startpoint)
 
         assertThat( path ).isEmpty();
     }
