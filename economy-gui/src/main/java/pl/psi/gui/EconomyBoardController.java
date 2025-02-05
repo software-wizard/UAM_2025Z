@@ -77,7 +77,7 @@ public class EconomyBoardController {
         economyBoardEngine.addBuildingToBoard(new Point(6,6),goldBuilding);
         economyBoardEngine.addBuildingToBoard(new Point(7,7), necropolisCombatBuilding);
 
-        economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero()));
+        economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero(), ));
         economyBoardEngine.addObjectObserver(goldBuilding,(e)->refreshGui());
         economyBoardEngine.addObjectObserver(necropolisCombatBuilding,(e)->ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), necropolisCombatBuilding.createBattleOpponent()));
     }
@@ -118,13 +118,13 @@ public class EconomyBoardController {
 
                 activeHero.setText( economyTurnQueue.getCurrentHeroName() );
 
-                goldLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.GOLD)).orElse(0).toString());
-                woodLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.WOOD)).orElse(0).toString());
-                oreLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.ORE)).orElse(0).toString());
-                mercuryLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.MERCURY)).orElse(0).toString());
-                sulfurLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.SULFUR)).orElse(0).toString());
-                crystalLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.CRYSTAL)).orElse(0).toString());
-                gemLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.ResourceType.GEM)).orElse(0).toString());
+                goldLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.GOLD)).orElse(0).toString());
+                woodLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.WOOD)).orElse(0).toString());
+                oreLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.ORE)).orElse(0).toString());
+                mercuryLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.MERCURY)).orElse(0).toString());
+                sulfurLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.SULFUR)).orElse(0).toString());
+                crystalLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.CRYSTAL)).orElse(0).toString());
+                gemLabel.setText( Optional.ofNullable(economyTurnQueue.getCurrentHero().getResourceAmount(Resources.Type.GEMS)).orElse(0).toString());
 
 
                 Optional<MapTileIf> mapObject = economyBoardEngine.getMapTile(new Point(x, y));

@@ -8,6 +8,7 @@ import pl.psi.resource.Resources;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 @Getter
@@ -83,17 +84,14 @@ public class EconomyHero implements PropertyChangeListener
 
     }
 
-    @Override
-    public TileType getTileType() {
-        return TileType.HERO;
+    public MapTileIf.TileType getTileType() {
+        return MapTileIf.TileType.HERO;
     }
 
-    @Override
     public ImagePattern getImagePattern() {
         return null;
     } //TODO Interface
 
-    @Override
     public void Interact(EconomyHero hero) {//inny bohater wchodzi w interakcje z TYM bohaterem
         //TUTAJ moznaby dac Attack ?
        //tylko trzeba uzupelnic canInteract o interact z mapa bohaterow??

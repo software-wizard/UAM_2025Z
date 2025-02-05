@@ -1,15 +1,10 @@
 package pl.psi;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Random;
 
 import static pl.psi.MapTileIf.TileType.GOLD_BUILDING;
@@ -49,9 +44,8 @@ public class GoldBuilding implements MapTileIf {
             hero.addResource(Resources.builder()
                     .resource(GOLD, goldAmount)
                     .build());
-            collectedGold = true;
-        }
-            hero.addResource(new Resources(Map.of(GOLD, goldAmount)));
+
+            hero.addResource(Resources.builder().resource(GOLD, goldAmount).build());
 
             observerSupport.firePropertyChange(COLLECT_GOLD,null,goldAmount);
             //usuwanie zlota z board
@@ -65,9 +59,5 @@ public class GoldBuilding implements MapTileIf {
         Random rand = new Random();
         int goldAmount = (rand.nextInt(6) + 5) * 100;
         return goldAmount;
-    }
-
-    private Boolean canCollectGold() {
-        return !collectedGold;
     }
 }
