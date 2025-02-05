@@ -12,18 +12,18 @@ import pl.psi.hero.EconomyHero;
 import java.io.IOException;
 
 public class EconomyShopLoader {
-    public void openShop(EconomyHero hero, Town aTown) {
+    public void openShop(EconomyHero hero, Town town) {
 
         try {
-
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader()
                     .getResource("fxml/eco-building-shop.fxml"));
+            var abstractFactory = new EconomyBuildingAbstractFactory();
+            var facade = new EconomyBuildingFacade(abstractFactory);
 
-            final Scene scene = new Scene(loader.load());
             Stage aStage = new Stage();
-            EconomyBuildingAbstractFactory factory = new EconomyBuildingAbstractFactory();
-            loader.setController(new EconomyBuildingShopController(new EconomyBuildingFacade(factory), hero, aTown, aStage));
+            loader.setController(new EconomyBuildingShopController(facade, hero, town, aStage));
+            final Scene scene = new Scene(loader.load());
             aStage.setScene(scene);
             aStage.setX(5);
             aStage.setY(5);
