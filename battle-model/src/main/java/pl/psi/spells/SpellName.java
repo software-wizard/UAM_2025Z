@@ -8,8 +8,9 @@ public enum SpellName {
     WEAKEN_ATTACK("Weaken Attack"),
     STRONGER_ATTACK("Stronger Attack"),
     EXTRA_MOVE_RANGE("Extra Move Range"),
+    SPLASH_ATTACK("Splash Attack"),
+    NONE("None");
 
-    SPLASH_ATTACK("Splash Attack");
     private final String displayName;
 
     SpellName(String aDisplayName) {

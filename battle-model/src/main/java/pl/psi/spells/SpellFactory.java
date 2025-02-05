@@ -17,6 +17,7 @@ public class SpellFactory {
                     new Spell.Builder().name(SpellName.WEAKEN_ATTACK).damage(0).manaCost(5).spellBonus(SpellName.WEAKEN_ATTACK).spellBonusRoundsDuration(2).build();
             case STRONGER_ATTACK ->
                     new Spell.Builder().name(SpellName.STRONGER_ATTACK).damage(0).manaCost(5).spellBonus(SpellName.STRONGER_ATTACK).spellBonusRoundsDuration(2).build();
+            case NONE -> new Spell.Builder().name(SpellName.NONE).damage(0).manaCost(0).build();
         };
     }
 }

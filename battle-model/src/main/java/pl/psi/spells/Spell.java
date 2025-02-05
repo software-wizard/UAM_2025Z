@@ -35,7 +35,7 @@ public class Spell {
         private int manaCost = 0;
         private int spellBonusRoundsDuration = 3;
         private int radius = 0;
-        private SpellBonus spellBonus = null;
+        private SpellBonus spellBonus = SpellBonusFactory.createSpellBonus(SpellName.NONE);
         public Builder name(SpellName aName) {
             name = aName;
             return this;

@@ -30,6 +30,7 @@ public class SpellBonusFactory {
                 break;
             case SPLASH_ATTACK:
             case MAGIC_ARROW:
+            case NONE:
             default:
                 break;
         }
