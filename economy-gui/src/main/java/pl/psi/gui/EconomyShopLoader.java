@@ -12,7 +12,7 @@ import pl.psi.hero.EconomyHero;
 import java.io.IOException;
 
 public class EconomyShopLoader {
-    public void openShop(EconomyHero hero, Town town) {
+    public void openShop(EconomyHero hero) {
 
         try {
             final FXMLLoader loader = new FXMLLoader();
@@ -22,7 +22,7 @@ public class EconomyShopLoader {
             var facade = new EconomyBuildingFacade(abstractFactory);
 
             Stage aStage = new Stage();
-            loader.setController(new EconomyBuildingShopController(facade, hero, town, aStage));
+            loader.setController(new EconomyBuildingShopController(facade, hero, aStage));
             final Scene scene = new Scene(loader.load());
             aStage.setScene(scene);
             aStage.setX(5);

@@ -32,13 +32,7 @@ public class EconomyBoardStart extends Application {
         EconomyBuildingShop economyBuildingShop = EconomyBuildingShopFactory.createEconomyBuildingShop(
                 EconomyHero.Fraction.NECROPOLIS, new EconomyBuildingAbstractFactory()
         );
-        var town = Town.builder()
-                .buildings(Map.of())
-                .name("Grave Raven")
-                .economyBuildingShop(economyBuildingShop)
-                .fraction(EconomyHero.Fraction.NECROPOLIS)
-                .build();
-        loader.setController( new EconomyBoardController( aHero1(), aHero2(), town));
+        loader.setController( new EconomyBoardController( aHero1(economyBuildingShop), aHero2(economyBuildingShop)));
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
         aStage.setX( 5 );
@@ -46,7 +40,7 @@ public class EconomyBoardStart extends Application {
         aStage.show();
     }
 
-    private EconomyHero aHero1()
+    private EconomyHero aHero1(EconomyBuildingShop economyBuildingShop)
     {
         final EconomyHero ret = new EconomyHero(
                 "A",
@@ -55,7 +49,13 @@ public class EconomyBoardStart extends Application {
                         .resource(GOLD, 5000)
                         .resource(WOOD, 100)
                         .resource(ORE, 100)
-                        .build()
+                        .build(),
+                Town.builder()
+                    .buildings(Map.of())
+                    .name("Grave Raven")
+                    .economyBuildingShop(economyBuildingShop)
+                    .fraction(EconomyHero.Fraction.NECROPOLIS)
+                    .build()
         );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 1, 1 ));
@@ -63,7 +63,7 @@ public class EconomyBoardStart extends Application {
         return ret;
     }
 
-    private EconomyHero aHero2()
+    private EconomyHero aHero2(EconomyBuildingShop economyBuildingShop)
     {
         final EconomyHero ret = new EconomyHero(
                 "B",
@@ -72,6 +72,12 @@ public class EconomyBoardStart extends Application {
                         .resource(GOLD, 5000)
                         .resource(WOOD, 100)
                         .resource(ORE, 100)
+                        .build(),
+                Town.builder()
+                        .buildings(Map.of())
+                        .name("Grave Raven")
+                        .economyBuildingShop(economyBuildingShop)
+                        .fraction(EconomyHero.Fraction.NECROPOLIS)
                         .build()
         );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();

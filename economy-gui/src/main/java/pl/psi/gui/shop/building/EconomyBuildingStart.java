@@ -27,14 +27,19 @@ public class EconomyBuildingStart extends Application {
         loader.setLocation(getClass().getClassLoader()
                 .getResource("fxml/eco-building-shop.fxml"));
         EconomyBuildingAbstractFactory abstractFactory = new EconomyBuildingAbstractFactory();
-        var hero = new EconomyHero("A", EconomyHero.Fraction.NECROPOLIS, Resources.builder().build());
+        var hero = new EconomyHero(
+                "A",
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder().build(),
+                Town.builder().build()
+        );
         var town = Town.builder()
                 .buildings(Map.of())
                 .name("Test town name")
                 .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();
         EconomyBuildingShopController controller = new EconomyBuildingShopController(
-                new EconomyBuildingFacade(abstractFactory), hero, town, aStage
+                new EconomyBuildingFacade(abstractFactory), hero, aStage
         );
         loader.setController(controller);
         final Scene scene = new Scene(loader.load());

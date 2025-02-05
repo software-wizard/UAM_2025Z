@@ -3,6 +3,7 @@ package pl.psi.hero;
 import javafx.scene.paint.ImagePattern;
 import lombok.Getter;
 import pl.psi.MapTileIf;
+import pl.psi.building.town.Town;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.resource.Resources;
 
@@ -16,12 +17,14 @@ public class EconomyHero implements PropertyChangeListener
 {
     private final String name;
     private final Fraction fraction;
+    private final Town town;
     private final Map<String, EconomyCreature> creatures;
     private final Resources resources;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
 
-    public EconomyHero(final String aName, final Fraction aFraction, final Resources aResources )
+    public EconomyHero(final String aName, final Fraction aFraction, final Resources aResources, final Town aTown)
     {
+        this.town = aTown;
         this.name = aName;
         fraction = aFraction;
         this.resources = aResources;

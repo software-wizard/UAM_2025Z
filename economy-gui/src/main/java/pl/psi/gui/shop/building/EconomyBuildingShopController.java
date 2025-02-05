@@ -53,10 +53,10 @@ public class EconomyBuildingShopController {
     private final Stage stage;
     private final EconomyEngine economyEngine;
 
-    public EconomyBuildingShopController(EconomyBuildingFacade economyBuildingFacade, EconomyHero buyer, Town town, Stage stage) {
+    public EconomyBuildingShopController(EconomyBuildingFacade economyBuildingFacade, EconomyHero buyer, Stage stage) {
         this.economyBuildingFacade = economyBuildingFacade;
         this.buyer = buyer;
-        this.town = town;
+        this.town = buyer.getTown();
         this.stage = stage;
         this.economyEngine = new EconomyEngine(buyer);
     }

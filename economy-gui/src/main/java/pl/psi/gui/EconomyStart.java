@@ -8,6 +8,7 @@ import pl.psi.EconomyEngine;
 import pl.psi.building.model.CreatureDwellingsBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.building.model.UpgradableBuilding;
+import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
@@ -39,11 +40,12 @@ public class EconomyStart extends Application {
                 Resources.builder().build()
         );
         var controller = new EcoController(
-                building, new EconomyEngine(new EconomyHero("A", EconomyHero.Fraction.NECROPOLIS, Resources.builder()
+                building, new EconomyEngine(new EconomyHero(
+                        "A", EconomyHero.Fraction.NECROPOLIS, Resources.builder()
                     .resource(GOLD, 3000)
                     .resource(GEMS, 2)
                     .build()
-                ))
+                , Town.builder().build()))
         );
         loader.setController(controller);
         final Scene scene = new Scene(loader.load());

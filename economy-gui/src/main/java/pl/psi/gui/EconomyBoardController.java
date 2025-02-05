@@ -1,31 +1,21 @@
 package pl.psi.gui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.stage.Stage;
 import pl.psi.*;
-import pl.psi.building.EconomyBuildingFacade;
-import pl.psi.building.factory.EconomyBuildingAbstractFactory;
-import pl.psi.building.town.Town;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.gui.shop.building.EconomyBuildingShopController;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.Optional;
 
 public class EconomyBoardController {
@@ -37,7 +27,6 @@ public class EconomyBoardController {
     private final EconomyTurnQueue economyTurnQueue;
     private EcoBattleConverter ecoBattleConverter;
     private EconomyShopLoader economyShopLoader;
-    private final Town town;
     @FXML
     private GridPane gridMap;
     @FXML
@@ -61,14 +50,13 @@ public class EconomyBoardController {
     @FXML
     private Label gemLabel;
 
-    public EconomyBoardController(final EconomyHero aHero1, final EconomyHero aHero2, final Town aTown) {
+    public EconomyBoardController(final EconomyHero aHero1, final EconomyHero aHero2) {
 
         economyBoardEngine = new EconomyBoardEngine(aHero1, aHero2);//w tym jest tworzone board
         economyTurnQueue = new EconomyTurnQueue(aHero1, aHero2);
         economyShopLoader = new EconomyShopLoader();
         hero1 = aHero1;
         hero2 = aHero2;
-        this.town = aTown;
         Castle castle = new Castle();
         GoldBuilding goldBuilding = new GoldBuilding();
         NecropolisCombatBuilding necropolisCombatBuilding =new NecropolisCombatBuilding();
@@ -77,7 +65,7 @@ public class EconomyBoardController {
         economyBoardEngine.addBuildingToBoard(new Point(6,6),goldBuilding);
         economyBoardEngine.addBuildingToBoard(new Point(7,7), necropolisCombatBuilding);
 
-        economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero(), town));
+        economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero()));
         economyBoardEngine.addObjectObserver(goldBuilding,(e)->refreshGui());
         economyBoardEngine.addObjectObserver(necropolisCombatBuilding,(e)->ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), necropolisCombatBuilding.createBattleOpponent()));
     }
