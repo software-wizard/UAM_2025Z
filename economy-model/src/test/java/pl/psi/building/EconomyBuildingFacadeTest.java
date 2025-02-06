@@ -40,7 +40,8 @@ class EconomyBuildingFacadeTest {
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)
-                        .build()
+                        .build(),
+                Mockito.mock(Town.class)
         );
         var town = mock(Town.class);
 
@@ -53,14 +54,15 @@ class EconomyBuildingFacadeTest {
 
     @Test
     void should_throw_exception_when_building_name_is_blank() {
+        var town = mock(Town.class);
         var buyer = new EconomyHero(
                 "B",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)
-                        .build()
+                        .build(),
+                town
         );
-        var town = mock(Town.class);
 
         assertThatThrownBy(() -> economyBuildingFacade.buildBuilding(buyer, town, ""))
                 .isInstanceOf(IllegalArgumentException.class);

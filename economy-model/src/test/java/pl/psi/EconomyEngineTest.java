@@ -6,6 +6,8 @@ import static pl.psi.resource.Resources.Type.GOLD;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.Mockito;
+import pl.psi.building.town.Town;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
@@ -28,7 +30,8 @@ class EconomyEngineTest
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 1000)
-                        .build()
+                        .build(),
+                Mockito.mock(Town.class)
         );
         economyEngine = new EconomyEngine( h1 );
         creatureFactory = new EconomyNecropolisFactory();

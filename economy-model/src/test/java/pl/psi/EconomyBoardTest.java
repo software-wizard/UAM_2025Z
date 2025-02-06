@@ -2,6 +2,8 @@ package pl.psi;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
@@ -21,14 +23,16 @@ public class EconomyBoardTest {
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 3000)
-                        .build()
+                        .build(),
+                Mockito.mock(Town.class)
         );
         hero2 = new EconomyHero(
                 "B",
                 EconomyHero.Fraction.NECROPOLIS,
                 Resources.builder()
                         .resource(GOLD, 2000)
-                        .build()
+                        .build(),
+                Mockito.mock(Town.class)
         );
 
         board = new EconomyBoard(hero1, hero2);

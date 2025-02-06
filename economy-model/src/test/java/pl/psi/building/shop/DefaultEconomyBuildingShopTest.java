@@ -10,6 +10,7 @@ import pl.psi.building.model.DefaultEconomyBuilding;
 import pl.psi.building.model.EconomyBuilding;
 import pl.psi.building.model.EconomyBuildingStatistic;
 import pl.psi.building.model.UpgradableBuilding;
+import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
@@ -40,7 +41,12 @@ class DefaultEconomyBuildingShopTest {
         // GIVEN
         var buildingName = "Tomb of Souls";
         var costOfBuilding = Resources.builder().resource(GOLD, 100).build();
-        var buyer = new EconomyHero("A", NECROPOLIS, Resources.builder().resource(GOLD, 1000).build());
+        var buyer = new EconomyHero(
+                "A",
+                NECROPOLIS,
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class)
+        );
         var buildingStatistic = new EconomyBuildingStatistic(buildingName, EconomyBuildingStatistic.Type.BUILDING, costOfBuilding, List.of());
         var buildingToBuy = new DefaultEconomyBuilding(buildingStatistic);
 
@@ -74,7 +80,11 @@ class DefaultEconomyBuildingShopTest {
         // GIVEN
         var buildingName = "Tomb of Souls";
         var costOfBuilding = Resources.builder().resource(GOLD, 2000).build();
-        var buyer = new EconomyHero("A", NECROPOLIS, Resources.builder().resource(GOLD, 1000).build());
+        var buyer = new EconomyHero(
+                "A",
+                NECROPOLIS,
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class));
         var buildingStatistic = new EconomyBuildingStatistic(buildingName, EconomyBuildingStatistic.Type.BUILDING, costOfBuilding, List.of());
 
         // WHEN
@@ -106,7 +116,12 @@ class DefaultEconomyBuildingShopTest {
     @DisplayName("Should successfully upgrade a building.")
     void should_upgrade_building() {
         // GIVEN
-        var buyer = new EconomyHero("A", NECROPOLIS, Resources.builder().resource(GOLD, 1000).build());
+        var buyer = new EconomyHero(
+                "A",
+                NECROPOLIS,
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class)
+        );
         var upgradableBuilding = Mockito.mock(UpgradableBuilding.class);
 
         // WHEN
@@ -123,7 +138,12 @@ class DefaultEconomyBuildingShopTest {
     @DisplayName("Should throw exception when building is not upgradable.")
     void should_throw_exception_when_building_not_upgradable() {
         // GIVEN
-        var buyer = new EconomyHero("A", NECROPOLIS, Resources.builder().resource(GOLD, 1000).build());
+        var buyer = new EconomyHero(
+                "A",
+                NECROPOLIS,
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class)
+        );
         var nonUpgradableBuilding = Mockito.mock(EconomyBuilding.class);
 
         // WHEN && THEN
@@ -140,7 +160,12 @@ class DefaultEconomyBuildingShopTest {
                 .cost(Resources.builder().resource(GOLD, 100).build())
                 .build();
         var building = Mockito.mock(EconomyBuilding.class);
-        var buyer = new EconomyHero("A", NECROPOLIS, Resources.builder().resource(GOLD, 1000).build());
+        var buyer = new EconomyHero(
+                "A",
+                NECROPOLIS,
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class)
+        );
 
         // WHEN
         when(building.getStatistic()).thenReturn(buildingStatistic);

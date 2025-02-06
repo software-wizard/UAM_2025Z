@@ -43,14 +43,19 @@ class TownTest {
         Resources resources = Resources.builder()
                 .resource(Resources.Type.GOLD, 100)
                 .build();
-        hero = new EconomyHero("A", EconomyHero.Fraction.NECROPOLIS, resources);
-        building = Mockito.mock(EconomyBuilding.class);
         town = Town.builder()
                 .buildings(Map.of())
                 .economyBuildingShop(buildingShop)
                 .name(buildingName)
                 .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();
+        hero = new EconomyHero(
+                "A",
+                EconomyHero.Fraction.NECROPOLIS,
+                resources,
+                town
+        );
+        building = Mockito.mock(EconomyBuilding.class);
         when(buildingShop.buyBuilding(hero, buildingName))
                 .thenReturn(building);
         when(building.isBuilt()).thenReturn(true);

@@ -2,7 +2,9 @@ package pl.psi.hero;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import pl.psi.EconomyEngine;
+import pl.psi.building.town.Town;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.resource.Resources;
 
@@ -23,7 +25,8 @@ public class BuyingCreatureTest
         hero1 = new EconomyHero(
                 "A",
                 EconomyHero.Fraction.NECROPOLIS,
-                Resources.builder().resource(GOLD, 1000).build()
+                Resources.builder().resource(GOLD, 1000).build(),
+                Mockito.mock(Town.class)
         );
         economyEngine = new EconomyEngine( hero1 );
     }
