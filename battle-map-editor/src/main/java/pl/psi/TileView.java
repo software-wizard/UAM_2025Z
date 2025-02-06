@@ -16,7 +16,7 @@ public class TileView extends StackPane {
     final private Tile tile;
 
     private final Rectangle rect;
-    private final Label label;
+    private Label label;
 
     public TileView(Tile tile) {
         this.tile = tile;

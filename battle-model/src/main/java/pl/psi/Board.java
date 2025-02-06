@@ -1,5 +1,9 @@
 package pl.psi;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import com.google.common.collect.BiMap;
@@ -16,7 +20,7 @@ public class Board
 {
     private static final int MAX_WITDH = 14;
     private final BiMap< Point, Creature > map = HashBiMap.create();
-    private final TileGenerationStrategy tileGenerationStrategy = new RandomTileGeneration(10, 10, 5);
+    private final TileGenerationStrategy tileGenerationStrategy = new JsonTileGeneration(getRandomFilePath());
     private Map<Point, Tile> specialTiles = new HashMap<>();
 
     public Board(List<Creature> aCreatures1, List<Creature> aCreatures2) {
@@ -83,6 +87,24 @@ public class Board
 
     public Tile getSpecialTile(Point point) {
         return specialTiles.get(point);
+    }
+
+    private static String getRandomFilePath() {
+        try {
+            Path dir = Paths.get("./battle-map-editor/src/main/resources/specialTiles");
+            List<Path> files = Files.list(dir)
+                    .filter(Files::isRegularFile)
+                    .toList();
+
+            if (files.isEmpty()) {
+                throw new IllegalStateException("No special tile files found in: " + dir);
+            }
+
+            Random random = new Random();
+            return files.get(random.nextInt(files.size())).toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Error while selecting a random special tile file", e);
+        }
     }
 }
 
