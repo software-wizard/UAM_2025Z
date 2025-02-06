@@ -2,6 +2,7 @@ package pl.psi.gui.shop.building;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -9,12 +10,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -45,6 +50,15 @@ public class EconomyBuildingShopController {
     @FXML
     private Label resourcesLabel;
 
+    @FXML
+    private Label appName;
+
+    @FXML
+    private HBox titleBar;
+
+    private boolean isMaximized = false;
+    private double offsetX = 0;
+    private double offsetY = 0;
     private EconomyBuildingView view;
 
     private final EconomyBuildingFacade economyBuildingFacade;
@@ -63,6 +77,9 @@ public class EconomyBuildingShopController {
 
     @FXML
     void initialize() {
+        appName.setText(town.getName());
+        titleBar.setOnMousePressed(this::handleMousePressed);
+        titleBar.setOnMouseDragged(this::handleMouseDragged);
         setupUI();
         populateBuildingGrid();
         economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_BUILDING, view);
@@ -71,42 +88,66 @@ public class EconomyBuildingShopController {
         view.propertyChange(new PropertyChangeEvent(this, null, null, null));
     }
 
+    public void handleMinimize(ActionEvent event) {
+        stage.setIconified(true);
+    }
+
+    public void handleClose(ActionEvent event) {
+        stage.close();
+    }
+
+    public void handleMaximize(ActionEvent event) {
+        if (isMaximized) {
+            stage.setMaximized(false);
+            isMaximized = false;
+        } else {
+            stage.setMaximized(true);
+            isMaximized = true;
+        }
+    }
+
+    private void handleMousePressed(MouseEvent event) {
+        offsetX = event.getSceneX();
+        offsetY = event.getSceneY();
+    }
+
+    private void handleMouseDragged(MouseEvent event) {
+        stage.setX(event.getScreenX() - offsetX);
+        stage.setY(event.getScreenY() - offsetY);
+    }
+
     private void setupUI() {
         buildingGrid.setPadding(new Insets(10));
         buildingGrid.setAlignment(Pos.CENTER);
+        buildingGrid.setHgap(20);
         buildingGrid.setVgap(20);
-        buildingGrid.setHgap(5);
-        buildingGrid.setStyle("-fx-background-color: #403429;");
+        buildingGrid.setStyle("-fx-background-color: #503C3C; -fx-font-size: 20px");
 
         resourcesLabel.setAlignment(Pos.CENTER);
         resourcesLabel.setPadding(new Insets(10));
-        resourcesLabel.setStyle("-fx-text-fill: black;");
+        resourcesLabel.setStyle("-fx-text-fill: #F5E6C4");
+        resourcesLabel.setEffect(new DropShadow(5, 3, 3, Color.BLACK));
 
-        labelVBox.setAlignment(Pos.BOTTOM_CENTER);
         labelVBox.setStyle("""
-            -fx-border-color: black;
+            -fx-font-size: 25px;
+            -fx-border-color: #2e201b;
             -fx-border-width: 2px;
             -fx-border-radius: 5px;
-            -fx-background-color: #403429;
+            -fx-background-color: #4E342E;
         """);
-        VBox.setVgrow(labelVBox, Priority.ALWAYS);
     }
 
     private void populateBuildingGrid() {
         Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> buildingBoxes = new HashMap<>();
 
         buildingBoxes.put(EconomyBuildingStatistic.Type.BUILDING,
-                createBuildingGrid(EconomyBuildingStatistic.Type.BUILDING, 1, buildingBoxes));
+                createBuildingGrid(EconomyBuildingStatistic.Type.BUILDING, 1));
         buildingBoxes.put(EconomyBuildingStatistic.Type.DWELLINGS,
-                createBuildingGrid(EconomyBuildingStatistic.Type.DWELLINGS, 2, buildingBoxes));
+                createBuildingGrid(EconomyBuildingStatistic.Type.DWELLINGS, 2));
         this.view = new DefaultEconomyBuildingView(economyBuildingFacade, buildingBoxes, town, buyer, resourcesLabel);
     }
 
-    private Map<EconomyBuildingStatistic, VBox> createBuildingGrid(
-                EconomyBuildingStatistic.Type buildingType,
-                int row,
-                Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
-    ) {
+    private Map<EconomyBuildingStatistic, VBox> createBuildingGrid(EconomyBuildingStatistic.Type buildingType, int row) {
         List<EconomyBuildingStatistic> availableBuildings = economyBuildingFacade.getAllAvailableBuildingsToBuild(buildingType, town.getFraction());
         Map<EconomyBuildingStatistic, VBox> buildingBoxes = new HashMap<>();
 
@@ -115,7 +156,7 @@ public class EconomyBuildingShopController {
             VBox buildingBox = createBuildingBox(statistic);
             buildingBoxes.put(statistic, buildingBox);
 
-            addBuildingClickHandler(row, statistic, buildingBox, allBuildings);
+            addBuildingClickHandler(row, statistic, buildingBox);
             buildingGrid.add(buildingBox, i, row);
         }
         return buildingBoxes;
@@ -130,34 +171,34 @@ public class EconomyBuildingShopController {
 
         String buildingLabel = buildingName.replace("_", " ");
         Label label = new Label(buildingLabel);
-        label.setStyle("-fx-text-fill: black;");
+        label.setStyle("""
+            -fx-text-fill: #F5E6C4;
+            -fx-background-color: #4E342E;
+        """);
+        label.setMaxWidth(Double.MAX_VALUE);
+        label.setTextAlignment(TextAlignment.CENTER);
+        label.setAlignment(Pos.CENTER);
 
         VBox buildingBox = new VBox(buildingIcon, label);
+        buildingBox.setEffect(new DropShadow(5, 3, 3, Color.BLACK));
         buildingBox.setAlignment(Pos.CENTER);
         return buildingBox;
     }
 
-    private void addBuildingClickHandler(int row,
-                                         EconomyBuildingStatistic statistic,
-                                         VBox buildingBox,
-                                         Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
-    ) {
+    private void addBuildingClickHandler(int row, EconomyBuildingStatistic statistic, VBox buildingBox) {
         ImageView buildingIcon = (ImageView) buildingBox.getChildren().getFirst();
         Popup popup = createPurchasePopup(statistic.name());
 
         buildingIcon.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                handlePrimaryClick(statistic, popup, allBuildings);
+                handlePrimaryClick(statistic, popup);
             } else if (event.getButton() == MouseButton.SECONDARY && row == 2) {
-                handleSecondaryClick(statistic, buildingIcon, allBuildings);
+                handleSecondaryClick(statistic, buildingIcon);
             }
         });
     }
 
-    private void handlePrimaryClick(EconomyBuildingStatistic statistic,
-                                    Popup popup,
-                                    Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings
-    ) {
+    private void handlePrimaryClick(EconomyBuildingStatistic statistic, Popup popup) {
         if (town.isBuildingAlreadyBuilt(statistic.name())) {
             EconomyBuilding building = town.findBuildingByName(statistic.name()).orElseThrow();
             if (economyBuildingFacade.isBuildingUpgradable(building)) {
@@ -182,8 +223,7 @@ public class EconomyBuildingShopController {
         }
     }
 
-    private void handleSecondaryClick(EconomyBuildingStatistic statistic, ImageView buildingIcon,
-                                      Map<EconomyBuildingStatistic.Type, Map<EconomyBuildingStatistic, VBox>> allBuildings) {
+    private void handleSecondaryClick(EconomyBuildingStatistic statistic, ImageView buildingIcon) {
         if (!town.isBuildingAlreadyBuilt(statistic.name())) {
             view.showAlert("Nie zbudowano budynku", "", "Aby ulepszyć budynek należy go wybudować.");
             return;

@@ -19,6 +19,7 @@ import java.util.Optional;
 @Builder(builderClassName = "Builder", toBuilder = true)
 public class Town {
 
+    @Getter
     private final String name;
     @Getter
     private final EconomyHero.Fraction fraction;

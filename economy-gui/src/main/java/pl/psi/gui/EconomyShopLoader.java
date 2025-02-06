@@ -2,7 +2,9 @@ package pl.psi.gui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.factory.EconomyBuildingAbstractFactory;
 import pl.psi.building.town.Town;
@@ -21,7 +23,7 @@ public class EconomyShopLoader {
             var abstractFactory = new EconomyBuildingAbstractFactory();
             var facade = new EconomyBuildingFacade(abstractFactory);
 
-            Stage aStage = new Stage();
+            Stage aStage = new Stage(StageStyle.TRANSPARENT);
             loader.setController(new EconomyBuildingShopController(facade, hero, aStage));
             final Scene scene = new Scene(loader.load());
             aStage.setScene(scene);
