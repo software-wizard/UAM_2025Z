@@ -33,7 +33,7 @@ public class TileContext {
         return tilesMap.get(aPoint);
     }
 
-    public void clearTiles() {
-        tilesMap.clear();
-    }
+//    public void clearTiles() {
+//        tilesMap.clear();
+//    }
 }

@@ -1,11 +1,45 @@
 package pl.psi.creatures;
 
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
+import javafx.scene.image.Image;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 
 public class NecropolisFactory
 {
+    private static final HashMap<Object, Image> creatureIcons = new HashMap<>();
+
+    static{
+        loadImage("Skeleton", "/Skeleton.png");
+        loadImage("Skeleton Warrior", "/Skeleton Warrior.png");
+        loadImage("Lich", "/Lich.png");
+        loadImage("Black Knight", "/Black Knight.png");
+        loadImage("Dread Knight", "/Dread Knight.png");
+        loadImage("Vampire", "/Vampire.png");
+        loadImage("Zombie", "/Zombie.png");
+        loadImage("Walking Dead", "/Walking Dead.png");
+        loadImage("Vampire Lord", "/Vampire Lord.png");
+        loadImage("Power Lich", "/Power Lich.png");
+        loadImage("Wight", "/Wight.png");
+        loadImage("Wraith", "/Wraith.png");
+        loadImage("Ghost Dragon", "/Ghost Dragon.png");
+    }
+
+    private static void loadImage(String name, String path) {
+        try {
+            String resourcesPath = "/creatures/" + path;
+            Image image = new Image(Objects.requireNonNull(NecropolisFactory.class.getResourceAsStream(resourcesPath)));
+            creatureIcons.put(name, image);
+        } catch (Exception e) {
+            System.out.println("Error while loading the image of: " + name);
+        }
+    }
+
+
+    public static Image getCreatureImage(String type) {
+        return creatureIcons.getOrDefault(type, creatureIcons.get("Skeleton"));
+    }
 
     private static final String EXCEPTION_MESSAGE = "We support tiers from 1 to 7";
 

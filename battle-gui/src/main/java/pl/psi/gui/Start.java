@@ -53,7 +53,8 @@ public class Start extends Application
     {
         final Hero ret = new Hero(
                 List.of( new NecropolisFactory().create( true, 1, 5 ),
-                        new NecropolisFactory().create( true, 1, 5 ) ),
+                        new NecropolisFactory().create( true, 1, 5 ),
+                        new NecropolisFactory().create( true, 6, 5 )),
                 10,
                 List.of(new Spell.Builder()
                         .name(SpellName.MAGIC_ARROW)
@@ -70,7 +71,9 @@ public class Start extends Application
     private Hero createP1()
     {
         final Hero ret = new Hero(
-                List.of( new NecropolisFactory().create( false, 5, 5 ) ),
+                List.of( new NecropolisFactory().create( false, 5, 5 ),
+                        new NecropolisFactory().create( false, 4, 3 ),
+                        new NecropolisFactory().create( true, 4, 5 )),
                 15,
                 List.of(
                         new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(5).level(1).manaCost(5).build(),
