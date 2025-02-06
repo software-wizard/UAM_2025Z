@@ -52,10 +52,7 @@ public class ChanceToCastSpellCreature extends Creature
             final int damageWithBonus = getAttackWithBonus();
             System.out.println("Damage: " + damage + "\nDamage with attack bonus: " + damageWithBonus);
 
-            if (cursed)
-            {
-                System.out.println("Cursed target");
-            }
+            System.out.println("Is target cursed: "+cursed);
 
             aDefender.applyDamage(damageWithBonus);
 
