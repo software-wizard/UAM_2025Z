@@ -5,8 +5,34 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static pl.psi.resource.Resources.Type.GOLD;
+import static pl.psi.resource.Resources.Type.WOOD;
 
 class ResourcesTest {
+
+    @Test
+    void should_print_resources() {
+        Resources resources = Resources.builder()
+                .resource(GOLD, 10)
+                .resource(WOOD, 5)
+                .build();
+
+        String expectedWOOD = "WOOD: 5";
+        String expectedGOLD = "GOLD: 10";
+        assertThat(resources.toString()).contains(expectedGOLD).contains(expectedWOOD);
+    }
+
+    @Test
+    void should_multiply_resources() {
+        Resources resources = Resources.builder()
+                .resource(GOLD, 10)
+                .resource(WOOD, 5)
+                .build();
+
+        resources.multiplyBy(2);
+
+        assertThat(resources.getResourceAmount(GOLD)).isEqualTo(20);
+        assertThat(resources.getResourceAmount(WOOD)).isEqualTo(10);
+    }
 
     @Test
     void should_throw_exception_when_trying_to_subtract_to_much_resources() {
