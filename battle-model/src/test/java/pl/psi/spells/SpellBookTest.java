@@ -27,6 +27,7 @@ public class SpellBookTest {
                                 .damage( Range.closed( NOT_IMPORTANT, NOT_IMPORTANT ) )
                                 .attack( NOT_IMPORTANT )
                                 .armor( NOT_IMPORTANT )
+                                .name("Target creature")
                                 .build()
                 )
                 .build();

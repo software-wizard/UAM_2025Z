@@ -27,6 +27,7 @@ public class SpellBonusTest {
                                 .damage( Range.closed( NOT_IMPORTANT, NOT_IMPORTANT ) )
                                 .attack( NOT_IMPORTANT )
                                 .armor( NOT_IMPORTANT )
+                                .name("Weaken creature")
                                 .build()
                 )
                 .build();
@@ -37,6 +38,7 @@ public class SpellBonusTest {
                                 .damage( Range.closed( NOT_IMPORTANT, NOT_IMPORTANT ) )
                                 .attack( NOT_IMPORTANT )
                                 .armor( NOT_IMPORTANT )
+                                .name("Creature")
                                 .build()
                 )
                 .build();
@@ -70,6 +72,7 @@ public class SpellBonusTest {
                                 .damage( Range.closed( NOT_IMPORTANT, NOT_IMPORTANT ) )
                                 .attack( NOT_IMPORTANT )
                                 .armor( NOT_IMPORTANT )
+                                .name("Creature with extra attack")
                                 .build()
                 )
                 .build();
@@ -80,6 +83,7 @@ public class SpellBonusTest {
                                 .damage( Range.closed( NOT_IMPORTANT, NOT_IMPORTANT ) )
                                 .attack( NOT_IMPORTANT )
                                 .armor( NOT_IMPORTANT )
+                                .name("Creature")
                                 .build()
                 )
                 .build();
