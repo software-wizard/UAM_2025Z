@@ -10,21 +10,21 @@ public class SpellFactory {
         switch (aSpellName) {
             case MAGIC_ARROW -> {
                 damage = switch (aSpellMasterityLevel) {
-                    case EXPERT -> 40;
-                    case ADVANCED -> 20;
+                    case EXPERT -> 20;
+                    case ADVANCED -> 10;
                     default -> 5;
                 };
             }
             case SPLASH_ATTACK -> {
                 damage = switch (aSpellMasterityLevel) {
-                    case EXPERT -> 15;
-                    case ADVANCED -> 10;
-                    default -> 5;
+                    case EXPERT -> 18;
+                    case ADVANCED -> 12;
+                    default -> 7;
                 };
                 radius = switch (aSpellMasterityLevel) {
-                    case EXPERT -> 5;
-                    case ADVANCED -> 4;
-                    default -> 3;
+                    case EXPERT -> 4;
+                    case ADVANCED -> 3;
+                    default -> 2;
                 };
             }
             case EXTRA_MOVE_RANGE -> {

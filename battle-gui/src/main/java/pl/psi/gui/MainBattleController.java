@@ -27,7 +27,7 @@ public class MainBattleController {
     private SpellsTab spellsTab;
 
     @Getter
-    private SharedState sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui, this.getGridMap());
+    private SharedState sharedState;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -36,8 +36,8 @@ public class MainBattleController {
     @FXML
     private void initialize() {
         spellsTab = new SpellsTab(gameEngine, sideBarSpells, this);
+        this.sharedState = new SharedState(INITIAL_SELECTED_SPELL_IDX, this::refreshGui, this.getGridMap());
         refreshGui();
-
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
@@ -55,7 +55,7 @@ public class MainBattleController {
     }
 
     private void refreshGui() {
-//        sharedState.getGridPane().getChildren().clear();
+        sharedState.getGridPane().getChildren().clear();
         gridMap.getChildren().clear();
 
         ColorTile colorTile = new ColorTile(gameEngine, sharedState);
@@ -67,8 +67,6 @@ public class MainBattleController {
                         .ifPresent(c -> mapTile.setName(c.toString()));
 
                 colorTile.applyStrategies(mapTile, new Point(x,y));
-
-//                sharedState.getGridPane().add(mapTile, x, y);
                 gridMap.add(mapTile, x, y);
             }
         }

@@ -34,17 +34,15 @@ public class CastSplashStrategy implements TileStrategy {
                 mapTile.setBackground(Color.LIGHTPINK);
                 int radius = splashSpell.getRadius();
                 mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> {
-                    mapTile.setBackground(Color.PURPLE);
                     highlightRadius(point, true, radius);
                 });
                 mapTile.addEventHandler(MouseEvent.MOUSE_EXITED, e -> {
-                    mapTile.setBackground(Color.LIGHTPINK);
                     highlightRadius(point, false, radius);
                 });
 
                mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                     List<Creature> targets = splashSpell.getCreaturesInRadius(point, gameEngine);
-                    if (targets.size() > 0) {
+                    if (!targets.isEmpty()) {
                         for (Creature creature : targets) {
                             spellBook.castSpell(splashSpell, creature);
                             sharedState.resetSelectedSpellIdx();
@@ -61,10 +59,10 @@ public class CastSplashStrategy implements TileStrategy {
         int centerY = center.getY();
         for (int dx = centerX - radius; dx <= centerX + radius; dx++) {
             for (int dy = centerY - radius; dy <= centerY + radius; dy++) {
-                Point targetPoint = new Point( centerX + dx, centerY + dy);
+                Point targetPoint = new Point( dx, dy);
                 MapTile theMapTile = this.getGridMapTile(sharedState.getGridPane(), targetPoint);
                 if (theMapTile != null) {
-                    theMapTile.setBackground(highlight ? Color.LIGHTBLUE : Color.WHITE);
+                    theMapTile.setOpacity(highlight ? 0.5 : 1);
                 }
             }
         }
