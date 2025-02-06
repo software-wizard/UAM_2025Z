@@ -72,7 +72,7 @@ public class Start extends Application
                 List.of( new NecropolisFactory().create( false, 1, 5 ) ),
                 15,
                 List.of(
-                        SpellFactory.createSpell(SpellName.MAGIC_ARROW, SpellMasterityLevel.EXPERT),
+                        SpellFactory.createSpell(SpellName.MAGIC_ARROW, SpellMasterityLevel.ADVANCED),
                         SpellFactory.createSpell(SpellName.WEAKEN_ATTACK, SpellMasterityLevel.EXPERT),
                         SpellFactory.createSpell(SpellName.SPLASH_ATTACK),
                         SpellFactory.createSpell(SpellName.EXTRA_MOVE_RANGE)
