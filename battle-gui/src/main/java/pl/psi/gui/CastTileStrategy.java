@@ -18,13 +18,18 @@ public class CastTileStrategy implements TileStrategy {
     @Override
     public void apply(MapTile aMapTile, Point aPoint) {
         if (sharedState.isSpellSelected()) {
+            int selectedSpellIdx = sharedState.getSelectedSpellIdx();
             gameEngine.getCreature(aPoint).ifPresent(creature -> {
                 if (!gameEngine.getCurrentHero().getCreatures().contains(creature)) {
                     aMapTile.setBackground(Color.HOTPINK);
                 }
                 aMapTile.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                     SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
-                    Spell selectedSpell = spellBook.getSpells().get(sharedState.getSelectedSpellIdx());
+                    Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx);
+
+                    if(selectedSpell.getRadius() != 0) {
+                        return;
+                    }
 
                     if (selectedSpell != null) {
                         spellBook.castSpell(selectedSpell, creature);

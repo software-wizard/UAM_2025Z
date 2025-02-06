@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
+import pl.psi.spells.SpellMasterityLevel;
 import pl.psi.spells.SpellName;
 import pl.psi.creatures.NecropolisFactory;
 
@@ -57,7 +58,6 @@ public class Start extends Application
                 List.of(new Spell.Builder()
                         .name(SpellName.MAGIC_ARROW)
                         .damage(-100)
-                        .level(1)
                         .manaCost(5)
                         .build(),
                         SpellFactory.createSpell(SpellName.STRONGER_ATTACK)
@@ -72,12 +72,10 @@ public class Start extends Application
                 List.of( new NecropolisFactory().create( false, 1, 5 ) ),
                 15,
                 List.of(
-                        new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(5).level(1).manaCost(5).build(),
-                        new Spell.Builder()
-                                .name(SpellName.WEAKEN_ATTACK).manaCost(5).spellBonus(SpellName.WEAKEN_ATTACK)
-                        .build(),
-                        new Spell.Builder().name(SpellName.SPLASH_ATTACK).damage(5).level(1).radius(3).manaCost(5).build(),
-                        new Spell.Builder().name(SpellName.EXTRA_MOVE_RANGE).manaCost(5).spellBonus(SpellName.EXTRA_MOVE_RANGE).spellBonusRoundsDuration(5).build()
+                        SpellFactory.createSpell(SpellName.MAGIC_ARROW, SpellMasterityLevel.EXPERT),
+                        SpellFactory.createSpell(SpellName.WEAKEN_ATTACK, SpellMasterityLevel.EXPERT),
+                        SpellFactory.createSpell(SpellName.SPLASH_ATTACK),
+                        SpellFactory.createSpell(SpellName.EXTRA_MOVE_RANGE)
                 )
         );
         return ret;

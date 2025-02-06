@@ -17,7 +17,7 @@ public class SpellBookTest {
     @Test
     void cannotCastWithoutEnoughMana() {
         SpellBook spellBook = new SpellBook(3, new ArrayList<>());
-        Spell magicArrow = new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(10).level(1).manaCost(5).build();
+        Spell magicArrow = new Spell.Builder().name(SpellName.MAGIC_ARROW).damage(10).manaCost(5).build();
         spellBook.addSpell(magicArrow);
 
         final Creature targetCreature = new Creature.Builder()

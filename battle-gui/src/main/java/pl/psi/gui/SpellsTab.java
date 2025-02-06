@@ -35,7 +35,7 @@ public class SpellsTab {
                 if (spell.getRadius() > 0) {
 
                 }
-                Button button = new Button(spell.getName() + "\n" + spell.getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost() + ((spell.getRadius() > 0) ? ("\nRadius: " + spell.getRadius()) : ""));
+                Button button = new Button(spell.getName() + "\n" + spell.getSpellMasterityLevel().getLevel() + " lev/Exp\nSpell points: " + spell.getManaCost() + ((spell.getRadius() > 0) ? ("\nRadius: " + spell.getRadius()) : ""));
                 button.setPrefWidth(104);
                 button.setFocusTraversable(false);
                 int finalI = i;

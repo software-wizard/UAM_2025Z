@@ -12,16 +12,16 @@ import java.util.List;
 public class Spell {
     private final SpellName name;
     private final int damage;
-    private final int level;
+    private final SpellMasterityLevel spellMasterityLevel;
     private final int manaCost;
     private final int spellBonusRoundsDuration;
     private final int radius;
     private final SpellBonus spellBonus;
 
-    public Spell(final SpellName aName, final int aDamage, final int aLevel, final int aManaCost, final SpellBonus aSpellBonus, final int aSpellBonusRoundsDuration, final int aRadius) {
+    public Spell(final SpellName aName, final int aDamage, final SpellMasterityLevel aSpellMasterityLevel, final int aManaCost, final SpellBonus aSpellBonus, final int aSpellBonusRoundsDuration, final int aRadius) {
         name = aName;
         damage = aDamage;
-        level = aLevel;
+        spellMasterityLevel = aSpellMasterityLevel;
         manaCost = aManaCost;
         spellBonusRoundsDuration = aSpellBonusRoundsDuration;
         spellBonus = aSpellBonus;
@@ -31,11 +31,11 @@ public class Spell {
     public static class Builder {
         private SpellName name;
         private int damage = 0;
-        private int level = 1;
+        private SpellMasterityLevel spellMasterityLevel = SpellMasterityLevel.BASIC;
         private int manaCost = 0;
         private int spellBonusRoundsDuration = 3;
         private int radius = 0;
-        private SpellBonus spellBonus = null;
+        private SpellBonus spellBonus = SpellBonusFactory.createSpellBonus(SpellName.NONE);
         public Builder name(SpellName aName) {
             name = aName;
             return this;
@@ -46,8 +46,8 @@ public class Spell {
             return this;
         }
 
-        public Builder level(int aLevel) {
-            level = aLevel;
+        public Builder masterityLevel(SpellMasterityLevel aSpellMasterityLevel) {
+            spellMasterityLevel = aSpellMasterityLevel;
             return this;
         }
 
@@ -62,7 +62,7 @@ public class Spell {
         }
 
         public Builder spellBonus(SpellName aSpellName){
-            spellBonus = SpellBonusFactory.createSpellBonus(aSpellName);
+            spellBonus = SpellBonusFactory.createSpellBonus(aSpellName, spellMasterityLevel);
             return this;
         }
 
@@ -71,7 +71,7 @@ public class Spell {
             return this;
         }
         public Spell build() {
-            return new Spell(name, damage, level, manaCost, spellBonus, spellBonusRoundsDuration, radius);
+            return new Spell(name, damage, spellMasterityLevel, manaCost, spellBonus, spellBonusRoundsDuration, radius);
         }
     }
 
@@ -100,6 +100,6 @@ public class Spell {
 
     @Override
     public String toString() {
-        return name.getDisplayName() + " (Level: " + level + ", Mana Cost: " + manaCost + ")";
+        return name.getDisplayName() + " (Level: " + spellMasterityLevel.getLevel() + ", Mana Cost: " + manaCost + ")";
     }
 }
