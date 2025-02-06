@@ -45,30 +45,6 @@ public class EconomyBoard {
         return Optional.ofNullable( heroMap.get( aPoint ) );
     }
 
-    Boolean isCastle(final Point aPoint )
-    {
-        if(getMapTile(aPoint).isPresent()){
-            MapTileIf maybeCastle = boardObjectsMap.get(aPoint);
-            return maybeCastle.getTileType() == CASTLE;
-        }
-        return false;
-    }
-    Boolean isCombatBuilding(final Point aPoint )
-    {
-        if(getMapTile(aPoint).isPresent()){
-            MapTileIf maybeCombatBuilding = boardObjectsMap.get(aPoint);
-            return maybeCombatBuilding.getTileType() == NECROPOLIS_COMBAT_BUILDING;
-        }
-        return false;
-    }
-    EconomyHero createCombatBuildingOpponent(final Point aPoint){
-
-        NecropolisCombatBuilding necropolisCombatBuilding = (NecropolisCombatBuilding)boardObjectsMap.get(aPoint);
-        return necropolisCombatBuilding.createBattleOpponent();
-            //interakcja z obiektem po ruchu postaci
-
-    }
-
     Optional<MapTileIf> getMapTile(final Point aPoint )
     {
         return Optional.ofNullable( boardObjectsMap.get(aPoint));

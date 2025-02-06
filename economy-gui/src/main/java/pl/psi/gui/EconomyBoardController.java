@@ -66,14 +66,17 @@ public class EconomyBoardController {
 
         Castle castle = new Castle();
         GoldBuilding goldBuilding = new GoldBuilding();
+        GoldBuilding goldBuilding2 = new GoldBuilding();
         NecropolisCombatBuilding necropolisCombatBuilding =new NecropolisCombatBuilding();
 
         economyBoardEngine.addBuildingToBoard(new Point(5,5), castle);
         economyBoardEngine.addBuildingToBoard(new Point(6,6),goldBuilding);
+        economyBoardEngine.addBuildingToBoard(new Point(8,2),goldBuilding2);
         economyBoardEngine.addBuildingToBoard(new Point(7,7), necropolisCombatBuilding);
 
         economyBoardEngine.addObjectObserver(castle,(e)-> economyShopLoader.openShop(economyTurnQueue.getCurrentHero()));
         economyBoardEngine.addObjectObserver(goldBuilding,(e)->refreshGui());
+        economyBoardEngine.addObjectObserver(goldBuilding2,(e)->refreshGui());
         economyBoardEngine.addObjectObserver(necropolisCombatBuilding,(e)->ecoBattleConverter.startBattle(economyTurnQueue.getCurrentHero(), necropolisCombatBuilding.createBattleOpponent()));
     }
 
