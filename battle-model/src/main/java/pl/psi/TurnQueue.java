@@ -1,5 +1,6 @@
 package pl.psi;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
@@ -14,7 +15,7 @@ import pl.psi.creatures.Creature;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class TurnQueue {
+public class TurnQueue{
 
     public static final String END_OF_TURN = "END_OF_TURN";
     public static final String NEXT_CREATURE = "NEXT_CREATURE";
@@ -68,4 +69,7 @@ public class TurnQueue {
         observerSupport.addPropertyChangeListener(aObserver);
     }
 
+    public void removeCreature(Creature creature) {
+        creatures.remove(creature);
+    }
 }

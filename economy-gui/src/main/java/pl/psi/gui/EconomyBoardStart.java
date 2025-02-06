@@ -4,13 +4,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.building.factory.EconomyBuildingAbstractFactory;
+import pl.psi.building.shop.EconomyBuildingShop;
+import pl.psi.building.shop.EconomyBuildingShopFactory;
+import pl.psi.building.town.Town;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
 import java.util.Map;
 
-import static pl.psi.resource.Resources.ResourceType.GOLD;
+import static pl.psi.resource.Resources.Type.*;
 
 public class EconomyBoardStart extends Application {
 
@@ -25,7 +29,10 @@ public class EconomyBoardStart extends Application {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getClass().getClassLoader()
                 .getResource( "fxml/eco-board.fxml" ) );
-        loader.setController( new EconomyBoardController( aHero1(), aHero2() ));
+        EconomyBuildingShop economyBuildingShop = EconomyBuildingShopFactory.createEconomyBuildingShop(
+                EconomyHero.Fraction.NECROPOLIS, new EconomyBuildingAbstractFactory()
+        );
+        loader.setController( new EconomyBoardController( aHero1(economyBuildingShop), aHero2(economyBuildingShop)));
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
         aStage.setX( 5 );
@@ -33,18 +40,46 @@ public class EconomyBoardStart extends Application {
         aStage.show();
     }
 
-    private EconomyHero aHero1()
+    private EconomyHero aHero1(EconomyBuildingShop economyBuildingShop)
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,3000)));
+        final EconomyHero ret = new EconomyHero(
+                "A",
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 5000)
+                        .resource(WOOD, 100)
+                        .resource(ORE, 100)
+                        .build(),
+                Town.builder()
+                    .buildings(Map.of())
+                    .name("Grave Raven")
+                    .economyBuildingShop(economyBuildingShop)
+                    .fraction(EconomyHero.Fraction.NECROPOLIS)
+                    .build()
+        );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 1, 1 ));
         ret.addCreature( factory.create( false, 1, 1 ));
         return ret;
     }
 
-    private EconomyHero aHero2()
+    private EconomyHero aHero2(EconomyBuildingShop economyBuildingShop)
     {
-        final EconomyHero ret = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(GOLD,4000)));
+        final EconomyHero ret = new EconomyHero(
+                "B",
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 5000)
+                        .resource(WOOD, 100)
+                        .resource(ORE, 100)
+                        .build(),
+                Town.builder()
+                        .buildings(Map.of())
+                        .name("Grave Raven")
+                        .economyBuildingShop(economyBuildingShop)
+                        .fraction(EconomyHero.Fraction.NECROPOLIS)
+                        .build()
+        );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ret.addCreature( factory.create( false, 2, 1 ));
         return ret;

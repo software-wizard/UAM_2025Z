@@ -8,4 +8,5 @@ public interface EconomyBuildingShop {
 
     EconomyBuilding buyBuilding(EconomyHero aBuyer, String aBuildingName);
     UpgradableBuilding buyBuildingUpgrade(EconomyHero aBuyer, EconomyBuilding aBuildingName);
+    void refund(EconomyHero aHero, EconomyBuilding aBuilding);
 }

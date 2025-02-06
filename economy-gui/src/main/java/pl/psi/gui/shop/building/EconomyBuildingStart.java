@@ -8,9 +8,9 @@ import pl.psi.building.EconomyBuildingFacade;
 import pl.psi.building.factory.EconomyBuildingAbstractFactory;
 import pl.psi.building.shop.EconomyBuildingShop;
 import pl.psi.building.shop.EconomyBuildingShopFactory;
+import pl.psi.building.town.Town;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
-import pl.psi.town.Town;
 
 import java.util.Collections;
 import java.util.Map;
@@ -27,24 +27,19 @@ public class EconomyBuildingStart extends Application {
         loader.setLocation(getClass().getClassLoader()
                 .getResource("fxml/eco-building-shop.fxml"));
         EconomyBuildingAbstractFactory abstractFactory = new EconomyBuildingAbstractFactory();
-        EconomyBuildingShop economyBuildingShop = EconomyBuildingShopFactory.createEconomyBuildingShop(
-                EconomyHero.Fraction.NECROPOLIS, abstractFactory
+        var hero = new EconomyHero(
+                "A",
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder().build(),
+                Town.builder().build()
         );
-        Map<Resources.ResourceType, Integer> resourcesMap = Map.of(
-                Resources.ResourceType.GOLD, 5000,
-                Resources.ResourceType.ORE, 5000,
-                Resources.ResourceType.WOOD, 1500,
-                Resources.ResourceType.SULFUR, 5000,
-                Resources.ResourceType.GEM, 2
-        );
-        var hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, new Resources(resourcesMap));
         var town = Town.builder()
-                .buildings(Collections.emptySet())
+                .buildings(Map.of())
                 .name("Test town name")
                 .fraction(EconomyHero.Fraction.NECROPOLIS)
                 .build();
         EconomyBuildingShopController controller = new EconomyBuildingShopController(
-                new EconomyBuildingFacade(economyBuildingShop, abstractFactory), hero, town, aStage
+                new EconomyBuildingFacade(abstractFactory), hero, aStage
         );
         loader.setController(controller);
         final Scene scene = new Scene(loader.load());

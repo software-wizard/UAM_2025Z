@@ -16,15 +16,22 @@
         </HBox>
     </center>
     <top>
-        <HBox BorderPane.alignment="CENTER">
+        <VBox BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="playerLabel" text="Player"/>
-                <Label fx:id="roundNumberStaticLabel" text="Round: "/>
-                <Label fx:id="roundNumberLabel" text="X"/>
-                <Label fx:id="currentStaticLabel" text="GOLD: "/>
-                <Label fx:id="currentGoldLabel" text="XXXX"/>
+                <HBox>
+                    <Label fx:id="playerStaticLabel" text="Player:"/>
+                    <Label fx:id="playerLabel" text="X"/>
+                </HBox>
+                <HBox>
+                    <Label fx:id="roundNumberStaticLabel" text="Round:"/>
+                    <Label fx:id="roundNumberLabel" text="Y"/>
+                </HBox>
+                <HBox>
+                    <Label fx:id="resourcesStaticLabel" text="Resources: "/>
+                    <Label fx:id="resourcesLabel" text="Z"/>
+                </HBox>
             </children>
-        </HBox>
+        </VBox>
     </top>
 
     <stylesheets>

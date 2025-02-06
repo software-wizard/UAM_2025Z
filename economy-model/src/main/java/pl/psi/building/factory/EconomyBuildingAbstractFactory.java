@@ -11,7 +11,7 @@ public class EconomyBuildingAbstractFactory {
 
     public EconomyBuildingFactory getEconomyBuildingFactory(
             EconomyHero.Fraction fraction,
-            EconomyBuildingStatistic.EconomyBuildingType buildingType
+            EconomyBuildingStatistic.Type buildingType
     ) {
         return switch (buildingType) {
             case BUILDING -> getEconomyBuildingFactory(fraction);
@@ -20,7 +20,7 @@ public class EconomyBuildingAbstractFactory {
     }
 
     public Set<EconomyBuildingFactory> getAllFactories(EconomyHero.Fraction fraction) {
-        return EnumSet.allOf(EconomyBuildingStatistic.EconomyBuildingType.class)
+        return EnumSet.allOf(EconomyBuildingStatistic.Type.class)
                 .stream()
                 .map(type -> getEconomyBuildingFactory(fraction, type))
                 .collect(Collectors.toSet());

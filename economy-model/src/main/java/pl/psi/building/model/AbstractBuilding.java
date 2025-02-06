@@ -15,15 +15,18 @@ abstract class AbstractBuilding implements EconomyBuilding {
         this.statistic = statistic;
     }
 
-    public Resources getBuildingCost() {
-        return statistic.cost();
-    }
-
+    @Override
     public void startBuilding() {
         builtState = EconomyBuilding.BuildingState.BEING_BUILT;
     }
 
+    @Override
     public void finishBuilding() {
         builtState = EconomyBuilding.BuildingState.BUILT;
+    }
+
+    @Override
+    public boolean isBuilt() {
+        return builtState == EconomyBuilding.BuildingState.BUILT;
     }
 }

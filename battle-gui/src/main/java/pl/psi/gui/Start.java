@@ -16,7 +16,7 @@ import pl.psi.creatures.SpellBonusStatistic;
 
 public class Start extends Application
 {
-
+    private Stage primaryStage;
     public Start()
     {
 
@@ -48,6 +48,15 @@ public class Start extends Application
             aE.printStackTrace();
         }
     }
+
+//    public void closeBattle() {
+//        if (primaryStage != null) {
+//            primaryStage.close();
+//            System.out.println("Battle window has been closed.");
+//        } else {
+//            System.err.println("Primary stage is null, cannot close the battle.");
+//        }
+//    }
 
     private Hero createP2()
     {

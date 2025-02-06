@@ -1,5 +1,8 @@
 package pl.psi;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,5 +29,10 @@ public class Hero
 
     public Hero(final List<Creature> aCreatures) {
         this(aCreatures, 0, new ArrayList<>());
+    }
+
+    public void removeCreature(Creature creature) {
+        creatures.remove(creature);
+        System.out.println(creature.getName() + " has been deleted");
     }
 }

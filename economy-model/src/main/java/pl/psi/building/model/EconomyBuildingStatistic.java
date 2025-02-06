@@ -6,15 +6,15 @@ import pl.psi.resource.Resources;
 
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 public record EconomyBuildingStatistic(
         String name,
-        EconomyBuildingType type,
+        Type type,
         Resources cost,
         List<EconomyBuildingStatistic> prerequisites
 ) {
 
-    public enum EconomyBuildingType {
+    public enum Type {
         BUILDING, DWELLINGS
     }
 

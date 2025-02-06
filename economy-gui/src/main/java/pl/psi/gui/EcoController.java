@@ -1,25 +1,22 @@
 package pl.psi.gui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import pl.psi.EconomyEngine;
-import pl.psi.converter.EcoBattleConverter;
+import pl.psi.building.model.UpgradableBuilding;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import pl.psi.resource.Resources;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class EcoController implements PropertyChangeListener
 {
     private final EconomyEngine economyEngine;
+    private final UpgradableBuilding building;
     @FXML
     HBox heroStateHBox;
     @FXML
@@ -27,13 +24,14 @@ public class EcoController implements PropertyChangeListener
     @FXML
     Label playerLabel;
     @FXML
-    Label currentGoldLabel;
-    @FXML
     Label roundNumberLabel;
+    @FXML
+    Label resourcesLabel;
 
-    public EcoController( final EconomyHero aHero1 )
+    public EcoController(final UpgradableBuilding aBuilding, final EconomyEngine aEconomyEngine)
     {
-        economyEngine = new EconomyEngine( aHero1 );
+        economyEngine = aEconomyEngine;
+        building = aBuilding;
     }
 
     @FXML
@@ -53,10 +51,9 @@ public class EcoController implements PropertyChangeListener
 
     void refreshGui()
     {
+        resourcesLabel.setText(economyEngine.getActiveHero().getResources().toString());
         playerLabel.setText( economyEngine.getActiveHero()
             .toString() );
-        currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero()
-            .getResourceAmount(Resources.ResourceType.GOLD) ) );
         roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         shopsBox.getChildren()
             .clear();
@@ -65,12 +62,11 @@ public class EcoController implements PropertyChangeListener
 
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         final VBox creatureShop = new VBox();
-        for( int i = 1; i < 8; i++ )
-        {
+        creatureShop.getChildren()
+                .add( new CreatureButton( this, economyEngine.getActiveHero(), factory, false, building.getCreatureTier() ) );
+        if (building.isUpgraded()) {
             creatureShop.getChildren()
-                .add( new CreatureButton( this, factory, false, i ) );
-            creatureShop.getChildren()
-                .add( new CreatureButton( this, factory, true, i ) );
+                    .add( new CreatureButton( this, economyEngine.getActiveHero(), factory, true, building.getCreatureTier() ) );
         }
         shopsBox.getChildren()
             .add( creatureShop );

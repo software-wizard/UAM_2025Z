@@ -1,15 +1,16 @@
 package pl.psi.hero;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.mockito.Mockito;
+import pl.psi.building.town.Town;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.resource.Resources;
 
 import java.util.Map;
-import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static pl.psi.resource.Resources.Type.GOLD;
 
 class EconomyHeroTest
 {
@@ -19,7 +20,14 @@ class EconomyHeroTest
     @BeforeEach
     void init()
     {
-        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, new Resources(Map.of(Resources.ResourceType.GOLD, 3000)) );
+        hero = new EconomyHero(
+                "A",
+                EconomyHero.Fraction.NECROPOLIS,
+                Resources.builder()
+                        .resource(GOLD, 3000)
+                        .build(),
+                Mockito.mock(Town.class)
+        );
     }
 
     @Test
@@ -40,6 +48,12 @@ class EconomyHeroTest
     @Test
     void shouldThrowExceptionWhileYouTrySubstractMoreGoldThanHeroHas()
     {
-        assertThrows( IllegalStateException.class, () -> hero.subtractResource( new Resources(Map.of(Resources.ResourceType.GOLD, 3001)) ) );
+        assertThrows(
+                IllegalStateException.class,
+                () -> hero.subtractResource(Resources.builder()
+                        .resource(GOLD, 3001)
+                        .build()
+                )
+        );
     }
 }

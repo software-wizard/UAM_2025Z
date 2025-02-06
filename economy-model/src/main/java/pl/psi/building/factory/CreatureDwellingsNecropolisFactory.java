@@ -9,6 +9,8 @@ import pl.psi.resource.Resources;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static pl.psi.resource.Resources.Type.*;
+
 class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
 
     @Override
@@ -36,152 +38,167 @@ class CreatureDwellingsNecropolisFactory implements EconomyBuildingFactory {
     private CreatureDwellingsBuilding buildDwellingsFromName(String name) {
         var building = NecropolisDwellingsStatistic.valueOf(name.toUpperCase());
         var economyBuildingStatistic = EconomyBuildingStatistic.builder()
-                .type(EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS)
+                .type(EconomyBuildingStatistic.Type.DWELLINGS)
                 .cost(building.buildingStatistic.cost())
                 .prerequisites(building.buildingStatistic.prerequisites())
                 .name(name)
                 .build();
         return new CreatureDwellingsBuilding(
-                economyBuildingStatistic, building.creatureNames, building.upgradeCost, building.costPerWeek
+                economyBuildingStatistic,
+                building.creatureTier,
+                building.upgradeCost,
+                building.costPerWeek
         );
     }
 
     @Getter
     @RequiredArgsConstructor
-    private enum NecropolisDwellingsStatistic implements NecropolisStatistic {
+    protected enum NecropolisDwellingsStatistic implements NecropolisStatistic {
         CURSED_TEMPLE(new EconomyBuildingStatistic(
                 "Cursed_Temple",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.GOLD, 400,
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.ORE, 5
-                )),
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(GOLD, 400)
+                        .resource(WOOD, 5)
+                        .resource(ORE, 5)
+                        .build(),
                 List.of()
-        ), Set.of("SKELETON", "SKELETON_WARRIOR"),
-                new Resources(Map.of(
-                        Resources.ResourceType.GOLD, 1000,
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.ORE, 5
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 2100))
+        ), 1,
+                Resources.builder()
+                        .resource(GOLD, 1000)
+                        .resource(WOOD, 5)
+                        .resource(ORE, 5)
+                        .build(),
+                Resources.builder()
+                        .resource(GOLD, 2100)
+                        .build()
         ),
         GRAVEYARD(new EconomyBuildingStatistic(
                 "Graveyard",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.GOLD, 1000
-                )),
-                List.of()
-        ), Set.of("WALKING_DEAD", "ZOMBIE"),
-                new Resources(Map.of(
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.GOLD, 1000
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 2000))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(ORE, 5)
+                        .resource(GOLD, 1000)
+                        .build(),
+                List.of(CURSED_TEMPLE.buildingStatistic)
+        ), 2,
+                Resources.builder()
+                        .resource(WOOD, 5)
+                        .resource(ORE, 5)
+                        .resource(GOLD, 1000)
+                        .build(),
+                Resources.builder()
+                        .resource(GOLD, 2000)
+                        .build()
         ),
         TOMB_OF_SOULS(new EconomyBuildingStatistic(
                 "Tomb_of_Souls",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.GOLD, 1500
-                )),
-                List.of()
-        ), Set.of("WIGHT", "WRAITH"),
-                new Resources(Map.of(
-                        Resources.ResourceType.MERCURY, 1,
-                        Resources.ResourceType.GOLD, 1500
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 3220))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(ORE, 5)
+                        .resource(WOOD, 5)
+                        .resource(GOLD, 1500)
+                        .build(),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 3,
+                Resources.builder()
+                        .resource(MERCURY, 1)
+                        .resource(GOLD, 1500)
+                        .build(),
+                Resources.builder()
+                        .resource(GOLD, 3220)
+                        .build()
         ),
         ESTATE(new EconomyBuildingStatistic(
                 "Estate",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.GOLD, 2000
-                )),
-                List.of()
-        ), Set.of("VAMPIRE", "VAMPIRE_LORD"),
-                new Resources(Map.of(
-                        Resources.ResourceType.WOOD, 10,
-                        Resources.ResourceType.CRYSTAL, 10,
-                        Resources.ResourceType.GEM, 10,
-                        Resources.ResourceType.GOLD, 2000
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 4000))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(ORE, 5)
+                        .resource(WOOD, 5)
+                        .resource(GOLD, 2000)
+                        .build(),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 4,
+                Resources.builder()
+                        .resource(WOOD, 10)
+                        .resource(CRYSTAL, 10)
+                        .resource(GEMS, 10)
+                        .resource(GOLD, 2000)
+                        .build(),
+                Resources.builder()
+                        .resource(GOLD, 4000)
+                        .build()
         ),
         MAUSOLEUM(new EconomyBuildingStatistic(
                 "Mausoleum",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 1,
-                        Resources.ResourceType.SULFUR, 1,
-                        Resources.ResourceType.GOLD, 2000
-                )),
-                List.of()
-        ), Set.of("LICH", "POWER_LICH"),
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 1,
-                        Resources.ResourceType.SULFUR, 1,
-                        Resources.ResourceType.GOLD, 2000
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 3600))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(ORE, 1)
+                        .resource(SULFUR, 1)
+                        .resource(GOLD, 2000)
+                        .build(),
+                List.of(GRAVEYARD.buildingStatistic)
+        ), 5,
+                Resources.builder()
+                        .resource(ORE, 1)
+                        .resource(SULFUR, 1)
+                        .resource(GOLD, 2000)
+                        .build(),
+                Resources.builder()
+                        .resource(GOLD, 3600)
+                        .build()
         ),
         HALL_OF_DARKNESS(new EconomyBuildingStatistic(
                 "Hall_of_Darkness",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 10,
-                        Resources.ResourceType.WOOD, 10,
-                        Resources.ResourceType.GOLD, 6000
-                )),
-                List.of()
-        ), Set.of("BLACK_KNIGHT", "DREAD_KNIGHT"),
-                new Resources(Map.of(
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.MERCURY, 2,
-                        Resources.ResourceType.SULFUR, 2,
-                        Resources.ResourceType.CRYSTAL, 2,
-                        Resources.ResourceType.GEM, 2,
-                        Resources.ResourceType.GOLD, 3000
-                )),
-                new Resources(Map.of(Resources.ResourceType.GOLD, 6000))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(Resources.Type.ORE, 10)
+                        .resource(WOOD, 10)
+                        .resource(Resources.Type.GOLD, 6000)
+                        .build(),
+                List.of(ESTATE.buildingStatistic, MAUSOLEUM.buildingStatistic)
+        ), 6,
+                Resources.builder()
+                        .resource(Resources.Type.ORE, 5)
+                        .resource(WOOD, 5)
+                        .resource(Resources.Type.MERCURY, 2)
+                        .resource(Resources.Type.SULFUR, 2)
+                        .resource(Resources.Type.CRYSTAL, 2)
+                        .resource(Resources.Type.GEMS, 2)
+                        .resource(Resources.Type.GOLD, 3000)
+                        .build(),
+                Resources.builder()
+                        .resource(Resources.Type.GOLD, 6000)
+                        .build()
         ),
         DRAGON_VAULT(new EconomyBuildingStatistic(
                 "Dragon_Vault",
-                EconomyBuildingStatistic.EconomyBuildingType.DWELLINGS,
-                new Resources(Map.of(
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.MERCURY, 5,
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.SULFUR, 5,
-                        Resources.ResourceType.GEM, 5,
-                        Resources.ResourceType.CRYSTAL, 5,
-                        Resources.ResourceType.GOLD, 10000
-                )),
-                List.of()
-        ), Set.of("BLACK_KNIGHT", "DREAD_KNIGHT"),
-                new Resources(Map.of(
-                        Resources.ResourceType.WOOD, 5,
-                        Resources.ResourceType.ORE, 5,
-                        Resources.ResourceType.MERCURY, 20,
-                        Resources.ResourceType.GOLD, 15000
-                )),
-                new Resources(Map.of(
-                        Resources.ResourceType.GOLD, 6000,
-                        Resources.ResourceType.MERCURY, 2
-                ))
+                EconomyBuildingStatistic.Type.DWELLINGS,
+                Resources.builder()
+                        .resource(WOOD, 5)
+                        .resource(Resources.Type.MERCURY, 5)
+                        .resource(Resources.Type.ORE, 5)
+                        .resource(Resources.Type.SULFUR, 5)
+                        .resource(Resources.Type.GEMS, 5)
+                        .resource(Resources.Type.CRYSTAL, 5)
+                        .resource(Resources.Type.GOLD, 10000)
+                        .build(),
+                List.of(HALL_OF_DARKNESS.buildingStatistic)
+        ), 7,
+                Resources.builder()
+                        .resource(WOOD, 5)
+                        .resource(Resources.Type.ORE, 5)
+                        .resource(Resources.Type.MERCURY, 20)
+                        .resource(Resources.Type.GOLD, 15000)
+                        .build(),
+                Resources.builder()
+                        .resource(Resources.Type.GOLD, 6000)
+                        .resource(Resources.Type.MERCURY, 2)
+                        .build()
         );
 
         private final EconomyBuildingStatistic buildingStatistic;
-        private final Set<String> creatureNames;
+        private final int creatureTier;
         private final Resources upgradeCost;
         private final Resources costPerWeek;
     }

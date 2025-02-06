@@ -8,7 +8,7 @@ public class CreatureShop
 
     public void buy( final EconomyHero aHero, final EconomyCreature aEconomyCreature )
     {
-        Resources resourcesNeededToButCreature = aEconomyCreature.getCost();
+        Resources resourcesNeededToButCreature = aEconomyCreature.getCost().multiplyBy(aEconomyCreature.getAmount());
         aHero.subtractResource(resourcesNeededToButCreature);
         try
         {

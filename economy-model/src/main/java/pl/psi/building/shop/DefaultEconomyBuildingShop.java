@@ -18,7 +18,7 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
 
     @Override
     public EconomyBuilding buyBuilding(EconomyHero aBuyer, String aBuildingName) {
-        EconomyBuildingStatistic foundBuildingStatistic = EnumSet.allOf(EconomyBuildingStatistic.EconomyBuildingType.class)
+        EconomyBuildingStatistic foundBuildingStatistic = EnumSet.allOf(EconomyBuildingStatistic.Type.class)
                 .stream()
                 .map(type -> abstractFactory.getEconomyBuildingFactory(fraction, type))
                 .flatMap(factory -> factory.getAllAvailableBuildingsToBuild().stream())
@@ -44,6 +44,12 @@ class DefaultEconomyBuildingShop implements EconomyBuildingShop {
                 "Buyer has not enough gold cost to buy a building %s",
                 aBuildingToUpgrade.getStatistic().name()
         );
+        aBuyer.subtractResource(upgradableBuilding.getUpgradeCost());
         return upgradableBuilding;
+    }
+
+    @Override
+    public void refund(EconomyHero aHero, EconomyBuilding aBuilding) {
+        aHero.subtractResource(aBuilding.getStatistic().cost());
     }
 }

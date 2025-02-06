@@ -1,25 +1,31 @@
 package pl.psi;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
 import pl.psi.hero.EconomyHero;
 import pl.psi.resource.Resources;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Map;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Random;
 
 import static pl.psi.MapTileIf.TileType.GOLD_BUILDING;
-import static pl.psi.resource.Resources.ResourceType.GOLD;
+import static pl.psi.resource.Resources.Type.GOLD;
 
 public class GoldBuilding implements MapTileIf {
-    Boolean collectedGold;
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    public String COLLECT_GOLD = "collect_gold";
 
-    GoldBuilding() {
-        collectedGold = false;
+    private static final String imagePath = "economy-gui/src/main/resources/AVTgold0.png";
+
+
+    public void addObserver(PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aObserver);
     }
+    // Boolean collectedGold;
+
+//    GoldBuilding() {
+//        collectedGold = false;
+//    }
+    //ZAMIAST TEGO USUNIECIE BUDYNKU Z LISTY
 
     @Override
     public TileType getTileType() {
@@ -27,34 +33,31 @@ public class GoldBuilding implements MapTileIf {
     }
 
     @Override
-    public ImagePattern getImagePattern() {
-        File goldBuilding = new File("economy-gui/src/main/resources/AVTgold0.png");
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(goldBuilding);
-        } catch (
-                FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return new ImagePattern(new Image(input));
+    public String getImagePath(){
+        return imagePath;
     }
 
     @Override
     public void Interact(EconomyHero hero) {
-        if (canCollectGold()) {
+//        if (canCollectGold()) {
             int goldAmount = collectGold();
-            hero.addResource(new Resources(Map.of(GOLD, goldAmount)));
-            collectedGold = true;
-        }
+            hero.addResource(Resources.builder()
+                    .resource(GOLD, goldAmount)
+                    .build());
+
+            hero.addResource(Resources.builder().resource(GOLD, goldAmount).build());
+
+            observerSupport.firePropertyChange(COLLECT_GOLD,null,goldAmount);
+            //usuwanie zlota z board
+            //collectedGold = true;
+
+            //usunac na mapie budynek
+//        }
     }
 
     private int collectGold() {//zwraca losowa ilosc gold
         Random rand = new Random();
         int goldAmount = (rand.nextInt(6) + 5) * 100;
         return goldAmount;
-    }
-
-    private Boolean canCollectGold() {
-        return !collectedGold;
     }
 }

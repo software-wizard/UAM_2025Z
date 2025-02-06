@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -9,20 +8,55 @@
             minWidth="-Infinity"
             prefHeight="700" prefWidth="1024" xmlns="http://javafx.com/javafx/8.0.171">
     <top>
-        <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button fx:id="passButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="PASS"
-                        textAlignment="CENTER">
-                    <font>
-                        <Font size="16.0"/>
-                    </font>
-                </Button>
-            </children>
-        </HBox>
+        <VBox alignment="TOP_RIGHT" prefHeight="10.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+            <HBox alignment="TOP_RIGHT">
+                <children>
+                    <Label fx:id="activeHero" prefHeight="37.0" prefWidth="115.0"
+                           textAlignment="CENTER">
+                        <font>
+                            <Font size="18.0"/>
+                        </font>
+                    </Label>
+                    <Button fx:id="passButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="PASS"
+                            textAlignment="CENTER">
+                        <font>
+                            <Font size="16.0"/>
+                        </font>
+                    </Button>
+                </children>
+            </HBox>
+
+        </VBox>
     </top>
     <center>
-        <GridPane fx:id="gridMap" BorderPane.alignment="CENTER">
-        </GridPane>
-    </center>
+        <VBox>
+            <GridPane fx:id="gridMap" BorderPane.alignment="CENTER">
+            </GridPane>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10; -fx-background-color: #eeeeee;">
+                <children>
 
+                    <Label fx:id="gold" text="GOLD:"/>
+                    <Label fx:id="goldLabel"/>
+
+                    <Label fx:id="wood" text="WOOD:"/>
+                    <Label fx:id="woodLabel" text="0" />
+
+                    <Label fx:id="ore" text="ORE:"/>
+                    <Label fx:id="oreLabel" />
+
+                    <Label fx:id="mercury" text="MERCURY:"/>
+                    <Label fx:id="mercuryLabel" text="0" />
+
+                    <Label fx:id="sulfur" text="SULFUR:"/>
+                    <Label fx:id="sulfurLabel" text="0" />
+
+                    <Label fx:id="crystal" text="CRYSTAL:"/>
+                    <Label fx:id="crystalLabel" text="0" />
+
+                    <Label fx:id="gem" text="GEM:"/>
+                    <Label fx:id="gemLabel" text="0" />
+                </children>
+            </HBox>
+        </VBox>
+    </center>
 </BorderPane>
