@@ -17,19 +17,19 @@ public class SpellBonus implements CreatureStatisticIf {
     private final boolean isUpgraded;
     private final boolean isUndead;
 
-    public SpellBonus(String name, int attack, int armor, int maxHp, int moveRange,
-                      Range<Integer> damage, int tier, String description,
-                      boolean isUpgraded, boolean isUndead) {
-        this.name = name;
-        this.attack = attack;
-        this.armor = armor;
-        this.maxHp = maxHp;
-        this.moveRange = moveRange;
-        this.damage = damage;
-        this.tier = tier;
-        this.description = description;
-        this.isUpgraded = isUpgraded;
-        this.isUndead = isUndead;
+    public SpellBonus(String aName, int aAttack, int aArmor, int aMaxHp, int aMoveRange,
+                      Range<Integer> aDamage, int aTier, String aDescription,
+                      boolean aIsUpgraded, boolean aIsUndead) {
+        name = aName;
+        attack = aAttack;
+        armor = aArmor;
+        maxHp = aMaxHp;
+        moveRange = aMoveRange;
+        damage = aDamage;
+        tier = aTier;
+        description = aDescription;
+        isUpgraded = aIsUpgraded;
+        isUndead = aIsUndead;
     }
 
     public void changeAttack(int change) {

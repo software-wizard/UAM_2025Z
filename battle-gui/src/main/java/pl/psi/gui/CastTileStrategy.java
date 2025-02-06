@@ -27,6 +27,10 @@ public class CastTileStrategy implements TileStrategy {
                     SpellBook spellBook = gameEngine.getCurrentHero().getSpellBook();
                     Spell selectedSpell = spellBook.getSpells().get(selectedSpellIdx);
 
+                    if(selectedSpell.getRadius() != 0) {
+                        return;
+                    }
+
                     if (selectedSpell != null) {
                         spellBook.castSpell(selectedSpell, creature);
                         System.out.printf("Spell '%s' cast on creature %s\n", selectedSpell.getName(),creature.getName());

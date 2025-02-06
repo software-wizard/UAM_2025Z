@@ -93,4 +93,12 @@ public class SpellBonusTest {
 
     }
 
+    @Test
+    void betterMasterityLevelMakesDifference(){
+        Spell basicWeakenAttack = SpellFactory.createSpell(SpellName.WEAKEN_ATTACK);
+        Spell expertWeakenAttack = SpellFactory.createSpell(SpellName.WEAKEN_ATTACK, SpellMasterityLevel.EXPERT);
+
+        Assertions.assertEquals(-5, basicWeakenAttack.getSpellBonus().getAttack());
+        Assertions.assertEquals(-10, expertWeakenAttack.getSpellBonus().getAttack());
+    }
 }

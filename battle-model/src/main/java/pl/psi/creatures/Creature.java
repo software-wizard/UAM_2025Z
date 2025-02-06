@@ -79,18 +79,12 @@ public class Creature implements PropertyChangeListener {
                 break;
             case ATTACK:
                 for(AppliedSpell appliedSpell : appliedSpells){
-                    SpellBonus spellBonus = appliedSpell.getSpell().getSpellBonus();
-                    if (spellBonus != null) {
-                        bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
-                    }
+                    bonus += appliedSpell.getSpell().getSpellBonus().getAttack();
                 }
                 break;
             case MOVE_RANGE:
                 for(AppliedSpell appliedSpell : appliedSpells){
-                    SpellBonus spellBonus = appliedSpell.getSpell().getSpellBonus();
-                        if (spellBonus != null) {
-                            bonus += spellBonus.getMoveRange();
-                        }
+                    bonus += appliedSpell.getSpell().getSpellBonus().getMoveRange();
                 }
                 break;
             default:

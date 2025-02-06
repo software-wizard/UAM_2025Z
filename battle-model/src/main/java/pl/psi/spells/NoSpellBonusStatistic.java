@@ -16,16 +16,16 @@ public class NoSpellBonusStatistic implements CreatureStatisticIf {
     private final boolean isUndead;
 
     public NoSpellBonusStatistic() {
-        this.name = "No spell bonus statistic";
-        this.attack = 0;
-        this.armor = 0;
-        this.maxHp = 0;
-        this.moveRange = 0;
-        this.damage = Range.closed(0, 0);
-        this.tier = 1;
-        this.description = "No spell bonus, nothing special";
-        this.isUpgraded = false;
-        this.isUndead = false;
+        name = "No spell bonus statistic";
+        attack = 0;
+        armor = 0;
+        maxHp = 0;
+        moveRange = 0;
+        damage = Range.closed(0, 0);
+        tier = 1;
+        description = "No spell bonus, nothing special";
+        isUpgraded = false;
+        isUndead = false;
     }
 
     @Override
